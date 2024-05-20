@@ -98,4 +98,17 @@ public class CustomerDAO {
         }
         return null;
     }
+
+    public static int getNextCustomerId() {
+        String sql = "SELECT MAX(Customer_ID) FROM customers";
+        try (Statement stmt = JDBC.connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) {
+                return rs.getInt(1) + 1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 1; // Default to 1 if there are no customers
+    }
 }

@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -124,9 +125,14 @@ public class CustomerFormController {
         loadAddCustomerForm();
     }
 
-    private void loadUpdateCustomerForm () {
+    private void loadUpdateCustomerForm(Customer selectedCustomer) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/view/UpdateCustomerForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UpdateCustomerForm.fxml"));
+            Parent root = loader.load();
+
+            UpdateCustomerFormController controller = loader.getController();
+            controller.setSelectedCustomer(selectedCustomer);
+
             Stage stage = (Stage) updateCustomerButton.getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
@@ -138,7 +144,19 @@ public class CustomerFormController {
 
     @FXML
     private void handleLoadUpdateCustomerForm() {
-        loadUpdateCustomerForm();
+        Customer selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
+        if (selectedCustomer != null) {
+            loadUpdateCustomerForm(selectedCustomer);
+        } else {
+            showAlert("Error", "No customer selected. Please select a customer to update.");
+        }
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
 

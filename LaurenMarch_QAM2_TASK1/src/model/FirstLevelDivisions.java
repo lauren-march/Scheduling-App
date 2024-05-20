@@ -93,4 +93,9 @@ public class FirstLevelDivisions {
 
         this.countryId = countryId;
     }
+
+    @Override
+    public String toString() {
+        return division;
+    }
 }

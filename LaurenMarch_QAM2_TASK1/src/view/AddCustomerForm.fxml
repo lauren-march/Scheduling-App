@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox alignment="center" prefHeight="415.0" prefWidth="320.0" spacing="40" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddCustomerFormController">
+<VBox alignment="center" prefHeight="415.0" prefWidth="320.0" spacing="40" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddCustomerFormController">
     <padding>
         <Insets bottom="40" left="40" right="40" top="40" />
     </padding>
@@ -43,7 +37,7 @@
                   <Font name="Constantia" size="12.0" />
                </font>
             </Label>
-            <TextField editable="false" GridPane.columnIndex="1" />
+            <TextField fx:id="customerIdTextField" editable="false" GridPane.columnIndex="1" />
             <Label text="Customer Name" GridPane.rowIndex="1">
                <font>
                   <Font name="Constantia" size="12.0" />
@@ -64,28 +58,28 @@
                   <Font name="Constantia" size="12.0" />
                </font>
             </Label>
-            <Label text="First Level Division" GridPane.rowIndex="5">
+            <Label text="Country" GridPane.rowIndex="5">
                <font>
                   <Font name="Constantia" size="12.0" />
                </font>
             </Label>
-            <Label text="Country" GridPane.rowIndex="6">
+            <Label text="First Level Division" GridPane.rowIndex="6">
                <font>
                   <Font name="Constantia" size="12.0" />
                </font>
             </Label>
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <Button mnemonicParsing="false" text="Add" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
+            <TextField fx:id="customerNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="addressTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="postalCodeTextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="phoneNumberTextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ComboBox fx:id="countryComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <ComboBox fx:id="firstLevelDivisionComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <Button fx:id="addCustomerButton" mnemonicParsing="false" text="Add" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" onAction="#handleAddButtonAction">
                <font>
                   <Font name="Constantia" size="12.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" text="Cancel" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="8">
+            <Button fx:id="cancelButton" mnemonicParsing="false" text="Cancel" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="8" onAction="#handleCancelButtonAction">
                <font>
                   <Font name="Constantia" size="12.0" />
                </font>
