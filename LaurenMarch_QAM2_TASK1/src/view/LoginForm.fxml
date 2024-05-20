@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="center" spacing="40" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginFormController">
+    <padding>
+        <Insets bottom="40" left="40" right="40" top="40" />
+    </padding>
+
+    <Label fx:id="titleLabel" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+    <Label fx:id="subtitleLabel" style="-fx-font-size: 14px;" />
+
+    <GridPane alignment="center" hgap="10" vgap="10">
+        <columnConstraints>
+            <ColumnConstraints hgrow="NEVER" minWidth="10" prefWidth="100" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
+        </columnConstraints>
+        <Label fx:id="usernameLabel" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField fx:id="usernameField" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <Label fx:id="passwordLabel" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <PasswordField fx:id="passwordField" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+        </rowConstraints>
+    </GridPane>
+
+    <Button fx:id="loginButton" mnemonicParsing="false" text="Login" textFill="#2c04c2" onAction="#handleLoginButtonAction"/>
+
+    <Label fx:id="errorLabel" textFill="red" />
+
+    <Label fx:id="dateTimeLabel" style="-fx-font-size: 14px;" />
+
+    <HBox alignment="center" spacing="10">
+        <Label fx:id="englishLabel" style="-fx-cursor: hand; -fx-text-fill: cyan;" text="English" />
+        <Label style="-fx-text-fill: black;" text="|" />
+        <Label fx:id="frenchLabel" style="-fx-cursor: hand;" text="French" />
+    </HBox>
+</VBox>

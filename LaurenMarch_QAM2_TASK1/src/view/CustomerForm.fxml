@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="374.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerFormController">
+    <children>
+        <Text fill="#0fb0c9" layoutX="28.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customers" wrappingWidth="92.13671875">
+            <font>
+                <Font name="Constantia" size="17.0" />
+            </font>
+        </Text>
+        <Button fx:id="addCustomerButton" layoutX="829.0" layoutY="98.0" mnemonicParsing="false" text="Add" onAction="#handleLoadAddCustomerForm" />
+        <Button fx:id="updateCustomerButton" layoutX="829.0" layoutY="134.0" mnemonicParsing="false" text="Update" onAction="#handleLoadUpdateCustomerForm"/>
+        <Button fx:id="deleteCustomerButton" layoutX="829.0" layoutY="174.0" mnemonicParsing="false" text="Delete"  />
+        <CubicCurve controlX1="-68.0" controlX2="250.0" controlY1="21.0" controlY2="-33.0" endX="489.0" endY="-6.0" fill="#0fb0c9" layoutX="240.0" layoutY="340.0" nodeOrientation="LEFT_TO_RIGHT" opacity="0.29" startX="-196.0" startY="-6.0" stroke="BLACK" strokeType="OUTSIDE" />
+        <ScrollPane fx:id="customerScrollPane" fitToHeight="true" fitToWidth="true" layoutX="28.0" layoutY="85.0" prefHeight="210.0" prefWidth="770.0">
+            <content>
+                <TableView fx:id="customerTableView" opacity="0.5" prefHeight="210.0" prefWidth="770.0">
+                    <columns>
+                        <TableColumn fx:id="customerIdColumn" editable="false" prefWidth="-1.0" text="Customer ID" />
+                        <TableColumn fx:id="customerNameColumn" editable="false" prefWidth="-1.0" text="Customer Name" />
+                        <TableColumn fx:id="addressColumn" editable="false" prefWidth="-1.0" text="Address" />
+                        <TableColumn fx:id="postalCodeColumn" editable="false" prefWidth="-1.0" text="Postal Code" />
+                        <TableColumn fx:id="phoneColumn" editable="false" prefWidth="-1.0" text="Phone" />
+                        <TableColumn fx:id="createDateColumn" editable="false" prefWidth="-1.0" text="Create Date" />
+                        <TableColumn fx:id="createdByColumn" editable="false" minWidth="6.0" prefWidth="-1.0" text="Created By" />
+                        <TableColumn fx:id="lastUpdateColumn" editable="false" prefWidth="-1.0" text="Last Update" />
+                        <TableColumn fx:id="lastUpdatedByColumn" editable="false" prefWidth="-1.0" text="Last Updated By" />
+                        <TableColumn fx:id="divisionIdColumn" editable="false" minWidth="0.0" prefWidth="-1.0" text="Division ID" />
+                    </columns>
+                </TableView>
+            </content>
+        </ScrollPane>
+      <Button fx:id="appointmentsFormButton" layoutX="752.0" layoutY="322.0" mnemonicParsing="false" text="Appointments" onAction="#handleLoadAppointmentsFormButton" />
+      <Button fx:id="logoutButton" layoutX="853.0" layoutY="322.0" mnemonicParsing="false" text="Logout" />
+    </children>
+</AnchorPane>

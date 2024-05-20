@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="374.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppointmentsFormController">
+   <children>
+      <Text fill="#0fb0c9" layoutX="42.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Appointments" wrappingWidth="113.13671875">
+         <font>
+            <Font name="Constantia" size="17.0" />
+         </font>
+      </Text>
+      <TabPane fx:id="tabPane" layoutX="42.0" layoutY="89.0" prefHeight="210.0" prefWidth="770.0">
+         <tabs>
+            <Tab text="Monthly View">
+               <content>
+                  <ScrollPane fitToHeight="true" fitToWidth="true">
+                     <content>
+                        <TableView fx:id="appointmentsTableViewMonth" fixedCellSize="50.0" prefHeight="200.0" prefWidth="770.0">
+                           <columns>
+                              <TableColumn fx:id="appointmentsIdColumnMonth" prefWidth="104.0" text="Appointment ID" />
+                              <TableColumn fx:id="appointmentsTitleColumnMonth" prefWidth="46.0" text="Title" />
+                              <TableColumn fx:id="appointmentsDescriptionColumnMonth" prefWidth="75.0" text="Description" />
+                              <TableColumn fx:id="appointmentsLocationColumnMonth" prefWidth="75.0" text="Location" />
+                              <TableColumn fx:id="appointmentsContactColumnMonth" prefWidth="75.0" text="Contact" />
+                              <TableColumn fx:id="appointmentsTypeColumnMonth" prefWidth="55.0" text="Type" />
+                              <TableColumn fx:id="appointmentsStartDateColumnMonth" prefWidth="116.0" text="Start Date/Time" />
+                              <TableColumn fx:id="appointmentsEndDateColumnMonth" prefWidth="85.0" text="End Date/Time" />
+                              <TableColumn fx:id="appointmentsCustomerIDColumnMonth" prefWidth="93.0" text="Customer ID" />
+                              <TableColumn fx:id="appointmentsUserIdColumnMonth" prefWidth="45.0" text="User ID" />
+                           </columns>
+                        </TableView>
+                     </content>
+                  </ScrollPane>
+               </content>
+            </Tab>
+            <Tab text="Weekly View">
+               <content>
+                  <ScrollPane fitToHeight="true" fitToWidth="true">
+                     <content>
+                        <TableView fx:id="appointmentsTableViewWeek" fixedCellSize="50.0" prefHeight="200.0" prefWidth="770.0">
+                           <columns>
+                              <TableColumn fx:id="appointmentsIdColumnWeek" prefWidth="104.0" text="Appointment ID" />
+                              <TableColumn fx:id="appointmentsTitleColumnWeek" prefWidth="46.0" text="Title" />
+                              <TableColumn fx:id="appointmentsDescriptionColumnWeek" prefWidth="75.0" text="Description" />
+                              <TableColumn fx:id="appointmentsLocationColumnWeek" prefWidth="75.0" text="Location" />
+                              <TableColumn fx:id="appointmentsContactColumnWeek" prefWidth="75.0" text="Contact" />
+                              <TableColumn fx:id="appointmentsTypeColumnWeek" prefWidth="55.0" text="Type" />
+                              <TableColumn fx:id="appointmentsStartDateColumnWeek" prefWidth="116.0" text="Start Date/Time" />
+                              <TableColumn fx:id="appointmentsEndDateColumnWeek" prefWidth="85.0" text="End Date/Time" />
+                              <TableColumn fx:id="appointmentsCustomerIDColumnWeek" prefWidth="93.0" text="Customer ID" />
+                              <TableColumn fx:id="appointmentsUserIdColumnWeek" prefWidth="45.0" text="User ID" />
+                           </columns>
+                        </TableView>
+                     </content>
+                  </ScrollPane>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+      <Button fx:id="addAppointment" layoutX="843.0" layoutY="99.0" mnemonicParsing="false" text="Add" />
+      <Button fx:id="updateAppointment" layoutX="843.0" layoutY="135.0" mnemonicParsing="false" text="Update" />
+      <Button fx:id="deleteAppointment" layoutX="843.0" layoutY="175.0" mnemonicParsing="false" text="Delete" />
+      <CubicCurve controlX1="-68.0" controlX2="250.0" controlY1="21.0" controlY2="-33.0" endX="489.0" endY="-6.0" fill="#0fb0c9" layoutX="240.0" layoutY="340.0" nodeOrientation="LEFT_TO_RIGHT" opacity="0.29" startX="-196.0" startY="-6.0" stroke="BLACK" strokeType="OUTSIDE" />
+      <Button fx:id="logoutButton" layoutX="844.0" layoutY="322.0" mnemonicParsing="false" text="Logout" />
+      <Button fx:id="customerFormButton" layoutX="758.0" layoutY="322.0" mnemonicParsing="false" text="Customers" onAction="#handleLoadCustomerFormButton" />
+   </children>
+</AnchorPane>
