@@ -8,10 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Customer;
@@ -159,5 +156,35 @@ public class CustomerFormController {
         alert.showAndWait();
     }
 
+    @FXML
+    private void handleDeleteButtonAction() {
+        Customer selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
+        if (selectedCustomer != null) {
+            deleteButtonAction(selectedCustomer);
+        } else {
+            showAlert("Error", "No customer selected. Please select a customer to delete.");
+        }
+    }
+
+    private void deleteButtonAction(Customer selectedCustomer) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("Delete Customer");
+        alert.setContentText("Are you sure you want to delete this customer?");
+
+        ButtonType buttonTypeYes = new ButtonType("Yes");
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeCancel);
+
+        alert.showAndWait().ifPresent(type -> {
+            if (type == buttonTypeYes) {
+                // Delete the customer from the database
+                CustomerDAO.deleteCustomer(selectedCustomer.getCustomerId());
+                // Refresh the table view
+                loadCustomerData();
+            }
+        });
+    }
 
 }
