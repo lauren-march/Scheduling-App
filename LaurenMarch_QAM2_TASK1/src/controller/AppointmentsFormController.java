@@ -70,6 +70,8 @@ public class AppointmentsFormController {
 
     @FXML
     private Button customerFormButton;
+    @FXML
+    private Button addAppointmentButton;
 
     @FXML
     private void handleLoadCustomerFormButton() {
@@ -160,6 +162,22 @@ public class AppointmentsFormController {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/view/CustomerForm.fxml"));
             Stage stage = (Stage) customerFormButton.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleLoadAddAppointmentForm() {
+        loadAddAppointmentForm();
+    }
+    private void loadAddAppointmentForm() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/view/AddAppointmentForm.fxml"));
+            Stage stage = (Stage) addAppointmentButton.getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
