@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import model.Appointments;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class AppointmentsDAO {
@@ -61,8 +62,35 @@ public class AppointmentsDAO {
         }
     }
 
-    public void updateAppointment(Appointments appointments, LocalDateTime lastUpdated) {
+    public void updateAppointment(Appointments appointments, LocalDateTime lastUpdated, LocalDateTime start, LocalDateTime end) {
+        String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, " +
+                 "Last_Update = ?, Last_Updated_By = ?, Customer_ID = ? User_ID = ?, Contact_ID = ?";
+        try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)){
+            ps.setString (1, appointments.getTitle());
+            ps.setString (2, appointments.getDescription());
+            ps.setString (3, appointments.getLocation());
+            ps.setString (4, appointments.getType());
+            ps.setTimestamp (5, Timestamp.valueOf(start));
+            ps.setTimestamp (6, Timestamp.valueOf(end));
+            ps.setTimestamp (7, Timestamp.valueOf(lastUpdated));
+            ps.setString (8, appointments.getLastUpdateBy());
+            ps.setInt (9, appointments.getCustomerId());
+            ps.setInt (10, appointments.getUserId());
+            ps.setInt (11, appointments.getContactId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
 
+    public void deleteAppointment(int appointmentId) {
+        String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";
+        try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)){
+            ps.setInt (1, appointmentId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
 }
