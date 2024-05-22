@@ -12,8 +12,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Customer;
+import model.FirstLevelDivisions;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 public class CustomerFormController {
 
@@ -69,7 +72,7 @@ public class CustomerFormController {
         makeColumnsAdjustable(customerTableView);
     }
 
-    private void loadCustomerData() {
+    public void loadCustomerData() {
         ObservableList<Customer> customerList = CustomerDAO.getCustomerList();
         customerTableView.setItems(customerList);
     }
@@ -77,13 +80,13 @@ public class CustomerFormController {
     private void makeColumnsAdjustable(TableView<?> table) {
         table.getColumns().forEach(column -> {
             column.setPrefWidth(column.getWidth());
-            column.setMinWidth(100);  // Set a minimum width for better appearance
+            column.setMinWidth(130);  // Set a minimum width for better appearance
         });
 
         table.getItems().addListener((ListChangeListener<Object>) change -> {
             table.getColumns().forEach(column -> {
                 column.setPrefWidth(column.getWidth());
-                column.setMinWidth(100);  // Set a minimum width for better appearance
+                column.setMinWidth(130);  // Set a minimum width for better appearance
             });
         });
     }
@@ -119,6 +122,7 @@ public class CustomerFormController {
 
     @FXML
     private void handleLoadAddCustomerForm() {
+
         loadAddCustomerForm();
     }
 

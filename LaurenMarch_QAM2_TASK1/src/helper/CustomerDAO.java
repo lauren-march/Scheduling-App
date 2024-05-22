@@ -29,9 +29,11 @@ public class CustomerDAO {
                 String customerDivisionName = rs.getString("Division");
                 int customerCountryId = rs.getInt("Country_ID");
                 String customerCountryName = rs.getString("Country");
+                LocalDateTime createDate = rs.getTimestamp("Create_Date").toLocalDateTime();
+                LocalDateTime lastUpdate = rs.getTimestamp("Last_Update").toLocalDateTime();
 
                 Customer customer = new Customer(customerId, customerName, customerAddress, customerPostalCode, customerPhone,
-                        createdBy, lastUpdatedBy, customerDivisionId, customerDivisionName, customerCountryId, customerCountryName, null, null);
+                        createdBy, lastUpdatedBy, customerDivisionId, customerDivisionName, customerCountryId, customerCountryName,createDate, lastUpdate);
                 customerList.add(customer);
             }
         } catch (SQLException e) {
@@ -41,15 +43,18 @@ public class CustomerDAO {
     }
 
     public static void addCustomer(Customer customer, LocalDateTime createdDate, LocalDateTime lastUpdated) throws SQLException {
-        String sql = "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Create_Date, Last_Update, Division_ID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone, Create_Date, Last_Update, Created_By, Last_Updated_By, Division_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
-            ps.setString(1, customer.getName());
-            ps.setString(2, customer.getAddress());
-            ps.setString(3, customer.getPostalCode());
-            ps.setString(4, customer.getPhoneNumber());
-            ps.setTimestamp(5, Timestamp.valueOf(createdDate));
-            ps.setTimestamp(6, Timestamp.valueOf(lastUpdated));
-            ps.setInt(7, customer.getDivisionId());
+            ps.setInt(1, customer.getCustomerId());
+            ps.setString(2, customer.getName());
+            ps.setString(3, customer.getAddress());
+            ps.setString(4, customer.getPostalCode());
+            ps.setString(5, customer.getPhoneNumber());
+            ps.setTimestamp(6, Timestamp.valueOf(createdDate));
+            ps.setTimestamp(7, Timestamp.valueOf(lastUpdated));
+            ps.setString(8, customer.getCreatedBy());
+            ps.setString(9, customer.getLastUpdatedBy());
+            ps.setInt(10, customer.getDivisionId());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
@@ -99,13 +104,31 @@ public class CustomerDAO {
         return null;
     }
 
+//    public static int getNextCustomerId() {
+//        String sql = "SELECT MAX(Customer_ID) FROM customers";
+//        try (Statement stmt = JDBC.connection.createStatement();
+//             ResultSet rs = stmt.executeQuery(sql)) {
+//            if (rs.next()) {
+//                return rs.getInt(1) + 1;
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return 1; // Default to 1 if there are no customers
+//    }
     public static int getNextCustomerId() {
-        String sql = "SELECT MAX(Customer_ID) FROM customers";
-        try (Statement stmt = JDBC.connection.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            if (rs.next()) {
-                return rs.getInt(1) + 1;
+        String sql = "SELECT Customer_ID FROM customers ORDER BY Customer_ID";
+        try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            int expectedId = 1;
+            while (rs.next()) {
+                int currentId = rs.getInt("Customer_ID");
+                if (currentId != expectedId) {
+                    return expectedId;
+                }
+                expectedId++;
             }
+            return expectedId; // If no gaps found, return the next available ID
         } catch (SQLException e) {
             e.printStackTrace();
         }

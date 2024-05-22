@@ -39,4 +39,9 @@ public class AppointmentsDAO {
         }
         return appointmentsList;
     }
+
+    public void addAppointment(Appointments appointments, LocalDateTime createDate, LocalDateTime lastUpdated) throws SQLException {
+        String sql = "INSERT INTO appointments (Title, Description, Location, Type, ";
+    }
+
 }

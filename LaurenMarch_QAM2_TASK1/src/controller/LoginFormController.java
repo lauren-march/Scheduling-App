@@ -36,6 +36,7 @@ public class LoginFormController {
     @FXML private Button loginButton; // Ensure this matches fx:id in FXML
 
     private ResourceBundle bundle;
+    public static String currentUser;
 
     @FXML
     public void initialize() {
@@ -104,11 +105,14 @@ public class LoginFormController {
             ps.setString(1, username);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
-            return rs.next();
+            if (rs.next()){
+                currentUser = username;
+                return true;
+            };
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
-            return false;
         }
+        return false;
     }
 
     private void loadAppointmentsForm() {

@@ -81,10 +81,12 @@ public class AddCustomerFormController {
         }
 
         LocalDateTime now = LocalDateTime.now();
+        String currentUser = LoginFormController.currentUser;
+
         Customer newCustomer = new Customer(
                 Integer.parseInt(customerIdTextField.getText()),
                 name, address, postalCode, phoneNumber,
-                "Admin", "Admin",
+                currentUser, currentUser,
                 selectedDivision.getDivisionId(),
                 selectedDivision.getDivision(),
                 selectedDivision.getCountryId(),
@@ -108,7 +110,12 @@ public class AddCustomerFormController {
 
     private void navigateToCustomerForm() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/view/CustomerForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomerForm.fxml"));
+            Parent root = loader.load();
+
+            CustomerFormController controller = loader.getController();
+            controller.loadCustomerData();  // Reload data after navigating back
+
             Stage stage = (Stage) addCustomerButton.getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
@@ -117,6 +124,7 @@ public class AddCustomerFormController {
             e.printStackTrace();
         }
     }
+
 
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
