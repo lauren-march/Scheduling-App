@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="center" prefHeight="535.0" prefWidth="320.0" spacing="40" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddCustomerFormController">
+<VBox alignment="center" prefHeight="535.0" prefWidth="320.0" spacing="40" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddAppointmentFormController">
     <padding>
         <Insets bottom="40" left="40" right="40" top="40" />
     </padding>
@@ -82,7 +82,7 @@
                 <TextField fx:id="titleTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <TextField fx:id="descriptionTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <TextField fx:id="locationTextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                <Button fx:id="addAppointmentButton" mnemonicParsing="false" text="Add" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="11">
+                <Button fx:id="addAppointmentButton" mnemonicParsing="false" text="Add" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="11" onAction="#handleAddAppointmentButton">
                     <font>
                         <Font name="Constantia" size="12.0" />
                     </font>
@@ -117,8 +117,8 @@
                   <Font name="Constantia" size="12.0" />
                </font>
             </Label>
-            <ComboBox fx:id="startTime" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <ComboBox fx:id="startTimeComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <ComboBox fx:id="endTimeComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
             </children>
         </GridPane>
     </children>

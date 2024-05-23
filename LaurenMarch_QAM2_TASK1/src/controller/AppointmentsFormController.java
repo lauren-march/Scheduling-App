@@ -23,6 +23,29 @@ import java.util.Locale;
 
 public class AppointmentsFormController {
     @FXML
+    private TableView<Appointments> appointmentsTableView;
+    @FXML
+    private TableColumn<Appointments, Integer> appointmentsIdColumn;
+    @FXML
+    private TableColumn<Appointments, String> appointmentsTitleColumn;
+    @FXML
+    private TableColumn<Appointments, String> appointmentsDescriptionColumn;
+    @FXML
+    private TableColumn<Appointments, String> appointmentsLocationColumn;
+    @FXML
+    private TableColumn<Appointments, String> appointmentsContactColumn;
+    @FXML
+    private TableColumn<Appointments, String> appointmentsTypeColumn;
+    @FXML
+    private TableColumn<Appointments, LocalDateTime> appointmentsStartDateColumn;
+    @FXML
+    private TableColumn<Appointments, LocalDateTime> appointmentsEndDateColumn;
+    @FXML
+    private TableColumn<Appointments, Integer> appointmentsCustomerIDColumn;
+    @FXML
+    private TableColumn<Appointments, Integer> appointmentsUserIdColumn;
+
+    @FXML
     private TableView<Appointments> appointmentsTableViewMonth;
     @FXML
     private TableView<Appointments> appointmentsTableViewWeek;
@@ -75,11 +98,25 @@ public class AppointmentsFormController {
 
     @FXML
     private void handleLoadCustomerFormButton() {
+
         loadCustomersForm();
     }
 
     @FXML
     public void initialize() {
+
+        // Initialize column for all view
+        appointmentsIdColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+        appointmentsTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        appointmentsDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        appointmentsLocationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
+        appointmentsContactColumn.setCellValueFactory(new PropertyValueFactory<>("contactId"));
+        appointmentsTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        appointmentsStartDateColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
+        appointmentsEndDateColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
+        appointmentsCustomerIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        appointmentsUserIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
+
         // Initialize columns for monthly view
         appointmentsIdColumnMonth.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         appointmentsTitleColumnMonth.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -111,15 +148,15 @@ public class AppointmentsFormController {
 
     }
 
-    private void loadAppointmentData() {
+    public void loadAppointmentData() {
         ObservableList<Appointments> appointmentsList = AppointmentsDAO.getAppointmentsList();
         ObservableList<Appointments> monthlyAppointments = FXCollections.observableArrayList();
         ObservableList<Appointments> weeklyAppointments = FXCollections.observableArrayList();
 
         LocalDate now = LocalDate.now();
-        LocalDate firstDayOfMonth = LocalDate.of(2020, now.getMonth(), 1); // For testing
-        LocalDate lastDayOfMonth = LocalDate.of(2020, now.getMonth(), now.lengthOfMonth()); // For testing
-        LocalDate firstDayOfWeek = LocalDate.of(2020, now.getMonth(), 1).with(WeekFields.of(Locale.getDefault()).dayOfWeek(), 1); // For testing
+        LocalDate firstDayOfMonth = now.withDayOfMonth(1);
+        LocalDate lastDayOfMonth = now.withDayOfMonth(now.lengthOfMonth());
+        LocalDate firstDayOfWeek = now.with(WeekFields.of(Locale.getDefault()).dayOfWeek(), 1);
         LocalDate lastDayOfWeek = firstDayOfWeek.plusDays(6);
 
         for (Appointments appointment : appointmentsList) {
@@ -140,6 +177,7 @@ public class AppointmentsFormController {
             }
         }
 
+        appointmentsTableView.setItems(appointmentsList);
         appointmentsTableViewMonth.setItems(monthlyAppointments);
         appointmentsTableViewWeek.setItems(weeklyAppointments);
     }

@@ -14,6 +14,28 @@
       </Text>
       <TabPane fx:id="tabPane" layoutX="42.0" layoutY="89.0" prefHeight="210.0" prefWidth="770.0">
          <tabs>
+            <Tab text="All Appointments View">
+               <content>
+                  <ScrollPane fitToHeight="true" fitToWidth="true">
+                     <content>
+                        <TableView fx:id="appointmentsTableView" fixedCellSize="50.0" prefHeight="200.0" prefWidth="770.0">
+                           <columns>
+                              <TableColumn fx:id="appointmentsIdColumn" prefWidth="104.0" text="Appointment ID" />
+                              <TableColumn fx:id="appointmentsTitleColumn" prefWidth="46.0" text="Title" />
+                              <TableColumn fx:id="appointmentsDescriptionColumn" prefWidth="75.0" text="Description" />
+                              <TableColumn fx:id="appointmentsLocationColumn" prefWidth="75.0" text="Location" />
+                              <TableColumn fx:id="appointmentsContactColumn" prefWidth="75.0" text="Contact" />
+                              <TableColumn fx:id="appointmentsTypeColumn" prefWidth="55.0" text="Type" />
+                              <TableColumn fx:id="appointmentsStartDateColumn" prefWidth="116.0" text="Start Date/Time" />
+                              <TableColumn fx:id="appointmentsEndDateColumn" prefWidth="85.0" text="End Date/Time" />
+                              <TableColumn fx:id="appointmentsCustomerIDColumn" prefWidth="93.0" text="Customer ID" />
+                              <TableColumn fx:id="appointmentsUserIdColumn" prefWidth="45.0" text="User ID" />
+                           </columns>
+                        </TableView>
+                     </content>
+                  </ScrollPane>
+               </content>
+            </Tab>
             <Tab text="Monthly View">
                <content>
                   <ScrollPane fitToHeight="true" fitToWidth="true">

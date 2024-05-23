@@ -13,7 +13,7 @@ public class UsersDAO {
 
     public static ObservableList<Users> getUsersList() {
         ObservableList<Users> usersList = FXCollections.observableArrayList();
-        String sql = "Select * From users";
+        String sql = "SELECT * FROM users ORDER BY User_ID";
 
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
@@ -33,5 +33,20 @@ public class UsersDAO {
         return usersList;
     }
 
+    public static ObservableList<Integer> getUserIdList() {
+        ObservableList<Integer> userIdList = FXCollections.observableArrayList();
+        String sql = "SELECT User_ID FROM users ORDER BY User_ID";
 
+        try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int userId = rs.getInt("User_ID");
+
+                userIdList.add(userId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return userIdList;
+    }
 }

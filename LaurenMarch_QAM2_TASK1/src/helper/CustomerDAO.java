@@ -33,7 +33,7 @@ public class CustomerDAO {
                 LocalDateTime lastUpdate = rs.getTimestamp("Last_Update").toLocalDateTime();
 
                 Customer customer = new Customer(customerId, customerName, customerAddress, customerPostalCode, customerPhone,
-                        createdBy, lastUpdatedBy, customerDivisionId, customerDivisionName, customerCountryId, customerCountryName,createDate, lastUpdate);
+                        createdBy, lastUpdatedBy, customerDivisionId, customerDivisionName, customerCountryId, customerCountryName, createDate, lastUpdate);
                 customerList.add(customer);
             }
         } catch (SQLException e) {
@@ -41,6 +41,23 @@ public class CustomerDAO {
         }
         return customerList;
     }
+
+    public static ObservableList<Integer> getCustomerIdList() {
+        ObservableList<Integer> customerIdList = FXCollections.observableArrayList();
+        String sql = "SELECT customers.Customer_ID FROM customers ORDER BY customers.Customer_ID";
+        try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int customerId = rs.getInt("Customer_ID");
+
+                customerIdList.add(customerId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customerIdList;
+    }
+
 
     public static void addCustomer(Customer customer, LocalDateTime createdDate, LocalDateTime lastUpdated) throws SQLException {
         String sql = "INSERT INTO customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone, Create_Date, Last_Update, Created_By, Last_Updated_By, Division_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

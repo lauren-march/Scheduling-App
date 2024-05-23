@@ -53,20 +53,6 @@ public class AddCustomerFormController {
         initializeFormForAdd();
     }
 
-    private void loadDivisions() {
-        Countries selectedCountry = countryComboBox.getSelectionModel().getSelectedItem();
-        if (selectedCountry != null) {
-            ObservableList<FirstLevelDivisions> divisions = FirstLevelDivisionsDAO.getDivisionsByCountryId(selectedCountry.getCountryId());
-            firstLevelDivisionComboBox.setItems(divisions);
-        }
-    }
-
-    private void initializeFormForAdd() {
-        int nextCustomerId = CustomerDAO.getNextCustomerId();
-        customerIdTextField.setText(String.valueOf(nextCustomerId));
-        customerIdTextField.setDisable(true);
-    }
-
     @FXML
     private void handleAddButtonAction() {
         String name = customerNameTextField.getText();
@@ -125,6 +111,19 @@ public class AddCustomerFormController {
         }
     }
 
+    private void initializeFormForAdd() {
+        int nextCustomerId = CustomerDAO.getNextCustomerId();
+        customerIdTextField.setText(String.valueOf(nextCustomerId));
+        customerIdTextField.setDisable(true);
+    }
+
+    private void loadDivisions() {
+        Countries selectedCountry = countryComboBox.getSelectionModel().getSelectedItem();
+        if (selectedCountry != null) {
+            ObservableList<FirstLevelDivisions> divisions = FirstLevelDivisionsDAO.getDivisionsByCountryId(selectedCountry.getCountryId());
+            firstLevelDivisionComboBox.setItems(divisions);
+        }
+    }
 
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

@@ -12,7 +12,7 @@ public class ContactsDAO {
 
     public static ObservableList<Contacts> getContactsList() {
         ObservableList<Contacts> contactsList = FXCollections.observableArrayList();
-        String sql = "Select * From users";
+        String sql = "Select * From contacts";
 
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
@@ -29,4 +29,5 @@ public class ContactsDAO {
         }
         return contactsList;
     }
+
 }

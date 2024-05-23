@@ -36,7 +36,6 @@ public class Customer {
         this.lastUpdate = lastUpdate;
     }
 
-    // Constructor for minimal details
     public Customer(int customerId, String name) {
         this.customerId = customerId;
         this.name = name;
@@ -145,5 +144,10 @@ public class Customer {
 
     public void setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(customerId);
     }
 }

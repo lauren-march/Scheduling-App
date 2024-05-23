@@ -91,4 +91,9 @@ public class Users {
 
         this.lastUpdatedBy = lastUpdatedBy;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(userId);
+    }
 }
