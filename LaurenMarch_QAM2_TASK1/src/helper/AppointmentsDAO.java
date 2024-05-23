@@ -95,7 +95,7 @@ public class AppointmentsDAO {
         }
     }
 
-    public void updateAppointment(Appointments appointments, LocalDateTime lastUpdated, LocalDateTime start, LocalDateTime end) {
+    public static void updateAppointment(Appointments appointments, LocalDateTime lastUpdated, LocalDateTime start, LocalDateTime end) {
         String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, " +
                 "Last_Update = ?, Last_Updated_By = ?, Customer_ID = ? User_ID = ?, Contact_ID = ?";
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
@@ -116,7 +116,7 @@ public class AppointmentsDAO {
         }
     }
 
-    public void deleteAppointment(int appointmentId) {
+    public static void deleteAppointment(int appointmentId) {
         String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
             ps.setInt(1, appointmentId);

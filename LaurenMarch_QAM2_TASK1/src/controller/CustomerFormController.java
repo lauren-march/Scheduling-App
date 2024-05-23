@@ -72,6 +72,37 @@ public class CustomerFormController {
         makeColumnsAdjustable(customerTableView);
     }
 
+    @FXML
+    private void handleLoadAppointmentsFormButton(){
+        loadAppointmentsForm();
+    }
+
+    @FXML
+    private void handleLoadAddCustomerForm() {
+
+        loadAddCustomerForm();
+    }
+
+    @FXML
+    private void handleLoadUpdateCustomerForm() {
+        Customer selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
+        if (selectedCustomer != null) {
+            loadUpdateCustomerForm(selectedCustomer);
+        } else {
+            showAlert("Error", "No customer selected. Please select a customer to update.");
+        }
+    }
+
+    @FXML
+    private void handleDeleteButtonAction() {
+        Customer selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
+        if (selectedCustomer != null) {
+            deleteButtonAction(selectedCustomer);
+        } else {
+            showAlert("Error", "No customer selected. Please select a customer to delete.");
+        }
+    }
+
     public void loadCustomerData() {
         ObservableList<Customer> customerList = CustomerDAO.getCustomerList();
         customerTableView.setItems(customerList);
@@ -103,11 +134,6 @@ public class CustomerFormController {
         }
     }
 
-    @FXML
-    private void handleLoadAppointmentsFormButton(){
-        loadAppointmentsForm();
-    }
-
     private void loadAddCustomerForm () {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/view/AddCustomerForm.fxml"));
@@ -118,12 +144,6 @@ public class CustomerFormController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @FXML
-    private void handleLoadAddCustomerForm() {
-
-        loadAddCustomerForm();
     }
 
     private void loadUpdateCustomerForm(Customer selectedCustomer) {
@@ -143,31 +163,11 @@ public class CustomerFormController {
         }
     }
 
-    @FXML
-    private void handleLoadUpdateCustomerForm() {
-        Customer selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
-        if (selectedCustomer != null) {
-            loadUpdateCustomerForm(selectedCustomer);
-        } else {
-            showAlert("Error", "No customer selected. Please select a customer to update.");
-        }
-    }
-
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setContentText(content);
         alert.showAndWait();
-    }
-
-    @FXML
-    private void handleDeleteButtonAction() {
-        Customer selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
-        if (selectedCustomer != null) {
-            deleteButtonAction(selectedCustomer);
-        } else {
-            showAlert("Error", "No customer selected. Please select a customer to delete.");
-        }
     }
 
     private void deleteButtonAction(Customer selectedCustomer) {

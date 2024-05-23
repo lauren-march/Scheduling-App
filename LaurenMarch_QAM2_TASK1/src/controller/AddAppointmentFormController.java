@@ -137,6 +137,12 @@ public class AddAppointmentFormController {
         navigateToAppointmentsForm();
     }
 
+    @FXML
+    private void handleCancelButtonAction() {
+
+        navigateToAppointmentsForm();
+    }
+
 
     private void initializeFormForAdd() {
         int nextAppointmentId = AppointmentsDAO.getNextAppointmentId();
@@ -196,7 +202,7 @@ public class AddAppointmentFormController {
 
     private void navigateToAppointmentsForm() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AppointmentsForm"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AppointmentsForm.fxml"));
             Parent root = loader.load();
 
             AppointmentsFormController controller = loader.getController();

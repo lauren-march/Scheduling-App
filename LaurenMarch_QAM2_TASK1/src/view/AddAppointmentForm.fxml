@@ -87,7 +87,7 @@
                         <Font name="Constantia" size="12.0" />
                     </font>
                 </Button>
-                <Button fx:id="cancelAddAppointmentButton" mnemonicParsing="false" text="Cancel" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="12">
+                <Button fx:id="cancelAddAppointmentButton" mnemonicParsing="false" text="Cancel" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="12" onAction="#handleCancelButtonAction">
                     <font>
                         <Font name="Constantia" size="12.0" />
                     </font>
