@@ -56,6 +56,38 @@ public class UpdateCustomerFormController {
         }
     }
 
+    @FXML
+    private void handleUpdateButtonAction() {
+        String name = customerNameTextField.getText();
+        String address = addressTextField.getText();
+        String postalCode = postalCodeTextField.getText();
+        String phoneNumber = phoneNumberTextField.getText();
+        FirstLevelDivisions selectedDivision = firstLevelDivisionComboBox.getSelectionModel().getSelectedItem();
+
+        if (name.isEmpty() || address.isEmpty() || postalCode.isEmpty() || phoneNumber.isEmpty() || selectedDivision == null) {
+            showAlert("Error", "Please fill in all fields.");
+            return;
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        selectedCustomer.setName(name);
+        selectedCustomer.setAddress(address);
+        selectedCustomer.setPostalCode(postalCode);
+        selectedCustomer.setPhoneNumber(phoneNumber);
+        selectedCustomer.setDivisionId(selectedDivision.getDivisionId());
+        selectedCustomer.setLastUpdate(now);
+
+        CustomerDAO.updateCustomer(selectedCustomer, now);
+
+        // Navigate back to CustomerForm
+        navigateToCustomerForm();
+    }
+
+    @FXML
+    private void handleCancelButtonAction() {
+        navigateToCustomerForm();
+    }
+
     private void loadDivisions() {
         Countries selectedCountry = countryComboBox.getSelectionModel().getSelectedItem();
         if (selectedCountry != null) {
@@ -88,38 +120,6 @@ public class UpdateCustomerFormController {
 
             customerIdTextField.setDisable(true);
         }
-    }
-
-    @FXML
-    private void handleUpdateButtonAction() {
-        String name = customerNameTextField.getText();
-        String address = addressTextField.getText();
-        String postalCode = postalCodeTextField.getText();
-        String phoneNumber = phoneNumberTextField.getText();
-        FirstLevelDivisions selectedDivision = firstLevelDivisionComboBox.getSelectionModel().getSelectedItem();
-
-        if (name.isEmpty() || address.isEmpty() || postalCode.isEmpty() || phoneNumber.isEmpty() || selectedDivision == null) {
-            showAlert("Error", "Please fill in all fields.");
-            return;
-        }
-
-        LocalDateTime now = LocalDateTime.now();
-        selectedCustomer.setName(name);
-        selectedCustomer.setAddress(address);
-        selectedCustomer.setPostalCode(postalCode);
-        selectedCustomer.setPhoneNumber(phoneNumber);
-        selectedCustomer.setDivisionId(selectedDivision.getDivisionId());
-        selectedCustomer.setLastUpdate(now);
-
-        CustomerDAO.updateCustomer(selectedCustomer, now);
-
-        // Navigate back to CustomerForm
-        navigateToCustomerForm();
-    }
-
-    @FXML
-    private void handleCancelButtonAction() {
-        navigateToCustomerForm();
     }
 
     private void navigateToCustomerForm() {

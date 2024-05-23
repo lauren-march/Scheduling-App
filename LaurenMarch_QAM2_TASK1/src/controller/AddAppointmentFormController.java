@@ -143,7 +143,6 @@ public class AddAppointmentFormController {
         navigateToAppointmentsForm();
     }
 
-
     private void initializeFormForAdd() {
         int nextAppointmentId = AppointmentsDAO.getNextAppointmentId();
         appointmentIdTextField.setText(String.valueOf(nextAppointmentId));
