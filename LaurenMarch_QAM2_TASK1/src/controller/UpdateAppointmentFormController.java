@@ -107,15 +107,14 @@ public class UpdateAppointmentFormController {
             return;
         }
 
+        // Convert to UTC for overlap validation
+        ZonedDateTime startUTC = TimeUtil.toUTC(startLocalDateTime);
+        ZonedDateTime endUTC = TimeUtil.toUTC(endLocalDateTime);
+
         // Validate overlapping appointments
-        if (!validateOverlappingAppointments(customerId, startLocalDateTime, endLocalDateTime, selectedAppointment.getAppointmentId())) {
+        if (!validateOverlappingAppointments(customerId, startUTC.toLocalDateTime(), endUTC.toLocalDateTime())) {
             return;
         }
-
-        // Convert to UTC for storage
-        ZonedDateTime startUTC = startLocalDateTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"));
-        ZonedDateTime endUTC = endLocalDateTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"));
-
         // Update appointment
         LocalDateTime now = LocalDateTime.now();
         String currentUser = LoginFormController.currentUser;
@@ -190,17 +189,20 @@ public class UpdateAppointmentFormController {
         return true;
     }
 
-    private boolean validateOverlappingAppointments(int customerId, LocalDateTime start, LocalDateTime end, int appointmentId) {
+    private boolean validateOverlappingAppointments(int customerId, LocalDateTime start, LocalDateTime end) {
         ObservableList<Appointments> appointments = AppointmentsDAO.getAppointmentsByCustomerId(customerId);
 
-        for (Appointments appointment : appointments) {
-            if (appointment.getAppointmentId() == appointmentId) {
-                continue; // Skip the current appointment being updated
-            }
-            LocalDateTime appointmentStart = appointment.getStart();
-            LocalDateTime appointmentEnd = appointment.getEnd();
+        // Convert new appointment times to UTC
+        ZonedDateTime startUTC = TimeUtil.toUTC(start);
+        ZonedDateTime endUTC = TimeUtil.toUTC(end);
 
-            if (start.isBefore(appointmentEnd) && end.isAfter(appointmentStart)) {
+        for (Appointments appointment : appointments) {
+            ZonedDateTime appointmentStartUTC = TimeUtil.toUTC(appointment.getStart());
+            ZonedDateTime appointmentEndUTC = TimeUtil.toUTC(appointment.getEnd());
+
+            boolean isOverlap = startUTC.isBefore(appointmentEndUTC) && endUTC.isAfter(appointmentStartUTC);
+
+            if (isOverlap) {
                 showAlert("Error", "The appointment overlaps with an existing appointment.");
                 return false;
             }

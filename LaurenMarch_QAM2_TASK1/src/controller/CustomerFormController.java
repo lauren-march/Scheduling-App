@@ -13,6 +13,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Customer;
 import model.FirstLevelDivisions;
+import model.Appointments;
+import helper.AppointmentsDAO;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -163,13 +165,6 @@ public class CustomerFormController {
         }
     }
 
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
     private void deleteButtonAction(Customer selectedCustomer) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog");
@@ -183,12 +178,32 @@ public class CustomerFormController {
 
         alert.showAndWait().ifPresent(type -> {
             if (type == buttonTypeYes) {
-                // Delete the customer from the database
-                CustomerDAO.deleteCustomer(selectedCustomer.getCustomerId());
-                // Refresh the table view
-                loadCustomerData();
+                // Check if the customer has any appointments
+                if (!hasAppointments(selectedCustomer.getCustomerId())) {
+                    // Delete the customer from the database
+                    CustomerDAO.deleteCustomer(selectedCustomer.getCustomerId());
+                    // Refresh the table view
+                    loadCustomerData();
+                } else {
+                    // Show error message
+                    showAlert("Error", "This customer has existing appointments and cannot be deleted.");
+                }
             }
         });
     }
+
+    // Helper method to check if a customer has any appointments
+    private boolean hasAppointments(int customerId) {
+        ObservableList<Appointments> appointments = AppointmentsDAO.getAppointmentsByCustomerId(customerId);
+        return !appointments.isEmpty();
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
 
 }
