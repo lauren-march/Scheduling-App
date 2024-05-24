@@ -216,6 +216,10 @@ public class AppointmentsFormController {
         LocalDate lastDayOfWeek = firstDayOfWeek.plusDays(6);
 
         for (Appointments appointment : appointmentsList) {
+            // Convert UTC to local time for display
+            appointment.setStart(TimeUtil.fromUTCToLocal(appointment.getStart()));
+            appointment.setEnd(TimeUtil.fromUTCToLocal(appointment.getEnd()));
+
             LocalDate appointmentDate = appointment.getStart().toLocalDate();
 
             // Check for monthly view

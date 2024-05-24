@@ -28,9 +28,22 @@ public class TimeUtil {
         ZonedDateTime startET = toET(start);
         ZonedDateTime endET = toET(end);
 
-        if (startET.toLocalTime().isBefore(BUSINESS_START) || endET.toLocalTime().isAfter(BUSINESS_END)) {
-            return false;
-        }
-        return true;
+        return !startET.toLocalTime().isBefore(BUSINESS_START) && !endET.toLocalTime().isAfter(BUSINESS_END);
+    }
+
+    public static LocalDateTime fromUTCToLocal(LocalDateTime utcDateTime) {
+        return utcDateTime.atZone(UTC_ZONE).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
+    }
+
+    public static LocalDateTime fromETToLocal(LocalDateTime etDateTime) {
+        return etDateTime.atZone(ET_ZONE).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
+    }
+
+    public static LocalDateTime fromLocalToET(LocalDateTime localDateTime) {
+        return localDateTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ET_ZONE).toLocalDateTime();
+    }
+
+    public static LocalDateTime fromLocalToUTC(LocalDateTime localDateTime) {
+        return localDateTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(UTC_ZONE).toLocalDateTime();
     }
 }
