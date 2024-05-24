@@ -14,7 +14,7 @@
       </Text>
       <TabPane fx:id="tabPane" layoutX="42.0" layoutY="89.0" prefHeight="210.0" prefWidth="770.0">
          <tabs>
-            <Tab text="All Appointments View">
+            <Tab closable="false" text="All Appointments View">
                <content>
                   <ScrollPane fitToHeight="true" fitToWidth="true">
                      <content>
@@ -36,7 +36,7 @@
                   </ScrollPane>
                </content>
             </Tab>
-            <Tab text="Monthly View">
+            <Tab closable="false" text="Monthly View">
                <content>
                   <ScrollPane fitToHeight="true" fitToWidth="true">
                      <content>
@@ -58,7 +58,7 @@
                   </ScrollPane>
                </content>
             </Tab>
-            <Tab text="Weekly View">
+            <Tab closable="false" text="Weekly View">
                <content>
                   <ScrollPane fitToHeight="true" fitToWidth="true">
                      <content>
@@ -82,11 +82,11 @@
             </Tab>
          </tabs>
       </TabPane>
-      <Button fx:id="addAppointmentButton" layoutX="843.0" layoutY="99.0" mnemonicParsing="false" text="Add" onAction="#handleLoadAddAppointmentForm" />
-      <Button fx:id="updateAppointmentButton" layoutX="843.0" layoutY="135.0" mnemonicParsing="false" text="Update" onAction="#handleLoadUpdateAppointmentForm"/>
-      <Button fx:id="deleteAppointmentButton" layoutX="843.0" layoutY="175.0" mnemonicParsing="false" text="Delete" onAction="#handleDeleteButtonAction"/>
+      <Button fx:id="addAppointmentButton" layoutX="843.0" layoutY="99.0" mnemonicParsing="false" onAction="#handleLoadAddAppointmentForm" text="Add" />
+      <Button fx:id="updateAppointmentButton" layoutX="843.0" layoutY="135.0" mnemonicParsing="false" onAction="#handleLoadUpdateAppointmentForm" text="Update" />
+      <Button fx:id="deleteAppointmentButton" layoutX="843.0" layoutY="175.0" mnemonicParsing="false" onAction="#handleDeleteButtonAction" text="Delete" />
       <CubicCurve controlX1="-68.0" controlX2="250.0" controlY1="21.0" controlY2="-33.0" endX="489.0" endY="-6.0" fill="#0fb0c9" layoutX="240.0" layoutY="340.0" nodeOrientation="LEFT_TO_RIGHT" opacity="0.29" startX="-196.0" startY="-6.0" stroke="BLACK" strokeType="OUTSIDE" />
       <Button fx:id="logoutButton" layoutX="844.0" layoutY="322.0" mnemonicParsing="false" text="Logout" />
-      <Button fx:id="customerFormButton" layoutX="758.0" layoutY="322.0" mnemonicParsing="false" text="Customers" onAction="#handleLoadCustomerFormButton" />
+      <Button fx:id="customerFormButton" layoutX="758.0" layoutY="322.0" mnemonicParsing="false" onAction="#handleLoadCustomerFormButton" text="Customers" />
    </children>
 </AnchorPane>
