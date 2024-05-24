@@ -141,6 +141,7 @@ public class AppointmentsFormController {
 
         // Load data
         loadAppointmentData();
+        makeColumnsAdjustable(appointmentsTableView);
         makeColumnsAdjustable(appointmentsTableViewMonth);
         makeColumnsAdjustable(appointmentsTableViewWeek);
     }

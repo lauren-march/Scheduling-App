@@ -3,9 +3,11 @@ package helper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointments;
+import util.TimeUtil;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class AppointmentsDAO {
 
@@ -158,5 +160,49 @@ public class AppointmentsDAO {
             e.printStackTrace();
         }
         return 1;
+    }
+
+    public static ObservableList<Appointments> getAppointmentsWithin15Minutes(LocalDateTime currentTime) {
+        ObservableList<Appointments> appointmentsList = FXCollections.observableArrayList();
+        String sql = "SELECT a.Appointment_ID, a.Title, a.Description, a.Location, a.Type, a.Start, a.End, " +
+                "a.Create_Date, a.Created_By, a.Last_Update, a.Last_Updated_By, a.Customer_ID, a.User_ID, " +
+                "a.Contact_ID, c.Contact_Name " +
+                "FROM client_schedule.appointments a " +
+                "JOIN client_schedule.contacts c ON a.Contact_ID = c.Contact_ID";
+
+        try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int appointmentId = rs.getInt("Appointment_ID");
+                String title = rs.getString("Title");
+                String description = rs.getString("Description");
+                String location = rs.getString("Location");
+                String type = rs.getString("Type");
+                LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
+                LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
+                LocalDateTime createDate = rs.getTimestamp("Create_Date").toLocalDateTime();
+                String createdBy = rs.getString("Created_By");
+                LocalDateTime lastUpdate = rs.getTimestamp("Last_Update").toLocalDateTime();
+                String lastUpdateBy = rs.getString("Last_Updated_By");
+                int customerId = rs.getInt("Customer_ID");
+                int userId = rs.getInt("User_ID");
+                int contactId = rs.getInt("Contact_ID");
+                String contactName = rs.getString("Contact_Name");
+
+                Appointments appointment = new Appointments(appointmentId, title, description, location, type, start, end,
+                        createDate, createdBy, lastUpdate, lastUpdateBy, customerId, userId, contactId, contactName);
+
+                // Convert appointment start time to the user's local time zone for comparison
+                LocalDateTime startLocal = TimeUtil.fromUTCToLocal(start);
+
+                // Check if the appointment start time is within the next 15 minutes
+                if (ChronoUnit.MINUTES.between(currentTime, startLocal) >= 0 && ChronoUnit.MINUTES.between(currentTime, startLocal) <= 15) {
+                    appointmentsList.add(appointment);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return appointmentsList;
     }
 }

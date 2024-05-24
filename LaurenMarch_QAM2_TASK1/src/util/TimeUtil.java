@@ -28,7 +28,10 @@ public class TimeUtil {
         ZonedDateTime startET = toET(start);
         ZonedDateTime endET = toET(end);
 
-        return !startET.toLocalTime().isBefore(BUSINESS_START) && !endET.toLocalTime().isAfter(BUSINESS_END);
+        boolean isStartWithinBusinessHours = !startET.toLocalTime().isBefore(BUSINESS_START) && !startET.toLocalTime().isAfter(BUSINESS_END);
+        boolean isEndWithinBusinessHours = !endET.toLocalTime().isBefore(BUSINESS_START) && !endET.toLocalTime().isAfter(BUSINESS_END);
+
+        return isStartWithinBusinessHours && isEndWithinBusinessHours;
     }
 
     public static LocalDateTime fromUTCToLocal(LocalDateTime utcDateTime) {

@@ -1,7 +1,9 @@
 package controller;
 
+import helper.AppointmentsDAO;
 import helper.JDBC;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,12 +11,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import model.Appointments;
+import util.TimeUtil;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -92,6 +97,7 @@ public class LoginFormController {
 
         if (authenticate(username, password)) {
             errorLabel.setText("");
+            checkForUpcomingAppointments(); // Check for upcoming appointments
             loadAppointmentsForm();
         } else {
             errorLabel.setText(bundle.getString("login.error"));
@@ -105,14 +111,31 @@ public class LoginFormController {
             ps.setString(1, username);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 currentUser = username;
                 return true;
-            };
+            }
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
         return false;
+    }
+
+    private void checkForUpcomingAppointments() {
+        LocalDateTime currentTime = LocalDateTime.now();
+        ObservableList<Appointments> upcomingAppointments = AppointmentsDAO.getAppointmentsWithin15Minutes(currentTime);
+
+        if (upcomingAppointments.isEmpty()) {
+            showAlert("No Upcoming Appointments", "There are no upcoming appointments within the next 15 minutes.");
+        } else {
+            StringBuilder alertContent = new StringBuilder("You have the following appointments within the next 15 minutes:\n");
+            for (Appointments appointment : upcomingAppointments) {
+                alertContent.append("Appointment ID: ").append(appointment.getAppointmentId())
+                        .append(", Date: ").append(appointment.getStart().toLocalDate())
+                        .append(", Time: ").append(appointment.getStart().toLocalTime()).append("\n");
+            }
+            showAlert("Upcoming Appointments", alertContent.toString());
+        }
     }
 
     private void loadAppointmentsForm() {
@@ -171,5 +194,12 @@ public class LoginFormController {
         loginButton.setText(bundle.getString("login.button"));
         errorLabel.setText(""); // Clear error message when changing language
         adjustTextFieldWidth();
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
