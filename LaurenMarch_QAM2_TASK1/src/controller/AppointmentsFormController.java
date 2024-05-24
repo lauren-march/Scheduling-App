@@ -1,7 +1,6 @@
 package controller;
 
 import helper.AppointmentsDAO;
-import helper.CustomerDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -13,15 +12,17 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointments;
-import model.Customer;
+import util.TimeUtil;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
 
 public class AppointmentsFormController {
+
     @FXML
     private TableView<Appointments> appointmentsTableView;
     @FXML
@@ -37,9 +38,9 @@ public class AppointmentsFormController {
     @FXML
     private TableColumn<Appointments, String> appointmentsTypeColumn;
     @FXML
-    private TableColumn<Appointments, LocalDateTime> appointmentsStartDateColumn;
+    private TableColumn<Appointments, ZonedDateTime> appointmentsStartDateColumn;
     @FXML
-    private TableColumn<Appointments, LocalDateTime> appointmentsEndDateColumn;
+    private TableColumn<Appointments, ZonedDateTime> appointmentsEndDateColumn;
     @FXML
     private TableColumn<Appointments, Integer> appointmentsCustomerIDColumn;
     @FXML
@@ -62,9 +63,9 @@ public class AppointmentsFormController {
     @FXML
     private TableColumn<Appointments, String> appointmentsTypeColumnMonth;
     @FXML
-    private TableColumn<Appointments, LocalDateTime> appointmentsStartDateColumnMonth;
+    private TableColumn<Appointments, ZonedDateTime> appointmentsStartDateColumnMonth;
     @FXML
-    private TableColumn<Appointments, LocalDateTime> appointmentsEndDateColumnMonth;
+    private TableColumn<Appointments, ZonedDateTime> appointmentsEndDateColumnMonth;
     @FXML
     private TableColumn<Appointments, Integer> appointmentsCustomerIDColumnMonth;
     @FXML
@@ -83,9 +84,9 @@ public class AppointmentsFormController {
     @FXML
     private TableColumn<Appointments, String> appointmentsTypeColumnWeek;
     @FXML
-    private TableColumn<Appointments, LocalDateTime> appointmentsStartDateColumnWeek;
+    private TableColumn<Appointments, ZonedDateTime> appointmentsStartDateColumnWeek;
     @FXML
-    private TableColumn<Appointments, LocalDateTime> appointmentsEndDateColumnWeek;
+    private TableColumn<Appointments, ZonedDateTime> appointmentsEndDateColumnWeek;
     @FXML
     private TableColumn<Appointments, Integer> appointmentsCustomerIDColumnWeek;
     @FXML
@@ -102,13 +103,12 @@ public class AppointmentsFormController {
 
     @FXML
     public void initialize() {
-
-        // Initialize column for all view
+        // Initialize columns for the all view
         appointmentsIdColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         appointmentsTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         appointmentsDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         appointmentsLocationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
-        appointmentsContactColumn.setCellValueFactory(new PropertyValueFactory<>("contactId"));
+        appointmentsContactColumn.setCellValueFactory(new PropertyValueFactory<>("contactName"));
         appointmentsTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         appointmentsStartDateColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
         appointmentsEndDateColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
@@ -120,7 +120,7 @@ public class AppointmentsFormController {
         appointmentsTitleColumnMonth.setCellValueFactory(new PropertyValueFactory<>("title"));
         appointmentsDescriptionColumnMonth.setCellValueFactory(new PropertyValueFactory<>("description"));
         appointmentsLocationColumnMonth.setCellValueFactory(new PropertyValueFactory<>("location"));
-        appointmentsContactColumnMonth.setCellValueFactory(new PropertyValueFactory<>("contactId"));
+        appointmentsContactColumnMonth.setCellValueFactory(new PropertyValueFactory<>("contactName"));
         appointmentsTypeColumnMonth.setCellValueFactory(new PropertyValueFactory<>("type"));
         appointmentsStartDateColumnMonth.setCellValueFactory(new PropertyValueFactory<>("start"));
         appointmentsEndDateColumnMonth.setCellValueFactory(new PropertyValueFactory<>("end"));
@@ -132,7 +132,7 @@ public class AppointmentsFormController {
         appointmentsTitleColumnWeek.setCellValueFactory(new PropertyValueFactory<>("title"));
         appointmentsDescriptionColumnWeek.setCellValueFactory(new PropertyValueFactory<>("description"));
         appointmentsLocationColumnWeek.setCellValueFactory(new PropertyValueFactory<>("location"));
-        appointmentsContactColumnWeek.setCellValueFactory(new PropertyValueFactory<>("contactId"));
+        appointmentsContactColumnWeek.setCellValueFactory(new PropertyValueFactory<>("contactName"));
         appointmentsTypeColumnWeek.setCellValueFactory(new PropertyValueFactory<>("type"));
         appointmentsStartDateColumnWeek.setCellValueFactory(new PropertyValueFactory<>("start"));
         appointmentsEndDateColumnWeek.setCellValueFactory(new PropertyValueFactory<>("end"));
@@ -143,17 +143,44 @@ public class AppointmentsFormController {
         loadAppointmentData();
         makeColumnsAdjustable(appointmentsTableViewMonth);
         makeColumnsAdjustable(appointmentsTableViewWeek);
-
     }
 
     @FXML
     private void handleLoadAddAppointmentForm() {
         loadAddAppointmentForm();
     }
+
     private void loadAddAppointmentForm() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/view/AddAppointmentForm.fxml"));
             Stage stage = (Stage) addAppointmentButton.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleLoadUpdateAppointmentForm() {
+        Appointments selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
+        if (selectedAppointment != null) {
+            loadUpdateAppointmentForm(selectedAppointment);
+        } else {
+            showAlert("Error", "No appointment selected. Please select an appointment to update.");
+        }
+    }
+
+    private void loadUpdateAppointmentForm(Appointments selectedAppointment) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UpdateAppointmentForm.fxml"));
+            Parent root = loader.load();
+
+            UpdateAppointmentFormController controller = loader.getController();
+            controller.setSelectedAppointment(selectedAppointment);
+
+            Stage stage = (Stage) updateAppointmentButton.getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
@@ -195,14 +222,12 @@ public class AppointmentsFormController {
             if ((appointmentDate.isEqual(firstDayOfMonth) || appointmentDate.isAfter(firstDayOfMonth)) &&
                     (appointmentDate.isEqual(lastDayOfMonth) || appointmentDate.isBefore(lastDayOfMonth))) {
                 monthlyAppointments.add(appointment);
-
             }
 
             // Check for weekly view
             if ((appointmentDate.isEqual(firstDayOfWeek) || appointmentDate.isAfter(firstDayOfWeek)) &&
                     (appointmentDate.isEqual(lastDayOfWeek) || appointmentDate.isBefore(lastDayOfWeek))) {
                 weeklyAppointments.add(appointment);
-
             }
         }
 
@@ -250,7 +275,7 @@ public class AppointmentsFormController {
 
         alert.showAndWait().ifPresent(type -> {
             if (type == buttonTypeYes) {
-                // Delete the customer from the database
+                // Delete the appointment from the database
                 AppointmentsDAO.deleteAppointment(selectedAppointment.getAppointmentId());
                 // Refresh the table view
                 loadAppointmentData();

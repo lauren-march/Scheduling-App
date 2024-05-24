@@ -5,14 +5,18 @@ import javafx.collections.ObservableList;
 import model.Appointments;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class AppointmentsDAO {
 
     public static ObservableList<Appointments> getAppointmentsList() {
         ObservableList<Appointments> appointmentsList = FXCollections.observableArrayList();
-        String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID FROM client_schedule.appointments";
+        String sql = "SELECT a.Appointment_ID, a.Title, a.Description, a.Location, a.Type, a.Start, a.End, " +
+                "a.Create_Date, a.Created_By, a.Last_Update, a.Last_Updated_By, a.Customer_ID, a.User_ID, " +
+                "a.Contact_ID, c.Contact_Name " +
+                "FROM client_schedule.appointments a " +
+                "JOIN client_schedule.contacts c ON a.Contact_ID = c.Contact_ID " +
+                "ORDER BY a.Appointment_ID";
 
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
@@ -31,8 +35,10 @@ public class AppointmentsDAO {
                 int customerId = rs.getInt("Customer_ID");
                 int userId = rs.getInt("User_ID");
                 int contactId = rs.getInt("Contact_ID");
+                String contactName = rs.getString("Contact_Name");
 
-                Appointments appointment = new Appointments(appointmentId, title, description, location, type, start, end, createDate, createdBy, lastUpdate, lastUpdateBy, customerId, userId, contactId);
+                Appointments appointment = new Appointments(appointmentId, title, description, location, type, start, end,
+                        createDate, createdBy, lastUpdate, lastUpdateBy, customerId, userId, contactId, contactName);
                 appointmentsList.add(appointment);
             }
         } catch (SQLException e) {
@@ -43,9 +49,15 @@ public class AppointmentsDAO {
 
     public static ObservableList<Appointments> getAppointmentsByCustomerId(int customerId) {
         ObservableList<Appointments> appointmentsByCustomerIdList = FXCollections.observableArrayList();
-        String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID FROM client_schedule.appointments";
+        String sql = "SELECT a.Appointment_ID, a.Title, a.Description, a.Location, a.Type, a.Start, a.End, " +
+                "a.Create_Date, a.Created_By, a.Last_Update, a.Last_Updated_By, a.Customer_ID, a.User_ID, " +
+                "a.Contact_ID, c.Contact_Name " +
+                "FROM client_schedule.appointments a " +
+                "JOIN client_schedule.contacts c ON a.Contact_ID = c.Contact_ID " +
+                "WHERE a.Customer_ID = ?";
 
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
+            ps.setInt(1, customerId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 int appointmentId = rs.getInt("Appointment_ID");
@@ -61,19 +73,21 @@ public class AppointmentsDAO {
                 String lastUpdateBy = rs.getString("Last_Updated_By");
                 int userId = rs.getInt("User_ID");
                 int contactId = rs.getInt("Contact_ID");
+                String contactName = rs.getString("Contact_Name");
 
-                Appointments appointment = new Appointments(appointmentId, title, description, location, type, start, end, createDate, createdBy, lastUpdate, lastUpdateBy, customerId, userId, contactId);
+                Appointments appointment = new Appointments(appointmentId, title, description, location, type, start, end,
+                        createDate, createdBy, lastUpdate, lastUpdateBy, customerId, userId, contactId, contactName);
                 appointmentsByCustomerIdList.add(appointment);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return appointmentsByCustomerIdList;
-
     }
 
     public static void addAppointment(Appointments appointments, LocalDateTime createDate, LocalDateTime lastUpdated) throws SQLException {
-        String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, " +
+                "Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
             ps.setInt(1, appointments.getAppointmentId());
             ps.setString(2, appointments.getTitle());
@@ -95,21 +109,22 @@ public class AppointmentsDAO {
         }
     }
 
-    public static void updateAppointment(Appointments appointments, LocalDateTime lastUpdated, LocalDateTime start, LocalDateTime end) {
+    public static void updateAppointment(Appointments appointments, LocalDateTime lastUpdated) {
         String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, " +
-                "Last_Update = ?, Last_Updated_By = ?, Customer_ID = ? User_ID = ?, Contact_ID = ?";
+                "Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
             ps.setString(1, appointments.getTitle());
             ps.setString(2, appointments.getDescription());
             ps.setString(3, appointments.getLocation());
             ps.setString(4, appointments.getType());
-            ps.setTimestamp(5, Timestamp.valueOf(start));
-            ps.setTimestamp(6, Timestamp.valueOf(end));
+            ps.setTimestamp(5, Timestamp.valueOf(appointments.getStart()));
+            ps.setTimestamp(6, Timestamp.valueOf(appointments.getEnd()));
             ps.setTimestamp(7, Timestamp.valueOf(lastUpdated));
             ps.setString(8, appointments.getLastUpdateBy());
             ps.setInt(9, appointments.getCustomerId());
             ps.setInt(10, appointments.getUserId());
             ps.setInt(11, appointments.getContactId());
+            ps.setInt(12, appointments.getAppointmentId());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
@@ -144,5 +159,4 @@ public class AppointmentsDAO {
         }
         return 1;
     }
-
 }

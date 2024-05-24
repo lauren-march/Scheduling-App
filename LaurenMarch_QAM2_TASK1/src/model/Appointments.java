@@ -17,10 +17,34 @@ public class Appointments {
     private int customerId;
     private int userId;
     private int contactId;
+    private transient String contactName; // Transient field for contact name
 
-    public Appointments(int appointmentId, String title, String description, String location, String type, LocalDateTime start,
-                        LocalDateTime end, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate, String lastUpdateBy,
-                        int customerId, int userId, int contactId) {
+    // Constructor with contactName for loading data from the database
+    public Appointments(int appointmentId, String title, String description, String location, String type,
+                        LocalDateTime start, LocalDateTime end, LocalDateTime createDate, String createdBy,
+                        LocalDateTime lastUpdate, String lastUpdateBy, int customerId, int userId, int contactId,
+                        String contactName) {
+        this.appointmentId = appointmentId;
+        this.title = title;
+        this.description = description;
+        this.location = location;
+        this.type = type;
+        this.start = start;
+        this.end = end;
+        this.createDate = createDate;
+        this.createdBy = createdBy;
+        this.lastUpdate = lastUpdate;
+        this.lastUpdateBy = lastUpdateBy;
+        this.customerId = customerId;
+        this.userId = userId;
+        this.contactId = contactId;
+        this.contactName = contactName;
+    }
+
+    // Constructor without contactName for creating new appointments
+    public Appointments(int appointmentId, String title, String description, String location, String type,
+                        LocalDateTime start, LocalDateTime end, LocalDateTime createDate, String createdBy,
+                        LocalDateTime lastUpdate, String lastUpdateBy, int customerId, int userId, int contactId) {
         this.appointmentId = appointmentId;
         this.title = title;
         this.description = description;
@@ -37,19 +61,14 @@ public class Appointments {
         this.contactId = contactId;
     }
 
-    public Appointments(int appointmentId, String title) {
-        this.appointmentId = appointmentId;
-        this.title = title;
-    }
-
+    // Getters and setters
     public int getAppointmentId() {
         return appointmentId;
     }
 
     public void setAppointmentId(int appointmentId) {
-       this.appointmentId = appointmentId;
+        this.appointmentId = appointmentId;
     }
-
 
     public String getTitle() {
         return title;
@@ -155,6 +174,14 @@ public class Appointments {
         this.contactId = contactId;
     }
 
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
     @Override
     public String toString() {
         return "Appointments{" +
@@ -172,6 +199,11 @@ public class Appointments {
                 ", customerId=" + customerId +
                 ", userId=" + userId +
                 ", contactId=" + contactId +
+                ", contactName='" + contactName + '\'' +
                 '}';
     }
 }
+
+
+
+

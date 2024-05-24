@@ -1,32 +1,25 @@
 package controller;
 
-import helper.AppointmentsDAO;
-import helper.ContactsDAO;
-import helper.CustomerDAO;
-import helper.UsersDAO;
+import helper.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.util.StringConverter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
 import javafx.scene.control.*;
-import javafx.util.StringConverter;
-import model.Appointments;
-import model.Contacts;
+import javafx.stage.Stage;
+import model.*;
 import util.TimeUtil;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Locale;
 
-public class AddAppointmentFormController {
+public class UpdateAppointmentFormController {
 
     @FXML
     private TextField appointmentIdTextField;
@@ -52,9 +45,11 @@ public class AddAppointmentFormController {
     private ComboBox<Integer> usersComboBox;
 
     @FXML
-    private Button addAppointmentButton;
+    private Button updateAppointmentButton;
     @FXML
     private Button cancelAddAppointmentButton;
+
+    private Appointments selectedAppointment;
 
     @FXML
     public void initialize() {
@@ -72,8 +67,13 @@ public class AddAppointmentFormController {
         initializeTimeComboBoxes();
     }
 
+    public void setSelectedAppointment(Appointments selectedAppointment) {
+        this.selectedAppointment = selectedAppointment;
+        initializeFormForUpdate();
+    }
+
     @FXML
-    public void handleAddAppointmentButton() {
+    public void handleUpdateAppointmentButton() {
         String title = titleTextField.getText();
         String description = descriptionTextField.getText();
         String location = locationTextField.getText();
@@ -108,19 +108,19 @@ public class AddAppointmentFormController {
         }
 
         // Validate overlapping appointments
-        if (!validateOverlappingAppointments(customerId, startLocalDateTime, endLocalDateTime)) {
+        if (!validateOverlappingAppointments(customerId, startLocalDateTime, endLocalDateTime, selectedAppointment.getAppointmentId())) {
             return;
         }
 
         // Convert to UTC for storage
-        ZonedDateTime startUTC = TimeUtil.toUTC(startLocalDateTime);
-        ZonedDateTime endUTC = TimeUtil.toUTC(endLocalDateTime);
+        ZonedDateTime startUTC = startLocalDateTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"));
+        ZonedDateTime endUTC = endLocalDateTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"));
 
-        // Create new appointment
+        // Update appointment
         LocalDateTime now = LocalDateTime.now();
         String currentUser = LoginFormController.currentUser;
 
-        Appointments newAppointment = new Appointments(
+        Appointments updatedAppointment = new Appointments(
                 Integer.parseInt(appointmentIdTextField.getText()),
                 title, description, location, type,
                 startUTC.toLocalDateTime(), endUTC.toLocalDateTime(),
@@ -129,12 +129,12 @@ public class AddAppointmentFormController {
         );
 
         try {
-            AppointmentsDAO.addAppointment(newAppointment, now, now);
+            AppointmentsDAO.updateAppointment(updatedAppointment, now);
+            navigateToAppointmentsForm(); // Navigate back to the appointments form to see the changes
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Error", "An error occurred while adding the appointment.");
+            showAlert("Error", "An error occurred while updating the appointment.");
         }
-        navigateToAppointmentsForm();
     }
 
     @FXML
@@ -190,10 +190,13 @@ public class AddAppointmentFormController {
         return true;
     }
 
-    private boolean validateOverlappingAppointments(int customerId, LocalDateTime start, LocalDateTime end) {
+    private boolean validateOverlappingAppointments(int customerId, LocalDateTime start, LocalDateTime end, int appointmentId) {
         ObservableList<Appointments> appointments = AppointmentsDAO.getAppointmentsByCustomerId(customerId);
 
         for (Appointments appointment : appointments) {
+            if (appointment.getAppointmentId() == appointmentId) {
+                continue; // Skip the current appointment being updated
+            }
             LocalDateTime appointmentStart = appointment.getStart();
             LocalDateTime appointmentEnd = appointment.getEnd();
 
@@ -205,15 +208,36 @@ public class AddAppointmentFormController {
         return true;
     }
 
+    private void initializeFormForUpdate() {
+        if (selectedAppointment != null) {
+            appointmentIdTextField.setText(String.valueOf(selectedAppointment.getAppointmentId()));
+            titleTextField.setText(selectedAppointment.getTitle());
+            descriptionTextField.setText(selectedAppointment.getDescription());
+            locationTextField.setText(selectedAppointment.getLocation());
+            typeTextField.setText(selectedAppointment.getType());
+
+            Contacts selectedContact = ContactsDAO.getContactById(selectedAppointment.getContactId());
+            contactsComboBox.setValue(selectedContact);
+
+            customerComboBox.setValue(selectedAppointment.getCustomerId());
+            usersComboBox.setValue(selectedAppointment.getUserId());
+
+            // Convert start and end times from UTC to local time
+            ZonedDateTime startUTC = selectedAppointment.getStart().atZone(ZoneId.of("UTC"));
+            ZonedDateTime endUTC = selectedAppointment.getEnd().atZone(ZoneId.of("UTC"));
+            LocalDateTime startLocalDateTime = TimeUtil.toLocal(startUTC).toLocalDateTime();
+            LocalDateTime endLocalDateTime = TimeUtil.toLocal(endUTC).toLocalDateTime();
+
+            startDatePicker.setValue(startLocalDateTime.toLocalDate());
+            startTimeComboBox.setValue(startLocalDateTime.toLocalTime());
+            endTimeComboBox.setValue(endLocalDateTime.toLocalTime());
+        }
+    }
+
     private void navigateToAppointmentsForm() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AppointmentsForm.fxml"));
-            Parent root = loader.load();
-
-            AppointmentsFormController controller = loader.getController();
-            controller.loadAppointmentData();
-
-            Stage stage = (Stage) addAppointmentButton.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/view/AppointmentsForm.fxml"));
+            Stage stage = (Stage) updateAppointmentButton.getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();

@@ -5,12 +5,12 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="center" prefHeight="481.0" prefWidth="320.0" spacing="40" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddCustomerFormController">
+<VBox alignment="center" prefHeight="535.0" prefWidth="320.0" spacing="40" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UpdateAppointmentFormController">
     <padding>
         <Insets bottom="40" left="40" right="40" top="40" />
     </padding>
     <children>
-        <Label prefHeight="19.0" prefWidth="157.0" text="Update Appointment" textFill="#0fb0c9">
+        <Label prefHeight="25.0" prefWidth="155.0" text="Update Appointment" textFill="#0fb0c9">
             <font>
                 <Font name="Constantia" size="16.0" />
             </font>
@@ -28,9 +28,10 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
@@ -40,7 +41,7 @@
                         <Font name="Constantia" size="12.0" />
                     </font>
                 </Label>
-                <TextField editable="false" GridPane.columnIndex="1" />
+                <TextField fx:id="appointmentIdTextField" editable="false" GridPane.columnIndex="1" />
                 <Label text="Title" GridPane.rowIndex="1">
                     <font>
                         <Font name="Constantia" size="12.0" />
@@ -66,45 +67,51 @@
                         <Font name="Constantia" size="12.0" />
                     </font>
                 </Label>
-                <Label text="End Date and Time" GridPane.rowIndex="7">
+                <Label text="Start Time" GridPane.rowIndex="7">
                     <font>
                         <Font name="Constantia" size="12.0" />
                     </font>
                 </Label>
-                <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                <Button mnemonicParsing="false" text="Add" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="10">
+                <TextField fx:id="titleTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="descriptionTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField fx:id="locationTextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <Button fx:id="updateAppointmentButton" mnemonicParsing="false" onAction="#handleUpdateAppointmentButton" text="Update" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="11">
                     <font>
                         <Font name="Constantia" size="12.0" />
                     </font>
                 </Button>
-                <Button mnemonicParsing="false" text="Cancel" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="11">
+                <Button fx:id="cancelAddAppointmentButton" mnemonicParsing="false" onAction="#handleCancelButtonAction" text="Cancel" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="12">
                     <font>
                         <Font name="Constantia" size="12.0" />
                     </font>
                 </Button>
-            <Label text="Start Date and Time" GridPane.rowIndex="6">
-               <font>
-                  <Font name="Constantia" size="12.0" />
-               </font>
-            </Label>
-            <Label text="Customer ID" GridPane.rowIndex="8">
-               <font>
-                  <Font name="Constantia" size="12.0" />
-               </font>
-            </Label>
-            <Label text="User ID" GridPane.rowIndex="9">
-               <font>
-                  <Font name="Constantia" size="12.0" />
-               </font>
-            </Label>
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                <Label text="Start Date" GridPane.rowIndex="6">
+                    <font>
+                        <Font name="Constantia" size="12.0" />
+                    </font>
+                </Label>
+                <Label text="Customer ID" GridPane.rowIndex="9">
+                    <font>
+                        <Font name="Constantia" size="12.0" />
+                    </font>
+                </Label>
+                <Label text="User ID" GridPane.rowIndex="10">
+                    <font>
+                        <Font name="Constantia" size="12.0" />
+                    </font>
+                </Label>
+                <ComboBox fx:id="contactsComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <DatePicker fx:id="startDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                <TextField fx:id="typeTextField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <ComboBox fx:id="customerComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                <ComboBox fx:id="usersComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                <Label text="End Time" GridPane.rowIndex="8">
+                    <font>
+                        <Font name="Constantia" size="12.0" />
+                    </font>
+                </Label>
+                <ComboBox fx:id="startTimeComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                <ComboBox fx:id="endTimeComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
             </children>
         </GridPane>
     </children>

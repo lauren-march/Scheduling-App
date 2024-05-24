@@ -83,7 +83,7 @@
          </tabs>
       </TabPane>
       <Button fx:id="addAppointmentButton" layoutX="843.0" layoutY="99.0" mnemonicParsing="false" text="Add" onAction="#handleLoadAddAppointmentForm" />
-      <Button fx:id="updateAppointmentButton" layoutX="843.0" layoutY="135.0" mnemonicParsing="false" text="Update" />
+      <Button fx:id="updateAppointmentButton" layoutX="843.0" layoutY="135.0" mnemonicParsing="false" text="Update" onAction="#handleLoadUpdateAppointmentForm"/>
       <Button fx:id="deleteAppointmentButton" layoutX="843.0" layoutY="175.0" mnemonicParsing="false" text="Delete" onAction="#handleDeleteButtonAction"/>
       <CubicCurve controlX1="-68.0" controlX2="250.0" controlY1="21.0" controlY2="-33.0" endX="489.0" endY="-6.0" fill="#0fb0c9" layoutX="240.0" layoutY="340.0" nodeOrientation="LEFT_TO_RIGHT" opacity="0.29" startX="-196.0" startY="-6.0" stroke="BLACK" strokeType="OUTSIDE" />
       <Button fx:id="logoutButton" layoutX="844.0" layoutY="322.0" mnemonicParsing="false" text="Logout" />
