@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.CubicCurve?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="374.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppointmentsFormController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="452.0" prefWidth="1071.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppointmentsFormController">
    <children>
       <Text fill="#0fb0c9" layoutX="42.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Appointments" wrappingWidth="113.13671875">
          <font>
             <Font name="Constantia" size="17.0" />
          </font>
       </Text>
-      <TabPane fx:id="tabPane" layoutX="42.0" layoutY="89.0" prefHeight="210.0" prefWidth="770.0">
+      <TabPane fx:id="tabPane" layoutX="42.0" layoutY="89.0" prefHeight="279.0" prefWidth="932.0">
          <tabs>
             <Tab closable="false" text="All Appointments View">
                <content>
-                  <ScrollPane fitToHeight="true" fitToWidth="true">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="238.0" prefWidth="932.0">
                      <content>
-                        <TableView fx:id="appointmentsTableView" fixedCellSize="50.0" prefHeight="200.0" prefWidth="770.0">
+                        <TableView fx:id="appointmentsTableView" opacity="0.5" prefHeight="223.0" prefWidth="932.0">
                            <columns>
                               <TableColumn fx:id="appointmentsIdColumn" prefWidth="104.0" text="Appointment ID" />
                               <TableColumn fx:id="appointmentsTitleColumn" prefWidth="46.0" text="Title" />
@@ -40,7 +46,7 @@
                <content>
                   <ScrollPane fitToHeight="true" fitToWidth="true">
                      <content>
-                        <TableView fx:id="appointmentsTableViewMonth" fixedCellSize="50.0" prefHeight="200.0" prefWidth="770.0">
+                        <TableView fx:id="appointmentsTableViewMonth" opacity="0.5" prefHeight="200.0" prefWidth="770.0">
                            <columns>
                               <TableColumn fx:id="appointmentsIdColumnMonth" prefWidth="104.0" text="Appointment ID" />
                               <TableColumn fx:id="appointmentsTitleColumnMonth" prefWidth="46.0" text="Title" />
@@ -62,7 +68,7 @@
                <content>
                   <ScrollPane fitToHeight="true" fitToWidth="true">
                      <content>
-                        <TableView fx:id="appointmentsTableViewWeek" fixedCellSize="50.0" prefHeight="200.0" prefWidth="770.0">
+                        <TableView fx:id="appointmentsTableViewWeek" opacity="0.5" prefHeight="200.0" prefWidth="770.0">
                            <columns>
                               <TableColumn fx:id="appointmentsIdColumnWeek" prefWidth="104.0" text="Appointment ID" />
                               <TableColumn fx:id="appointmentsTitleColumnWeek" prefWidth="46.0" text="Title" />
@@ -82,11 +88,11 @@
             </Tab>
          </tabs>
       </TabPane>
-      <Button fx:id="addAppointmentButton" layoutX="843.0" layoutY="99.0" mnemonicParsing="false" onAction="#handleLoadAddAppointmentForm" text="Add" />
-      <Button fx:id="updateAppointmentButton" layoutX="843.0" layoutY="135.0" mnemonicParsing="false" onAction="#handleLoadUpdateAppointmentForm" text="Update" />
-      <Button fx:id="deleteAppointmentButton" layoutX="843.0" layoutY="175.0" mnemonicParsing="false" onAction="#handleDeleteButtonAction" text="Delete" />
-      <CubicCurve controlX1="-68.0" controlX2="250.0" controlY1="21.0" controlY2="-33.0" endX="489.0" endY="-6.0" fill="#0fb0c9" layoutX="240.0" layoutY="340.0" nodeOrientation="LEFT_TO_RIGHT" opacity="0.29" startX="-196.0" startY="-6.0" stroke="BLACK" strokeType="OUTSIDE" />
-      <Button fx:id="logoutButton" layoutX="844.0" layoutY="322.0" mnemonicParsing="false" text="Logout" />
-      <Button fx:id="customerFormButton" layoutX="758.0" layoutY="322.0" mnemonicParsing="false" onAction="#handleLoadCustomerFormButton" text="Customers" />
+      <Button fx:id="addAppointmentButton" layoutX="995.0" layoutY="95.0" mnemonicParsing="false" onAction="#handleLoadAddAppointmentForm" text="Add" />
+      <Button fx:id="updateAppointmentButton" layoutX="995.0" layoutY="131.0" mnemonicParsing="false" onAction="#handleLoadUpdateAppointmentForm" text="Update" />
+      <Button fx:id="deleteAppointmentButton" layoutX="995.0" layoutY="171.0" mnemonicParsing="false" onAction="#handleDeleteButtonAction" text="Delete" />
+      <CubicCurve controlX1="-68.0" controlX2="467.0" controlY1="21.0" controlY2="-28.0" endX="654.0" endY="-6.0" fill="#0fb0c9" layoutX="240.0" layoutY="409.0" nodeOrientation="LEFT_TO_RIGHT" opacity="0.29" startX="-196.0" startY="-6.0" stroke="BLACK" strokeType="OUTSIDE" />
+      <Button fx:id="logoutButton" layoutX="996.0" layoutY="392.0" mnemonicParsing="false" text="Logout" />
+      <Button fx:id="customerFormButton" layoutX="910.0" layoutY="392.0" mnemonicParsing="false" onAction="#handleLoadCustomerFormButton" text="Customers" />
    </children>
 </AnchorPane>
