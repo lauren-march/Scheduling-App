@@ -1,5 +1,6 @@
 package controller;
 
+import exception.ValidationException;
 import helper.AppointmentsDAO;
 import helper.ContactsDAO;
 import helper.CustomerDAO;
@@ -82,64 +83,66 @@ public class UpdateAppointmentFormController {
 
     @FXML
     public void handleUpdateAppointmentButton() {
-        String title = titleTextField.getText();
-        String description = descriptionTextField.getText();
-        String location = locationTextField.getText();
-        String type = typeTextField.getText();
-        Contacts contact = contactsComboBox.getValue();
-        Integer customerId = customerComboBox.getValue();
-        Integer userId = usersComboBox.getValue();
-        LocalDate startDate = startDatePicker.getValue();
-        LocalTime startTime = startTimeComboBox.getValue();
-        LocalTime endTime = endTimeComboBox.getValue();
-
-        if (title.isEmpty() || description.isEmpty() || location.isEmpty() || type.isEmpty() ||
-                contact == null || customerId == null || userId == null || startDate == null ||
-                startTime == null || endTime == null) {
-            showAlert("Error", "Please fill in all fields.");
-            return;
-        }
-
-        // Combine date and time
-        LocalDateTime startLocalDateTime = LocalDateTime.of(startDate, startTime);
-        LocalDateTime endLocalDateTime = LocalDateTime.of(startDate, endTime);
-
-        if (!ValidationUtil.validateTimes.validate(startLocalDateTime, endLocalDateTime)) {
-            return;
-        }
-
-        if (!ValidationUtil.validateOverlappingAppointments.validate(customerId, startLocalDateTime, endLocalDateTime)) {
-            return;
-        }
-
-        // Validate business hours using the BusinessHoursValidator
-        if (!ValidationUtil.businessHoursValidator.validate(TimeUtil.toET(startLocalDateTime), TimeUtil.toET(endLocalDateTime))) {
-            showAlert("Error", "Appointment times must be within business hours (8:00 AM - 10:00 PM ET).");
-            return;
-        }
-
-        // Convert to UTC for storage
-        Timestamp startUTC = TimeUtil.localToTimestamp(startLocalDateTime);
-        Timestamp endUTC = TimeUtil.localToTimestamp(endLocalDateTime);
-
-        // Update appointment
-        LocalDateTime now = LocalDateTime.now();
-        String currentUser = LoginFormController.currentUser;
-
-        Appointments updatedAppointment = new Appointments(
-                Integer.parseInt(appointmentIdTextField.getText()),
-                title, description, location, type,
-                startLocalDateTime, endLocalDateTime,
-                now, currentUser, now, currentUser,
-                customerId, userId, contact.getContactId()
-        );
-
         try {
-            AppointmentsDAO.updateAppointment(updatedAppointment, startUTC, endUTC);
-            navigateToAppointmentsForm();
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Error", "An error occurred while updating the appointment.");
+            String title = ValidationUtil.validateTitle(titleTextField.getText());
+            String description = ValidationUtil.validateDescription(descriptionTextField.getText());
+            String location = ValidationUtil.validateLocation(locationTextField.getText());
+            String type = ValidationUtil.validateType(typeTextField.getText());
+            Contacts contact = contactsComboBox.getValue();
+            Integer customerId = customerComboBox.getValue();
+            Integer userId = usersComboBox.getValue();
+            LocalDate startDate = startDatePicker.getValue();
+            LocalTime startTime = startTimeComboBox.getValue();
+            LocalTime endTime = endTimeComboBox.getValue();
+
+            if (contact == null || customerId == null || userId == null || startDate == null || startTime == null || endTime == null) {
+                showAlert("Error", "Please fill in all fields.");
+                return;
+            }
+
+            // Combine date and time
+            LocalDateTime startLocalDateTime = LocalDateTime.of(startDate, startTime);
+            LocalDateTime endLocalDateTime = LocalDateTime.of(startDate, endTime);
+
+            if (!ValidationUtil.validateTimes.validate(startLocalDateTime, endLocalDateTime)) {
+                return;
+            }
+
+            if (!ValidationUtil.validateOverlappingAppointments.validate(customerId, startLocalDateTime, endLocalDateTime)) {
+                return;
+            }
+
+            // Validate business hours using the BusinessHoursValidator
+            if (!ValidationUtil.businessHoursValidator.validate(TimeUtil.toET(startLocalDateTime), TimeUtil.toET(endLocalDateTime))) {
+                showAlert("Error", "Appointment times must be within business hours (8:00 AM - 10:00 PM ET).");
+                return;
+            }
+
+            // Convert to UTC for storage
+            Timestamp startUTC = TimeUtil.localToTimestamp(startLocalDateTime);
+            Timestamp endUTC = TimeUtil.localToTimestamp(endLocalDateTime);
+
+            // Update appointment
+            LocalDateTime now = LocalDateTime.now();
+            String currentUser = LoginFormController.currentUser;
+
+            Appointments updatedAppointment = new Appointments(
+                    Integer.parseInt(appointmentIdTextField.getText()),
+                    title, description, location, type,
+                    startLocalDateTime, endLocalDateTime,
+                    now, currentUser, now, currentUser,
+                    customerId, userId, contact.getContactId()
+            );
+
+            try {
+                AppointmentsDAO.updateAppointment(updatedAppointment, startUTC, endUTC);
+                navigateToAppointmentsForm();
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Error", "An error occurred while updating the appointment.");
+            }
+        } catch (ValidationException e) {
+            showAlert("Validation Error", e.getMessage());
         }
     }
 

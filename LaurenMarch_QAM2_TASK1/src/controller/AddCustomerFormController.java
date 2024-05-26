@@ -1,5 +1,6 @@
 package controller;
 
+import exception.ValidationException;
 import helper.CustomerDAO;
 import helper.FirstLevelDivisionsDAO;
 import helper.CountryDAO;
@@ -14,6 +15,7 @@ import javafx.stage.Stage;
 import model.Customer;
 import model.FirstLevelDivisions;
 import model.Countries;
+import util.ValidationUtil;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -55,38 +57,42 @@ public class AddCustomerFormController {
 
     @FXML
     private void handleAddButtonAction() {
-        String name = customerNameTextField.getText();
-        String address = addressTextField.getText();
-        String postalCode = postalCodeTextField.getText();
-        String phoneNumber = phoneNumberTextField.getText();
-        FirstLevelDivisions selectedDivision = firstLevelDivisionComboBox.getSelectionModel().getSelectedItem();
-
-        if (name.isEmpty() || address.isEmpty() || postalCode.isEmpty() || phoneNumber.isEmpty() || selectedDivision == null) {
-            showAlert("Error", "Please fill in all fields.");
-            return;
-        }
-
-        LocalDateTime now = LocalDateTime.now();
-        String currentUser = LoginFormController.currentUser;
-
-        Customer newCustomer = new Customer(
-                Integer.parseInt(customerIdTextField.getText()),
-                name, address, postalCode, phoneNumber,
-                currentUser, currentUser,
-                selectedDivision.getDivisionId(),
-                selectedDivision.getDivision(),
-                selectedDivision.getCountryId(),
-                countryComboBox.getSelectionModel().getSelectedItem().getCountry(),
-                now, now
-        );
         try {
-            CustomerDAO.addCustomer(newCustomer, now, now);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+            String name = ValidationUtil.validateName(customerNameTextField.getText());
+            String address = ValidationUtil.validateAddress(addressTextField.getText());
+            String postalCode = ValidationUtil.validatePostalCode(postalCodeTextField.getText(),
+                    countryComboBox.getSelectionModel().getSelectedItem().getCountry());
+            String phoneNumber = ValidationUtil.validatePhoneNumber(phoneNumberTextField.getText());
+            FirstLevelDivisions selectedDivision = firstLevelDivisionComboBox.getSelectionModel().getSelectedItem();
 
-        // Navigate back to CustomerForm
-        navigateToCustomerForm();
+            if (selectedDivision == null) {
+                showAlert("Error", "Please fill in all fields.");
+                return;
+            }
+
+            LocalDateTime now = LocalDateTime.now();
+            String currentUser = LoginFormController.currentUser;
+
+            Customer newCustomer = new Customer(
+                    Integer.parseInt(customerIdTextField.getText()),
+                    name, address, postalCode, phoneNumber,
+                    currentUser, currentUser,
+                    selectedDivision.getDivisionId(),
+                    selectedDivision.getDivision(),
+                    selectedDivision.getCountryId(),
+                    countryComboBox.getSelectionModel().getSelectedItem().getCountry(),
+                    now, now
+            );
+
+            try {
+                CustomerDAO.addCustomer(newCustomer, now, now);
+                navigateToCustomerForm();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (ValidationException e) {
+            showAlert("Validation Error", e.getMessage());
+        }
     }
 
     @FXML

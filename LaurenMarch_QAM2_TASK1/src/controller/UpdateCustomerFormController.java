@@ -1,5 +1,6 @@
 package controller;
 
+import exception.ValidationException;
 import helper.CustomerDAO;
 import helper.FirstLevelDivisionsDAO;
 import helper.CountryDAO;
@@ -14,8 +15,10 @@ import javafx.stage.Stage;
 import model.Customer;
 import model.FirstLevelDivisions;
 import model.Countries;
+import util.ValidationUtil;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 public class UpdateCustomerFormController {
@@ -58,29 +61,34 @@ public class UpdateCustomerFormController {
 
     @FXML
     private void handleUpdateButtonAction() {
-        String name = customerNameTextField.getText();
-        String address = addressTextField.getText();
-        String postalCode = postalCodeTextField.getText();
-        String phoneNumber = phoneNumberTextField.getText();
-        FirstLevelDivisions selectedDivision = firstLevelDivisionComboBox.getSelectionModel().getSelectedItem();
+        try {
+            String name = ValidationUtil.validateName(customerNameTextField.getText());
+            String address = ValidationUtil.validateAddress(addressTextField.getText());
+            String postalCode = ValidationUtil.validatePostalCode(postalCodeTextField.getText(),
+                    countryComboBox.getSelectionModel().getSelectedItem().getCountry());
+            String phoneNumber = ValidationUtil.validatePhoneNumber(phoneNumberTextField.getText());
+            FirstLevelDivisions selectedDivision = firstLevelDivisionComboBox.getSelectionModel().getSelectedItem();
 
-        if (name.isEmpty() || address.isEmpty() || postalCode.isEmpty() || phoneNumber.isEmpty() || selectedDivision == null) {
-            showAlert("Error", "Please fill in all fields.");
-            return;
+            if (selectedDivision == null) {
+                showAlert("Error", "Please fill in all fields.");
+                return;
+            }
+
+            LocalDateTime now = LocalDateTime.now();
+            selectedCustomer.setName(name);
+            selectedCustomer.setAddress(address);
+            selectedCustomer.setPostalCode(postalCode);
+            selectedCustomer.setPhoneNumber(phoneNumber);
+            selectedCustomer.setDivisionId(selectedDivision.getDivisionId());
+            selectedCustomer.setLastUpdate(now);
+
+
+            CustomerDAO.updateCustomer(selectedCustomer, now);
+            navigateToCustomerForm();
+
+        } catch (ValidationException e) {
+            showAlert("Validation Error", e.getMessage());
         }
-
-        LocalDateTime now = LocalDateTime.now();
-        selectedCustomer.setName(name);
-        selectedCustomer.setAddress(address);
-        selectedCustomer.setPostalCode(postalCode);
-        selectedCustomer.setPhoneNumber(phoneNumber);
-        selectedCustomer.setDivisionId(selectedDivision.getDivisionId());
-        selectedCustomer.setLastUpdate(now);
-
-        CustomerDAO.updateCustomer(selectedCustomer, now);
-
-        // Navigate back to CustomerForm
-        navigateToCustomerForm();
     }
 
     @FXML
