@@ -19,6 +19,7 @@ import util.TimeUtil;
 import util.ValidationUtil;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -94,26 +95,26 @@ public class AddAppointmentFormController {
         }
 
         // Combine date and time
-        ZonedDateTime startLocalDateTime = ZonedDateTime.from(LocalTime.from(LocalDateTime.of(startDate, startTime)));
+        LocalDateTime startLocalDateTime = LocalDateTime.of(startDate, startTime);
         LocalDateTime endLocalDateTime = LocalDateTime.of(startDate, endTime);
 
-        if (!ValidationUtil.validateTimes.validate(startLocalDateTime.toLocalDateTime(), endLocalDateTime)) {
+        if (!ValidationUtil.validateTimes.validate(startLocalDateTime, endLocalDateTime)) {
             return;
         }
 
-        if (!ValidationUtil.validateOverlappingAppointments.validate(customerId, LocalTime.from(startLocalDateTime), LocalTime.from(endLocalDateTime))) {
+        if (!ValidationUtil.validateOverlappingAppointments.validate(customerId, startLocalDateTime, endLocalDateTime)) {
             return;
         }
 
         // Validate business hours
-        if (!TimeUtil.isWithinBusinessHours(startLocalDateTime, ZonedDateTime.from(endLocalDateTime))) {
+        if (!ValidationUtil.businessHoursValidator.validate(TimeUtil.toET(startLocalDateTime), TimeUtil.toET(endLocalDateTime))) {
             showAlert("Error", "Appointment times must be within business hours (8:00 AM - 10:00 PM ET).");
             return;
         }
 
         // Convert to UTC for storage
-        ZonedDateTime startUTC = TimeUtil.toUTC(startLocalDateTime.toLocalDateTime());
-        ZonedDateTime endUTC = TimeUtil.toUTC(endLocalDateTime);
+        Timestamp startUTC = TimeUtil.localToTimestamp(startLocalDateTime);
+        Timestamp endUTC = TimeUtil.localToTimestamp(endLocalDateTime);
 
         // Create new appointment
         LocalDateTime now = LocalDateTime.now();
@@ -128,12 +129,12 @@ public class AddAppointmentFormController {
         );
 
         try {
-            AppointmentsDAO.addAppointment(newAppointment, now, now);
+            AppointmentsDAO.addAppointment(newAppointment, startUTC, endUTC);
+            navigateToAppointmentsForm();
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "An error occurred while adding the appointment.");
         }
-        navigateToAppointmentsForm();
     }
 
     @FXML
@@ -179,29 +180,6 @@ public class AddAppointmentFormController {
 
         startTimeComboBox.setConverter(timeStringConverter);
         endTimeComboBox.setConverter(timeStringConverter);
-    }
-
-    private boolean validateTimes(LocalDateTime start, LocalDateTime end) {
-        if (start != null && end != null && !end.isAfter(start)) {
-            showAlert("Error", "End time must be after start time.");
-            return false;
-        }
-        return true;
-    }
-
-    private boolean validateOverlappingAppointments(int customerId, LocalDateTime start, LocalDateTime end) {
-        ObservableList<Appointments> appointments = AppointmentsDAO.getAppointmentsByCustomerId(customerId);
-
-        for (Appointments appointment : appointments) {
-            LocalDateTime appointmentStart = appointment.getStart();
-            LocalDateTime appointmentEnd = appointment.getEnd();
-
-            if (start.isBefore(appointmentEnd) && end.isAfter(appointmentStart)) {
-                showAlert("Error", "The appointment overlaps with an existing appointment.");
-                return false;
-            }
-        }
-        return true;
     }
 
     private void navigateToAppointmentsForm() {

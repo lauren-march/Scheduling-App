@@ -28,13 +28,14 @@ public class ValidationUtil {
             LocalDateTime appointmentStart = appointment.getStart();
             LocalDateTime appointmentEnd = appointment.getEnd();
 
-            if (start.isBefore(LocalTime.from(appointmentEnd)) && end.isAfter(LocalTime.from(appointmentStart))) {
+            if (start.isBefore(appointmentEnd) && end.isAfter(appointmentStart)) {
                 showAlert("Error", "The appointment overlaps with an existing appointment.");
                 return false;
             }
         }
         return true;
     };
+
 
     public static BusinessHoursValidator businessHoursValidator = (start, end) -> {
         if (!TimeUtil.isWithinBusinessHours(start, end)) {

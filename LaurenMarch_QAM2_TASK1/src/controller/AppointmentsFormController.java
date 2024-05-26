@@ -38,9 +38,9 @@ public class AppointmentsFormController {
     @FXML
     private TableColumn<Appointments, String> appointmentsTypeColumn;
     @FXML
-    private TableColumn<Appointments, ZonedDateTime> appointmentsStartDateColumn;
+    private TableColumn<Appointments, LocalDateTime> appointmentsStartDateColumn;
     @FXML
-    private TableColumn<Appointments, ZonedDateTime> appointmentsEndDateColumn;
+    private TableColumn<Appointments, LocalDateTime> appointmentsEndDateColumn;
     @FXML
     private TableColumn<Appointments, Integer> appointmentsCustomerIDColumn;
     @FXML
@@ -63,9 +63,9 @@ public class AppointmentsFormController {
     @FXML
     private TableColumn<Appointments, String> appointmentsTypeColumnMonth;
     @FXML
-    private TableColumn<Appointments, ZonedDateTime> appointmentsStartDateColumnMonth;
+    private TableColumn<Appointments, LocalDateTime> appointmentsStartDateColumnMonth;
     @FXML
-    private TableColumn<Appointments, ZonedDateTime> appointmentsEndDateColumnMonth;
+    private TableColumn<Appointments, LocalDateTime> appointmentsEndDateColumnMonth;
     @FXML
     private TableColumn<Appointments, Integer> appointmentsCustomerIDColumnMonth;
     @FXML
@@ -84,9 +84,9 @@ public class AppointmentsFormController {
     @FXML
     private TableColumn<Appointments, String> appointmentsTypeColumnWeek;
     @FXML
-    private TableColumn<Appointments, ZonedDateTime> appointmentsStartDateColumnWeek;
+    private TableColumn<Appointments, LocalDateTime> appointmentsStartDateColumnWeek;
     @FXML
-    private TableColumn<Appointments, ZonedDateTime> appointmentsEndDateColumnWeek;
+    private TableColumn<Appointments, LocalDateTime> appointmentsEndDateColumnWeek;
     @FXML
     private TableColumn<Appointments, Integer> appointmentsCustomerIDColumnWeek;
     @FXML
@@ -217,10 +217,6 @@ public class AppointmentsFormController {
         LocalDate lastDayOfWeek = firstDayOfWeek.plusDays(6);
 
         for (Appointments appointment : appointmentsList) {
-            // Convert UTC to local time for display
-            appointment.setStart(TimeUtil.fromUTCToLocal(appointment.getStart()));
-            appointment.setEnd(TimeUtil.fromUTCToLocal(appointment.getEnd()));
-
             LocalDate appointmentDate = appointment.getStart().toLocalDate();
 
             // Check for monthly view

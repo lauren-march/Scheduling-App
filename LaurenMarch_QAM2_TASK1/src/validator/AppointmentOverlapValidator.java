@@ -1,9 +1,9 @@
 package validator;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 @FunctionalInterface
 public interface AppointmentOverlapValidator {
-    boolean validate(int customerId, LocalTime start, LocalTime end);
+    boolean validate(int customerId, LocalDateTime start, LocalDateTime end);
 }
 

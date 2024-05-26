@@ -28,11 +28,11 @@ public class AppointmentsDAO {
                 String description = rs.getString("Description");
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
-                LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
-                LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
-                LocalDateTime createDate = rs.getTimestamp("Create_Date").toLocalDateTime();
+                LocalDateTime start = TimeUtil.timestampToLocal(rs.getTimestamp("Start"));
+                LocalDateTime end = TimeUtil.timestampToLocal(rs.getTimestamp("End"));
+                LocalDateTime createDate = TimeUtil.timestampToLocal(rs.getTimestamp("Create_Date"));
                 String createdBy = rs.getString("Created_By");
-                LocalDateTime lastUpdate = rs.getTimestamp("Last_Update").toLocalDateTime();
+                LocalDateTime lastUpdate = TimeUtil.timestampToLocal(rs.getTimestamp("Last_Update"));
                 String lastUpdateBy = rs.getString("Last_Updated_By");
                 int customerId = rs.getInt("Customer_ID");
                 int userId = rs.getInt("User_ID");
@@ -67,11 +67,11 @@ public class AppointmentsDAO {
                 String description = rs.getString("Description");
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
-                LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
-                LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
-                LocalDateTime createDate = rs.getTimestamp("Create_Date").toLocalDateTime();
+                LocalDateTime start = TimeUtil.timestampToLocal(rs.getTimestamp("Start"));
+                LocalDateTime end = TimeUtil.timestampToLocal(rs.getTimestamp("End"));
+                LocalDateTime createDate = TimeUtil.timestampToLocal(rs.getTimestamp("Create_Date"));
                 String createdBy = rs.getString("Created_By");
-                LocalDateTime lastUpdate = rs.getTimestamp("Last_Update").toLocalDateTime();
+                LocalDateTime lastUpdate = TimeUtil.timestampToLocal(rs.getTimestamp("Last_Update"));
                 String lastUpdateBy = rs.getString("Last_Updated_By");
                 int userId = rs.getInt("User_ID");
                 int contactId = rs.getInt("Contact_ID");
@@ -87,7 +87,7 @@ public class AppointmentsDAO {
         return appointmentsByCustomerIdList;
     }
 
-    public static void addAppointment(Appointments appointments, LocalDateTime createDate, LocalDateTime lastUpdated) throws SQLException {
+    public static void addAppointment(Appointments appointments, Timestamp startUTC, Timestamp endUTC) throws SQLException {
         String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, " +
                 "Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
@@ -96,8 +96,8 @@ public class AppointmentsDAO {
             ps.setString(3, appointments.getDescription());
             ps.setString(4, appointments.getLocation());
             ps.setString(5, appointments.getType());
-            ps.setTimestamp(6, Timestamp.valueOf(appointments.getStart()));
-            ps.setTimestamp(7, Timestamp.valueOf(appointments.getEnd()));
+            ps.setTimestamp(6, startUTC);
+            ps.setTimestamp(7, endUTC);
             ps.setTimestamp(8, Timestamp.valueOf(appointments.getCreateDate()));
             ps.setString(9, appointments.getCreatedBy());
             ps.setTimestamp(10, Timestamp.valueOf(appointments.getLastUpdate()));
@@ -111,7 +111,7 @@ public class AppointmentsDAO {
         }
     }
 
-    public static void updateAppointment(Appointments appointments, LocalDateTime lastUpdated) {
+    public static void updateAppointment(Appointments appointments, Timestamp startUTC, Timestamp endUTC) {
         String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, " +
                 "Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
@@ -119,9 +119,9 @@ public class AppointmentsDAO {
             ps.setString(2, appointments.getDescription());
             ps.setString(3, appointments.getLocation());
             ps.setString(4, appointments.getType());
-            ps.setTimestamp(5, Timestamp.valueOf(appointments.getStart()));
-            ps.setTimestamp(6, Timestamp.valueOf(appointments.getEnd()));
-            ps.setTimestamp(7, Timestamp.valueOf(lastUpdated));
+            ps.setTimestamp(5, startUTC);
+            ps.setTimestamp(6, endUTC);
+            ps.setTimestamp(7, Timestamp.valueOf(appointments.getLastUpdate()));
             ps.setString(8, appointments.getLastUpdateBy());
             ps.setInt(9, appointments.getCustomerId());
             ps.setInt(10, appointments.getUserId());
@@ -178,11 +178,11 @@ public class AppointmentsDAO {
                 String description = rs.getString("Description");
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
-                LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
-                LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
-                LocalDateTime createDate = rs.getTimestamp("Create_Date").toLocalDateTime();
+                LocalDateTime start = TimeUtil.timestampToLocal(rs.getTimestamp("Start"));
+                LocalDateTime end = TimeUtil.timestampToLocal(rs.getTimestamp("End"));
+                LocalDateTime createDate = TimeUtil.timestampToLocal(rs.getTimestamp("Create_Date"));
                 String createdBy = rs.getString("Created_By");
-                LocalDateTime lastUpdate = rs.getTimestamp("Last_Update").toLocalDateTime();
+                LocalDateTime lastUpdate = TimeUtil.timestampToLocal(rs.getTimestamp("Last_Update"));
                 String lastUpdateBy = rs.getString("Last_Updated_By");
                 int customerId = rs.getInt("Customer_ID");
                 int userId = rs.getInt("User_ID");
@@ -192,11 +192,8 @@ public class AppointmentsDAO {
                 Appointments appointment = new Appointments(appointmentId, title, description, location, type, start, end,
                         createDate, createdBy, lastUpdate, lastUpdateBy, customerId, userId, contactId, contactName);
 
-                // Convert appointment start time to the user's local time zone for comparison
-                LocalDateTime startLocal = TimeUtil.fromUTCToLocal(start);
-
                 // Check if the appointment start time is within the next 15 minutes
-                if (ChronoUnit.MINUTES.between(currentTime, startLocal) >= 0 && ChronoUnit.MINUTES.between(currentTime, startLocal) <= 15) {
+                if (ChronoUnit.MINUTES.between(currentTime, start) >= 0 && ChronoUnit.MINUTES.between(currentTime, start) <= 15) {
                     appointmentsList.add(appointment);
                 }
             }

@@ -1,21 +1,29 @@
 package controller;
 
-import helper.*;
+import helper.AppointmentsDAO;
+import helper.ContactsDAO;
+import helper.CustomerDAO;
+import helper.UsersDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.util.StringConverter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import model.*;
+import javafx.util.StringConverter;
+import model.Appointments;
+import model.Contacts;
 import util.TimeUtil;
 import util.ValidationUtil;
 
 import java.io.IOException;
-import java.time.*;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Locale;
@@ -64,7 +72,6 @@ public class UpdateAppointmentFormController {
         ObservableList<Integer> users = UsersDAO.getUserIdList();
         usersComboBox.setItems(users);
 
-        initializeFormForAdd();
         initializeTimeComboBoxes();
     }
 
@@ -101,52 +108,67 @@ public class UpdateAppointmentFormController {
             return;
         }
 
+        if (!ValidationUtil.validateOverlappingAppointments.validate(customerId, startLocalDateTime, endLocalDateTime)) {
+            return;
+        }
+
         // Validate business hours using the BusinessHoursValidator
         if (!ValidationUtil.businessHoursValidator.validate(TimeUtil.toET(startLocalDateTime), TimeUtil.toET(endLocalDateTime))) {
             showAlert("Error", "Appointment times must be within business hours (8:00 AM - 10:00 PM ET).");
             return;
         }
 
-        // Convert to UTC for overlap validation
-        ZonedDateTime startUTC = TimeUtil.toUTC(startLocalDateTime);
-        ZonedDateTime endUTC = TimeUtil.toUTC(endLocalDateTime);
-
-        // Validate overlapping appointments
-        if (!ValidationUtil.validateOverlappingAppointments.validate(customerId, startTime, endTime)) {
-            return;
-        }
+        // Convert to UTC for storage
+        Timestamp startUTC = TimeUtil.localToTimestamp(startLocalDateTime);
+        Timestamp endUTC = TimeUtil.localToTimestamp(endLocalDateTime);
 
         // Update appointment
-        ZonedDateTime now = ZonedDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
         String currentUser = LoginFormController.currentUser;
 
         Appointments updatedAppointment = new Appointments(
                 Integer.parseInt(appointmentIdTextField.getText()),
                 title, description, location, type,
-                startUTC.toLocalDateTime(), endUTC.toLocalDateTime(),
-                now.toLocalDateTime(), currentUser, now.toLocalDateTime(), currentUser,
+                startLocalDateTime, endLocalDateTime,
+                now, currentUser, now, currentUser,
                 customerId, userId, contact.getContactId()
         );
 
         try {
-            AppointmentsDAO.updateAppointment(updatedAppointment, now.toLocalDateTime());
-            navigateToAppointmentsForm(); // Navigate back to the appointments form to see the changes
+            AppointmentsDAO.updateAppointment(updatedAppointment, startUTC, endUTC);
+            navigateToAppointmentsForm();
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "An error occurred while updating the appointment.");
         }
     }
 
-
     @FXML
     private void handleCancelButtonAction() {
         navigateToAppointmentsForm();
     }
 
-    private void initializeFormForAdd() {
-        int nextAppointmentId = AppointmentsDAO.getNextAppointmentId();
-        appointmentIdTextField.setText(String.valueOf(nextAppointmentId));
-        appointmentIdTextField.setDisable(true);
+    private void initializeFormForUpdate() {
+        if (selectedAppointment != null) {
+            appointmentIdTextField.setText(String.valueOf(selectedAppointment.getAppointmentId()));
+            titleTextField.setText(selectedAppointment.getTitle());
+            descriptionTextField.setText(selectedAppointment.getDescription());
+            locationTextField.setText(selectedAppointment.getLocation());
+            typeTextField.setText(selectedAppointment.getType());
+
+            Contacts selectedContact = ContactsDAO.getContactById(selectedAppointment.getContactId());
+            contactsComboBox.setValue(selectedContact);
+
+            customerComboBox.setValue(selectedAppointment.getCustomerId());
+            usersComboBox.setValue(selectedAppointment.getUserId());
+
+            LocalDateTime startLocalDateTime = selectedAppointment.getStart();
+            LocalDateTime endLocalDateTime = selectedAppointment.getEnd();
+
+            startDatePicker.setValue(startLocalDateTime.toLocalDate());
+            startTimeComboBox.setValue(startLocalDateTime.toLocalTime());
+            endTimeComboBox.setValue(endLocalDateTime.toLocalTime());
+        }
     }
 
     private void initializeTimeComboBoxes() {
@@ -181,30 +203,6 @@ public class UpdateAppointmentFormController {
 
         startTimeComboBox.setConverter(timeStringConverter);
         endTimeComboBox.setConverter(timeStringConverter);
-    }
-
-    private void initializeFormForUpdate() {
-        if (selectedAppointment != null) {
-            appointmentIdTextField.setText(String.valueOf(selectedAppointment.getAppointmentId()));
-            titleTextField.setText(selectedAppointment.getTitle());
-            descriptionTextField.setText(selectedAppointment.getDescription());
-            locationTextField.setText(selectedAppointment.getLocation());
-            typeTextField.setText(selectedAppointment.getType());
-
-            Contacts selectedContact = ContactsDAO.getContactById(selectedAppointment.getContactId());
-            contactsComboBox.setValue(selectedContact);
-
-            customerComboBox.setValue(selectedAppointment.getCustomerId());
-            usersComboBox.setValue(selectedAppointment.getUserId());
-
-            // Assuming the start and end times are already in the local time zone
-            LocalDateTime startLocalDateTime = selectedAppointment.getStart();
-            LocalDateTime endLocalDateTime = selectedAppointment.getEnd();
-
-            startDatePicker.setValue(startLocalDateTime.toLocalDate());
-            startTimeComboBox.setValue(startLocalDateTime.toLocalTime());
-            endTimeComboBox.setValue(endLocalDateTime.toLocalTime());
-        }
     }
 
     private void navigateToAppointmentsForm() {

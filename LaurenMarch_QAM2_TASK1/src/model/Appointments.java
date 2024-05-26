@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class Appointments {
@@ -8,8 +9,8 @@ public class Appointments {
     private String description;
     private String location;
     private String type;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private Timestamp start;
+    private Timestamp end;
     private LocalDateTime createDate;
     private String createdBy;
     private LocalDateTime lastUpdate;
@@ -29,8 +30,8 @@ public class Appointments {
         this.description = description;
         this.location = location;
         this.type = type;
-        this.start = start;
-        this.end = end;
+        this.start = Timestamp.valueOf(start);
+        this.end = Timestamp.valueOf(end);
         this.createDate = createDate;
         this.createdBy = createdBy;
         this.lastUpdate = lastUpdate;
@@ -50,8 +51,8 @@ public class Appointments {
         this.description = description;
         this.location = location;
         this.type = type;
-        this.start = start;
-        this.end = end;
+        this.start = Timestamp.valueOf(start);
+        this.end = Timestamp.valueOf(end);
         this.createDate = createDate;
         this.createdBy = createdBy;
         this.lastUpdate = lastUpdate;
@@ -103,19 +104,19 @@ public class Appointments {
     }
 
     public LocalDateTime getStart() {
-        return start;
+        return start.toLocalDateTime();
     }
 
     public void setStart(LocalDateTime start) {
-        this.start = start;
+        this.start = Timestamp.valueOf(start);
     }
 
     public LocalDateTime getEnd() {
-        return end;
+        return end.toLocalDateTime();
     }
 
     public void setEnd(LocalDateTime end) {
-        this.end = end;
+        this.end = Timestamp.valueOf(end);
     }
 
     public LocalDateTime getCreateDate() {
@@ -203,7 +204,3 @@ public class Appointments {
                 '}';
     }
 }
-
-
-
-
