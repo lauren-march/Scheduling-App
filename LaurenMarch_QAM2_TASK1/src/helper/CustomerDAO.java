@@ -2,6 +2,7 @@ package helper;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.chart.PieChart;
 import model.Customer;
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -139,4 +140,25 @@ public class CustomerDAO {
         }
         return 1; // Default to 1 if there are no customers
     }
+
+    public static ObservableList<PieChart.Data> getCustomerCountByCountry() {
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+        String sql = "SELECT countries.Country, COUNT(customers.Customer_ID) as CustomerCount " +
+                "FROM customers " +
+                "JOIN first_level_divisions ON customers.Division_ID = first_level_divisions.Division_ID " +
+                "JOIN countries ON countries.Country_ID = first_level_divisions.Country_ID " +
+                "GROUP BY countries.Country";
+        try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String country = rs.getString("Country");
+                int count = rs.getInt("CustomerCount");
+                pieChartData.add(new PieChart.Data(country + " (" + count + ")", count));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return pieChartData;
+    }
+
 }

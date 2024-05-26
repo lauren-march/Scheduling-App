@@ -99,6 +99,8 @@ public class AppointmentsFormController {
     @FXML
     private Button updateAppointmentButton;
     @FXML
+    private Button reportsButton;
+    @FXML
     private Button deleteAppointmentButton;
 
     @FXML
@@ -171,6 +173,11 @@ public class AppointmentsFormController {
         } else {
             showAlert("Error", "No appointment selected. Please select an appointment to update.");
         }
+    }
+
+    @FXML
+    private void handleLoadReportsForm(){
+        loadReportsForm();
     }
 
     private void loadUpdateAppointmentForm(Appointments selectedAppointment) {
@@ -282,6 +289,18 @@ public class AppointmentsFormController {
                 loadAppointmentData();
             }
         });
+    }
+
+    private void loadReportsForm() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/view/ReportsForm.fxml"));
+            Stage stage = (Stage) reportsButton.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showAlert(String title, String content) {

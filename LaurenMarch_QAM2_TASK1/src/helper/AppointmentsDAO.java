@@ -2,6 +2,7 @@ package helper;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.chart.PieChart;
 import model.Appointments;
 import util.TimeUtil;
 
@@ -202,4 +203,63 @@ public class AppointmentsDAO {
         }
         return appointmentsList;
     }
+
+    // Getters for Reports form
+    public static ObservableList<PieChart.Data> getAppointmentsByTypeForMonth(int month) {
+        ObservableList<PieChart.Data> appointmentData = FXCollections.observableArrayList();
+        String sql = "SELECT Type, COUNT(*) as Count FROM appointments " +
+                "WHERE MONTH(Start) = ? GROUP BY Type";
+
+        try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
+            ps.setInt(1, month);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String type = rs.getString("Type");
+                int count = rs.getInt("Count");
+                appointmentData.add(new PieChart.Data(type, count));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return appointmentData;
+    }
+
+    public static ObservableList<Appointments> getAppointmentsByContactId(int contactId) {
+        ObservableList<Appointments> appointmentsList = FXCollections.observableArrayList();
+        String sql = "SELECT a.Appointment_ID, a.Title, a.Description, a.Location, a.Type, a.Start, a.End, " +
+                "a.Create_Date, a.Created_By, a.Last_Update, a.Last_Updated_By, a.Customer_ID, a.User_ID, " +
+                "a.Contact_ID, c.Contact_Name " +
+                "FROM client_schedule.appointments a " +
+                "JOIN client_schedule.contacts c ON a.Contact_ID = c.Contact_ID " +
+                "WHERE a.Contact_ID = ?";
+
+        try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
+            ps.setInt(1, contactId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int appointmentId = rs.getInt("Appointment_ID");
+                String title = rs.getString("Title");
+                String description = rs.getString("Description");
+                String location = rs.getString("Location");
+                String type = rs.getString("Type");
+                LocalDateTime start = TimeUtil.timestampToLocal(rs.getTimestamp("Start"));
+                LocalDateTime end = TimeUtil.timestampToLocal(rs.getTimestamp("End"));
+                LocalDateTime createDate = TimeUtil.timestampToLocal(rs.getTimestamp("Create_Date"));
+                String createdBy = rs.getString("Created_By");
+                LocalDateTime lastUpdate = TimeUtil.timestampToLocal(rs.getTimestamp("Last_Update"));
+                String lastUpdateBy = rs.getString("Last_Updated_By");
+                int customerId = rs.getInt("Customer_ID");
+                int userId = rs.getInt("User_ID");
+                String contactName = rs.getString("Contact_Name");
+
+                Appointments appointment = new Appointments(appointmentId, title, description, location, type, start, end,
+                        createDate, createdBy, lastUpdate, lastUpdateBy, customerId, userId, contactId, contactName);
+                appointmentsList.add(appointment);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return appointmentsList;
+    }
+
 }
