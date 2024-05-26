@@ -39,7 +39,8 @@ public class LoginFormController {
     @FXML private Label subtitleLabel;
     @FXML private Label usernameLabel;
     @FXML private Label passwordLabel;
-    @FXML private Button loginButton; // Ensure this matches fx:id in FXML
+    @FXML private Button loginButton;
+    @FXML private Button exitButton;
 
     private ResourceBundle bundle;
     public static String currentUser;
@@ -106,6 +107,11 @@ public class LoginFormController {
         } else {
             errorLabel.setText(bundle.getString("login.error"));
         }
+    }
+
+    @FXML
+    private void handleExitButtonAction(){
+        Platform.exit();
     }
 
     private boolean authenticate(String username, String password) {

@@ -242,6 +242,12 @@ public class AppointmentsFormController {
         }
     }
 
+    @FXML
+    private void handleLogoutButtonAction() {
+        logout();
+    }
+
+
     public void loadAppointmentData() {
         ObservableList<Appointments> appointmentsList = AppointmentsDAO.getAppointmentsList();
         ObservableList<Appointments> monthlyAppointments = FXCollections.observableArrayList();
@@ -341,6 +347,18 @@ public class AppointmentsFormController {
         textArea.setEditable(false);
         alert.getDialogPane().setContent(textArea);
         alert.showAndWait();
+    }
+
+    private void logout() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/view/LoginForm.fxml"));
+            Stage stage = (Stage) logoutButton.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showAlert(String title, String content) {
