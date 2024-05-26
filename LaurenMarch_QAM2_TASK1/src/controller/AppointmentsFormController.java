@@ -4,16 +4,20 @@ import helper.AppointmentsDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.Appointments;
 import util.TimeUtil;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,6 +26,9 @@ import java.time.temporal.WeekFields;
 import java.util.Locale;
 
 public class AppointmentsFormController {
+
+    @FXML
+    private AnchorPane appointmentFormPane;
 
     @FXML
     private TableView<Appointments> appointmentsTableView;
@@ -99,9 +106,14 @@ public class AppointmentsFormController {
     @FXML
     private Button updateAppointmentButton;
     @FXML
+    private Button deleteAppointmentButton;
+    @FXML
     private Button reportsButton;
     @FXML
-    private Button deleteAppointmentButton;
+    private Button logsButton;
+    @FXML
+    private Button logoutButton;
+
 
     @FXML
     public void initialize() {
@@ -212,6 +224,24 @@ public class AppointmentsFormController {
         }
     }
 
+    @FXML
+    private void handleLogsButtonAction(ActionEvent event) {
+        try {
+            StringBuilder logs = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(new FileReader("login_activity.txt"))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    logs.append(line).append("\n");
+                }
+            }
+
+            showLogs(logs.toString());
+        } catch (IOException e) {
+            showAlert("Error", "Unable to read log file.");
+            e.printStackTrace();
+        }
+    }
+
     public void loadAppointmentData() {
         ObservableList<Appointments> appointmentsList = AppointmentsDAO.getAppointmentsList();
         ObservableList<Appointments> monthlyAppointments = FXCollections.observableArrayList();
@@ -301,6 +331,16 @@ public class AppointmentsFormController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void showLogs(String logs) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("User Activity Logs");
+        alert.setHeaderText("Login Activity");
+        TextArea textArea = new TextArea(logs);
+        textArea.setEditable(false);
+        alert.getDialogPane().setContent(textArea);
+        alert.showAndWait();
     }
 
     private void showAlert(String title, String content) {

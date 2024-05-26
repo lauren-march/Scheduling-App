@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Appointments;
+import util.ActivityLoggerUtil;
 import util.TimeUtil;
 
 import java.io.IOException;
@@ -95,7 +96,10 @@ public class LoginFormController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        if (authenticate(username, password)) {
+        boolean loginSuccess = authenticate(username, password);
+        ActivityLoggerUtil.log(username, loginSuccess);
+
+        if (loginSuccess) {
             errorLabel.setText("");
             checkForUpcomingAppointments(); // Check for upcoming appointments
             loadAppointmentsForm();
