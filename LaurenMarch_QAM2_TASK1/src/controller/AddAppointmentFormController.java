@@ -16,6 +16,7 @@ import javafx.util.StringConverter;
 import model.Appointments;
 import model.Contacts;
 import util.TimeUtil;
+import util.ValidationUtil;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -93,27 +94,25 @@ public class AddAppointmentFormController {
         }
 
         // Combine date and time
-        LocalDateTime startLocalDateTime = LocalDateTime.of(startDate, startTime);
+        ZonedDateTime startLocalDateTime = ZonedDateTime.from(LocalTime.from(LocalDateTime.of(startDate, startTime)));
         LocalDateTime endLocalDateTime = LocalDateTime.of(startDate, endTime);
 
-        // Validate times
-        if (!validateTimes(startLocalDateTime, endLocalDateTime)) {
+        if (!ValidationUtil.validateTimes.validate(startLocalDateTime.toLocalDateTime(), endLocalDateTime)) {
+            return;
+        }
+
+        if (!ValidationUtil.validateOverlappingAppointments.validate(customerId, LocalTime.from(startLocalDateTime), LocalTime.from(endLocalDateTime))) {
             return;
         }
 
         // Validate business hours
-        if (!TimeUtil.isWithinBusinessHours(startLocalDateTime, endLocalDateTime)) {
+        if (!TimeUtil.isWithinBusinessHours(startLocalDateTime, ZonedDateTime.from(endLocalDateTime))) {
             showAlert("Error", "Appointment times must be within business hours (8:00 AM - 10:00 PM ET).");
             return;
         }
 
-        // Validate overlapping appointments
-        if (!validateOverlappingAppointments(customerId, startLocalDateTime, endLocalDateTime)) {
-            return;
-        }
-
         // Convert to UTC for storage
-        ZonedDateTime startUTC = TimeUtil.toUTC(startLocalDateTime);
+        ZonedDateTime startUTC = TimeUtil.toUTC(startLocalDateTime.toLocalDateTime());
         ZonedDateTime endUTC = TimeUtil.toUTC(endLocalDateTime);
 
         // Create new appointment
