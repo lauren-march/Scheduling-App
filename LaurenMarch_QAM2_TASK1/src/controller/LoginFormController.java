@@ -13,7 +13,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Appointments;
 import util.ActivityLoggerUtil;
-import util.TimeUtil;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -29,18 +28,30 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class LoginFormController {
-    @FXML private TextField usernameField;
-    @FXML private PasswordField passwordField;
-    @FXML private Label errorLabel;
-    @FXML private Label dateTimeLabel;
-    @FXML private Label englishLabel;
-    @FXML private Label frenchLabel;
-    @FXML private Label titleLabel;
-    @FXML private Label subtitleLabel;
-    @FXML private Label usernameLabel;
-    @FXML private Label passwordLabel;
-    @FXML private Button loginButton;
-    @FXML private Button exitButton;
+    @FXML
+    private TextField usernameField;
+    @FXML
+    private PasswordField passwordField;
+
+    @FXML
+    private Label errorLabel;
+    @FXML
+    private Label dateTimeLabel;
+    @FXML
+    private Label englishLabel;
+    @FXML
+    private Label frenchLabel;
+    @FXML
+    private Label titleLabel;
+    @FXML
+    private Label subtitleLabel;
+    @FXML
+    private Label usernameLabel;
+    @FXML
+    private Label passwordLabel;
+
+    @FXML
+    private Button loginButton;
 
     private ResourceBundle bundle;
     public static String currentUser;

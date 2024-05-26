@@ -4,7 +4,6 @@ import exception.ValidationException;
 import helper.CustomerDAO;
 import helper.FirstLevelDivisionsDAO;
 import helper.CountryDAO;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +17,6 @@ import model.Countries;
 import util.ValidationUtil;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 public class UpdateCustomerFormController {

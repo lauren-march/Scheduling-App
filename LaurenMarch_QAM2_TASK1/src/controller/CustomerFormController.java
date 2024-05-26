@@ -1,6 +1,5 @@
 package controller;
 
-
 import helper.CustomerDAO;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -12,13 +11,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Customer;
-import model.FirstLevelDivisions;
 import model.Appointments;
 import helper.AppointmentsDAO;
 
 import java.io.IOException;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
 
 public class CustomerFormController {
 
@@ -50,8 +46,6 @@ public class CustomerFormController {
     private Button addCustomerButton;
     @FXML
     private Button updateCustomerButton;
-    @FXML
-    private Button deleteCustomerButton;
 
     @FXML
     public void initialize() {
@@ -204,6 +198,4 @@ public class CustomerFormController {
         alert.setContentText(content);
         alert.showAndWait();
     }
-
-
 }

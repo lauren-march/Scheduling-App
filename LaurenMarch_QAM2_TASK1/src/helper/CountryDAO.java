@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import model.Countries;
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.zip.CheckedOutputStream;
 
 public class CountryDAO {
 

@@ -6,13 +6,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -50,6 +53,9 @@ public class ReportsFormController {
     private ComboBox<Contacts> contactScheduleComboBox;
 
     @FXML
+    private Button exitButton;
+
+    @FXML
     public void initialize() {
         // Initialize columns
         appointmentsIdColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
@@ -84,6 +90,11 @@ public class ReportsFormController {
         initializeContactScheduleComboBox();
         updatePieChart(currentMonth);
         updateCustomerByCountryChart();
+    }
+
+    @FXML
+    private void handleExitButton() {
+        exitButtonAction();
     }
 
     private void updatePieChart(Month selectedMonth) {
@@ -135,12 +146,17 @@ public class ReportsFormController {
     private void initializeContactScheduleComboBox() {
         ObservableList<Contacts> contacts = ContactsDAO.getContactsList();
         contactScheduleComboBox.setItems(contacts);
+
+        if (!contacts.isEmpty()) {
+            Contacts firstContact = contacts.get(0);
+            contactScheduleComboBox.setValue(firstContact);
+            updateTableView(firstContact);
+        }
     }
 
     private void loadAppointmentData() {
         ObservableList<Appointments> appointmentsList = AppointmentsDAO.getAppointmentsList();
         contactAppointmentsTableView.setItems(appointmentsList);
-
     }
 
     private void makeColumnsAdjustable(TableView<?> table) {
@@ -160,6 +176,18 @@ public class ReportsFormController {
     private void updateTableView(Contacts selectedContact) {
         ObservableList<Appointments> filteredAppointments = AppointmentsDAO.getAppointmentsByContactId(selectedContact.getContactId());
         contactAppointmentsTableView.setItems(filteredAppointments);
+    }
+
+    private void exitButtonAction(){
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/view/AppointmentsForm.fxml"));
+            Stage stage = (Stage) exitButton.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

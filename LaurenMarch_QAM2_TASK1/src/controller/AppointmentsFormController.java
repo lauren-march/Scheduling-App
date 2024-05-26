@@ -165,18 +165,6 @@ public class AppointmentsFormController {
         loadAddAppointmentForm();
     }
 
-    private void loadAddAppointmentForm() {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/view/AddAppointmentForm.fxml"));
-            Stage stage = (Stage) addAppointmentButton.getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @FXML
     private void handleLoadUpdateAppointmentForm() {
         Appointments selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
@@ -190,23 +178,6 @@ public class AppointmentsFormController {
     @FXML
     private void handleLoadReportsForm(){
         loadReportsForm();
-    }
-
-    private void loadUpdateAppointmentForm(Appointments selectedAppointment) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UpdateAppointmentForm.fxml"));
-            Parent root = loader.load();
-
-            UpdateAppointmentFormController controller = loader.getController();
-            controller.setSelectedAppointment(selectedAppointment);
-
-            Stage stage = (Stage) updateAppointmentButton.getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML
@@ -247,7 +218,6 @@ public class AppointmentsFormController {
         logout();
     }
 
-
     public void loadAppointmentData() {
         ObservableList<Appointments> appointmentsList = AppointmentsDAO.getAppointmentsList();
         ObservableList<Appointments> monthlyAppointments = FXCollections.observableArrayList();
@@ -278,6 +248,35 @@ public class AppointmentsFormController {
         appointmentsTableView.setItems(appointmentsList);
         appointmentsTableViewMonth.setItems(monthlyAppointments);
         appointmentsTableViewWeek.setItems(weeklyAppointments);
+    }
+
+    private void loadAddAppointmentForm() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/view/AddAppointmentForm.fxml"));
+            Stage stage = (Stage) addAppointmentButton.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadUpdateAppointmentForm(Appointments selectedAppointment) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UpdateAppointmentForm.fxml"));
+            Parent root = loader.load();
+
+            UpdateAppointmentFormController controller = loader.getController();
+            controller.setSelectedAppointment(selectedAppointment);
+
+            Stage stage = (Stage) updateAppointmentButton.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void makeColumnsAdjustable(TableView<?> table) {

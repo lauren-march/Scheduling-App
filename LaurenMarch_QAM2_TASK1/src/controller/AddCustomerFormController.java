@@ -39,8 +39,6 @@ public class AddCustomerFormController {
     private ComboBox<FirstLevelDivisions> firstLevelDivisionComboBox;
     @FXML
     private Button addCustomerButton;
-    @FXML
-    private Button cancelButton;
 
     @FXML
     public void initialize() {

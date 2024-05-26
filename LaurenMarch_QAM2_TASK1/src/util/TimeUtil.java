@@ -12,11 +12,6 @@ public class TimeUtil {
     private static final ZonedDateTime BUSINESS_START_ET = LocalDate.now().atTime(8, 0).atZone(ET_ZONE);
     private static final ZonedDateTime BUSINESS_END_ET = LocalDate.now().atTime(22,0).atZone(ET_ZONE);
 
-    // Get the current time in UTC
-    public static LocalDateTime utcNow() {
-        return ZonedDateTime.now(UTC_ZONE).toLocalDateTime();
-    }
-
     // Convert LocalDateTime to EST
     public static ZonedDateTime toET(LocalDateTime localDateTime) {
         return localDateTime.atZone(LOCAL_ZONE).withZoneSameInstant(ET_ZONE);

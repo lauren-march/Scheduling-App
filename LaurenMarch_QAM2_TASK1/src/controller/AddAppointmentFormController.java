@@ -24,7 +24,6 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Locale;
@@ -54,10 +53,7 @@ public class AddAppointmentFormController {
     @FXML
     private ComboBox<Integer> usersComboBox;
 
-    @FXML
-    private Button addAppointmentButton;
-    @FXML
-    private Button cancelAddAppointmentButton;
+    @FXML private Button addAppointmentButton;
 
     @FXML
     public void initialize() {

@@ -1,7 +1,5 @@
 package util;
 
-import com.mysql.cj.conf.PropertyDefinitions;
-import com.mysql.cj.xdevapi.Schema;
 import exception.ValidationException;
 import helper.AppointmentsDAO;
 import javafx.collections.ObservableList;
