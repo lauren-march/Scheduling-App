@@ -74,7 +74,7 @@
                 <TextField fx:id="phoneNumberTextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                 <ComboBox fx:id="countryComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                 <ComboBox fx:id="firstLevelDivisionComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                <Button fx:id="updateCustomerButton" mnemonicParsing="false" text="Update" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" onAction="#handleUpdateButtonAction">
+                <Button fx:id="updateCustomerButton" mnemonicParsing="false" text="Update" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" onAction="#handleUpdateCustomerButton">
                     <font>
                         <Font name="Constantia" size="12.0" />
                     </font>

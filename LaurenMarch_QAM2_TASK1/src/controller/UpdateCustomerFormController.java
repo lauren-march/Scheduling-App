@@ -19,6 +19,9 @@ import util.ValidationUtil;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
+/**
+ * This class handles the functionality and UI elements of the UpdateCustomerForm.
+ */
 public class UpdateCustomerFormController {
 
     @FXML
@@ -42,6 +45,10 @@ public class UpdateCustomerFormController {
 
     private Customer selectedCustomer;
 
+    /**
+     * This is the initialize method and is automatically called by JavaFx when this form loads.
+     * It adds data to UI elements for updateCustomerForm.
+     */
     @FXML
     public void initialize() {
         // Load countries into ComboBox
@@ -51,14 +58,22 @@ public class UpdateCustomerFormController {
         // Add listener to countryComboBox to load relevant divisions
         countryComboBox.setOnAction(event -> loadDivisions());
 
-        // Initialize form for updating an existing customer if a customer is selected
-        if (selectedCustomer != null) {
-            initializeFormForUpdate();
         }
-    }
 
+    /**
+     * This method handles the functionality of the Update button on the UpdateCustomerForm.
+     * First it gets the values entered in the corresponding fields and stores them to corresponding variables.
+     * Textfields are checked with ValidationUtil methods to make sure they are not blank.
+     * Then it runs a check to make sure that there isn't null fields for comboboxes.
+     * Then it runs checks for validation lambdas.
+     * I chose to use lambdas for ValidateUtil.validateTime, validateOverlappingAppointments, and businessHoursValidator
+     * since these can be used in various places in the application (reusable) and it saved about 11-12 lines of code for each
+     * which makes my code more readable and concise.
+     * Lastly it creates a new customer object with the updates that gets updated to the customer table in the
+     * database with the CustomerDAO.updateCustomer() method that uses SQL UPDATE statement.
+     */
     @FXML
-    private void handleUpdateButtonAction() {
+    private void handleUpdateCustomerButton() {
         try {
             String name = ValidationUtil.validateName(customerNameTextField.getText());
             String address = ValidationUtil.validateAddress(addressTextField.getText());
@@ -89,27 +104,28 @@ public class UpdateCustomerFormController {
         }
     }
 
+    /**
+     * This method handles the onAction for the cancel button that navigates back to the AppointmentsForm by calling the helper function navigateToAppointmentsForm.
+     */
     @FXML
     private void handleCancelButtonAction() {
         navigateToCustomerForm();
     }
 
-    private void loadDivisions() {
-        Countries selectedCountry = countryComboBox.getSelectionModel().getSelectedItem();
-        if (selectedCountry != null) {
-            ObservableList<FirstLevelDivisions> divisions = FirstLevelDivisionsDAO.getDivisionsByCountryId(selectedCountry.getCountryId());
-            firstLevelDivisionComboBox.setItems(divisions);
-        }
-    }
-
+    /**
+     * This helper method sets the selected customer to the user selected customer from the CustomerForm.
+     * @param selectedCustomer this is the user selected customer from the CustomerForm
+     */
     public void setSelectedCustomer(Customer selectedCustomer) {
         this.selectedCustomer = selectedCustomer;
-        if (this.selectedCustomer != null) {
-            initializeFormForUpdate();
-        }
+        initializeFormForSelectedCustomer();
     }
 
-    private void initializeFormForUpdate() {
+    /**
+     * This helper method loads the data from CustomerForm into the corresponding UI fields.
+     * This information is loaded from the selectedCustomer.
+     */
+    private void initializeFormForSelectedCustomer() {
         if (selectedCustomer != null) {
             customerIdTextField.setText(String.valueOf(selectedCustomer.getCustomerId()));
             customerNameTextField.setText(selectedCustomer.getName());
@@ -128,6 +144,23 @@ public class UpdateCustomerFormController {
         }
     }
 
+    /**
+     * This helper method allows the divisions to only load after a country is selected from its combobox.
+     * First selectedCountry variable is assigned to the user selected item from the countryComboBox.
+     * If the selectedCountry has been selected (!= null) then the list of divisions is created from a FirstLevelDivisionDAO method.
+     * The firstLevelDivisionComboBox is then populated with that list the corresponds to the selected country.
+     */
+    private void loadDivisions() {
+        Countries selectedCountry = countryComboBox.getSelectionModel().getSelectedItem();
+        if (selectedCountry != null) {
+            ObservableList<FirstLevelDivisions> divisions = FirstLevelDivisionsDAO.getDivisionsByCountryId(selectedCountry.getCountryId());
+            firstLevelDivisionComboBox.setItems(divisions);
+        }
+    }
+
+    /**
+     * This method allows the user to navigate back to the CustomerForm after clicking Add or Cancel button.
+     */
     private void navigateToCustomerForm() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/view/CustomerForm.fxml"));

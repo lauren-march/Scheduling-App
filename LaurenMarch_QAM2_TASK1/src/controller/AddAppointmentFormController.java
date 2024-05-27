@@ -29,7 +29,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.Locale;
 
 /**
- * This class handles the functionality and display of the AddAppointmentForm.
+ * This class handles the functionality and UI elements of the AddAppointmentForm.
  */
 public class AddAppointmentFormController {
 
@@ -59,7 +59,8 @@ public class AddAppointmentFormController {
     @FXML private Button addAppointmentButton;
 
     /**
-     * This method adds data from the database to the combo boxes and calls some helper methods for other data to be added to their respective fields. 
+     * This is the initialize method and is automatically called by JavaFx when this form loads.
+     * It adds data to UI elements for AddAppointmentForm.
      */
     @FXML
     public void initialize() {
@@ -77,6 +78,18 @@ public class AddAppointmentFormController {
         initializeTimeComboBoxes();
     }
 
+    /**
+     * This method handles the functionality of the Add button on the AddAppointmentForm.
+     * First it gets the values entered in the corresponding fields and stores them to corresponding variables.
+     * Textfields are checked with ValidationUtil methods to make sure they are not blank.
+     * Then it runs a check to make sure that there isn't null fields for comboboxes.
+     * Then it runs checks for validation lambdas.
+     * I chose to use lambdas for ValidateUtil.validateTime, validateOverlappingAppointments, and businessHoursValidator
+     * since these can be used in various places in the application (reusable) and it saved about 11-12 lines of code for each
+     * which makes my code more readable and concise.
+     * Lastly it converts the localtime to UTC and creates a new appointment object
+     * that gets saved to the appointments table in the database with the AppointmentsDAO.addAppointment() method.
+     */
     @FXML
     public void handleAddAppointmentButton() {
         try {
@@ -100,10 +113,12 @@ public class AddAppointmentFormController {
             LocalDateTime startLocalDateTime = LocalDateTime.of(startDate, startTime);
             LocalDateTime endLocalDateTime = LocalDateTime.of(startDate, endTime);
 
+            // Validate times against each other to make sure end time is after start time
             if (!ValidationUtil.validateTimes.validate(startLocalDateTime, endLocalDateTime)) {
                 return;
             }
 
+            // Validate date/time for existing appointments to ensure appointments do not overlap
             if (!ValidationUtil.validateOverlappingAppointments.validate(customerId, startLocalDateTime, endLocalDateTime)) {
                 return;
             }
@@ -118,7 +133,7 @@ public class AddAppointmentFormController {
             Timestamp startUTC = TimeUtil.localToTimestamp(startLocalDateTime);
             Timestamp endUTC = TimeUtil.localToTimestamp(endLocalDateTime);
 
-            // Create new appointment
+            // Creates a new appointment
             LocalDateTime now = LocalDateTime.now();
             String currentUser = LoginFormController.currentUser;
 
@@ -130,6 +145,7 @@ public class AddAppointmentFormController {
                     customerId, userId, contact.getContactId()
             );
 
+            // Saves new appointment to database to corresponding appointments table
             try {
                 AppointmentsDAO.addAppointment(newAppointment, startUTC, endUTC);
                 navigateToAppointmentsForm();
@@ -142,17 +158,28 @@ public class AddAppointmentFormController {
         }
     }
 
+    /**
+     * This method handles the onAction for the cancel button that navigates back to the AppointmentsForm by calling the helper function navigateToAppointmentsForm.
+     */
     @FXML
     private void handleCancelButtonAction() {
         navigateToAppointmentsForm();
     }
 
+    /**
+     * This helper method sets the appointmentIdTextField to an increment of the existing appointmentIds +1 and disables the textfield from being editable.
+     */
     private void initializeFormForAppointmentId() {
         int nextAppointmentId = AppointmentsDAO.getNextAppointmentId();
         appointmentIdTextField.setText(String.valueOf(nextAppointmentId));
         appointmentIdTextField.setDisable(true);
     }
 
+    /**
+     * This helper method adds data to the start and end time combo boxes and changes the format from 24h to 12h for better user readability.
+     * This method creates a list of times in increments of 15 minutes for the user to select.
+     * This list is in 24h format that gets converted to 12h format with the StringConverter.
+     */
     private void initializeTimeComboBoxes() {
         ObservableList<LocalTime> times = FXCollections.observableArrayList();
         DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("h:mm a").toFormatter(Locale.ENGLISH);
@@ -187,6 +214,9 @@ public class AddAppointmentFormController {
         endTimeComboBox.setConverter(timeStringConverter);
     }
 
+    /**
+     * This method allows the user to navigate back to the AppointmentForm after clicking Add or Cancel button.
+     */
     private void navigateToAppointmentsForm() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AppointmentsForm.fxml"));

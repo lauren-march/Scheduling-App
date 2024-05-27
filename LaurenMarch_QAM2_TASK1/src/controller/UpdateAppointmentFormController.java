@@ -28,6 +28,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Locale;
 
+/**
+ * This class handles the functionality and UI elements of the UpdateAppointmentForm.
+ */
 public class UpdateAppointmentFormController {
 
     @FXML
@@ -60,6 +63,10 @@ public class UpdateAppointmentFormController {
 
     private Appointments selectedAppointment;
 
+    /**
+     * This is the initialize method and is automatically called by JavaFx when this form loads.
+     * It adds data to UI elements for UpdateAppointmentForm.
+     */
     @FXML
     public void initialize() {
         // Load contacts into ComboBox
@@ -75,11 +82,18 @@ public class UpdateAppointmentFormController {
         initializeTimeComboBoxes();
     }
 
-    public void setSelectedAppointment(Appointments selectedAppointment) {
-        this.selectedAppointment = selectedAppointment;
-        initializeFormForUpdate();
-    }
-
+    /**
+     * This method handles the functionality of the Update button on the UpdateAppointmentForm.
+     * First it gets the values entered in the corresponding fields and stores them to corresponding variables.
+     * Textfields are checked with ValidationUtil methods to make sure they are not blank.
+     * Then it runs a check to make sure that there isn't null fields for comboboxes.
+     * Then it runs checks for validation lambdas.
+     * I chose to use lambdas for ValidateUtil.validateTime, validateOverlappingAppointments, and businessHoursValidator
+     * since these can be used in various places in the application (reusable) and it saved about 11-12 lines of code for each
+     * which makes my code more readable and concise.
+     * Lastly it converts the localtime to UTC and updates and creates a new appointment object with the updates
+     * that gets updated to the appointments table in the database with the AppointmentsDAO.updateAppointment() method that uses SQL UPDATE statement.
+     */
     @FXML
     public void handleUpdateAppointmentButton() {
         try {
@@ -145,12 +159,27 @@ public class UpdateAppointmentFormController {
         }
     }
 
+    /**
+     * This method handles the onAction for the cancel button that navigates back to the AppointmentsForm by calling the helper function navigateToAppointmentsForm.
+     */
     @FXML
     private void handleCancelButtonAction() {
         navigateToAppointmentsForm();
     }
 
-    private void initializeFormForUpdate() {
+    /**
+     * This helper method sets the selected appointment to the user selected appointment from the AppointmentsForm.
+     * @param selectedAppointment this is the user selected appointment from the AppointmentForm
+     */
+    public void setSelectedAppointment(Appointments selectedAppointment) {
+        this.selectedAppointment = selectedAppointment;
+        initializeFormForSelectedAppointment();
+    }
+
+    /**
+     * This helper method loads the data from AppointmentsForm into the corresponding UI fields.
+     */
+    private void initializeFormForSelectedAppointment() {
         if (selectedAppointment != null) {
             appointmentIdTextField.setText(String.valueOf(selectedAppointment.getAppointmentId()));
             titleTextField.setText(selectedAppointment.getTitle());
@@ -170,9 +199,16 @@ public class UpdateAppointmentFormController {
             startDatePicker.setValue(startLocalDateTime.toLocalDate());
             startTimeComboBox.setValue(startLocalDateTime.toLocalTime());
             endTimeComboBox.setValue(endLocalDateTime.toLocalTime());
+
+            appointmentIdTextField.setDisable(true);
         }
     }
 
+    /**
+     * This helper method adds data to the start and end time combo boxes and changes the format from 24h to 12h for better user readability.
+     * This method creates a list of times in increments of 15 minutes for the user to select.
+     * This list is in 24h format that gets converted to 12h format with the StringConverter.
+     */
     private void initializeTimeComboBoxes() {
         ObservableList<LocalTime> times = FXCollections.observableArrayList();
         DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("h:mm a").toFormatter(Locale.ENGLISH);
@@ -207,6 +243,9 @@ public class UpdateAppointmentFormController {
         endTimeComboBox.setConverter(timeStringConverter);
     }
 
+    /**
+     * This method allows the user to navigate back to the AppointmentForm after clicking Add or Cancel button.
+     */
     private void navigateToAppointmentsForm() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/view/AppointmentsForm.fxml"));
