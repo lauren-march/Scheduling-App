@@ -28,6 +28,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Locale;
 
+/**
+ * This class handles the functionality and display of the AddAppointmentForm.
+ */
 public class AddAppointmentFormController {
 
     @FXML
@@ -55,19 +58,22 @@ public class AddAppointmentFormController {
 
     @FXML private Button addAppointmentButton;
 
+    /**
+     * This method adds data from the database to the combo boxes and calls some helper methods for other data to be added to their respective fields. 
+     */
     @FXML
     public void initialize() {
-        // Load contacts into ComboBox
+        // Load contacts into contactsComboBox
         ObservableList<Contacts> contacts = ContactsDAO.getContactsList();
         contactsComboBox.setItems(contacts);
-
+        // Load customerId into customerComboBox
         ObservableList<Integer> customers = CustomerDAO.getCustomerIdList();
         customerComboBox.setItems(customers);
-
+        // Load userId into usersComboBox
         ObservableList<Integer> users = UsersDAO.getUserIdList();
         usersComboBox.setItems(users);
 
-        initializeFormForAdd();
+        initializeFormForAppointmentId();
         initializeTimeComboBoxes();
     }
 
@@ -141,7 +147,7 @@ public class AddAppointmentFormController {
         navigateToAppointmentsForm();
     }
 
-    private void initializeFormForAdd() {
+    private void initializeFormForAppointmentId() {
         int nextAppointmentId = AppointmentsDAO.getNextAppointmentId();
         appointmentIdTextField.setText(String.valueOf(nextAppointmentId));
         appointmentIdTextField.setDisable(true);
