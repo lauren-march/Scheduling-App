@@ -6,8 +6,15 @@ import model.Countries;
 import java.sql.*;
 import java.time.LocalDateTime;
 
+/**
+ * This class is the Data Access Object class for the country table.
+ */
 public class CountryDAO {
 
+    /**
+     * This method creates a list of all countries in the countries table in the database.
+     * @return returns countriesList
+     */
     public static ObservableList<Countries> getAllCountries() {
         ObservableList<Countries> countriesList = FXCollections.observableArrayList();
         String sql = "SELECT * FROM countries";
@@ -30,6 +37,11 @@ public class CountryDAO {
         return countriesList;
     }
 
+    /**
+     * This method creates a list of countries filtered based on Country_ID.
+     * @param countryId selected country ID will create a list based on this parameter.
+     * @return returns list based on Country_ID
+     */
     public static Countries getCountryById(int countryId) {
         String sql = "SELECT * FROM countries WHERE Country_ID = ?";
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {

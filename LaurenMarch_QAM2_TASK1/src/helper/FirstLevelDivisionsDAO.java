@@ -9,8 +9,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
+/**
+ * This class is the Data Access Object class for the first level divisions table.
+ */
 public class FirstLevelDivisionsDAO {
 
+    /**
+     * This method creates a list of divisions filtered based on Country_ID.
+     * @param countryId selected country ID
+     * @return returns divisionsList
+     */
     public static ObservableList<FirstLevelDivisions> getDivisionsByCountryId(int countryId) {
         ObservableList<FirstLevelDivisions> divisionsList = FXCollections.observableArrayList();
         String sql = "SELECT * FROM first_level_divisions WHERE Country_ID = ?";
@@ -35,6 +43,11 @@ public class FirstLevelDivisionsDAO {
         return divisionsList;
     }
 
+    /**
+     * This method gets divisions filtered based on Division_ID.
+     * @param divisionId parameter to filter by.
+     * @return returns new division if one exists, or null if it does not
+     */
     public static FirstLevelDivisions getDivisionById(int divisionId) {
         String sql = "SELECT * FROM first_level_divisions WHERE Division_ID = ?";
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {

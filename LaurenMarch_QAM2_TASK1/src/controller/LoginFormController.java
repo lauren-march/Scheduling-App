@@ -61,18 +61,16 @@ public class LoginFormController {
 
     /**
      * This is the initialize method and is automatically called by JavaFx when this form loads.
-     * It handles the UI elements for LoginForm.
+     * It handles the UI elements, time display, and localization for the LoginForm.
      */
     @FXML
     public void initialize() {
-        // Set up resource bundle for localization
+        // Sets up resource bundle for localization
         bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
         reloadText();
 
-        // Set initial date and time
         updateDateTime();
 
-        // Schedule a timer to update the date and time every second
         Timer timer = new Timer(true);
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -81,7 +79,6 @@ public class LoginFormController {
             }
         }, 0, 1000);
 
-        // Set initial styles and event handlers for language selection
         setLanguageStyles();
         englishLabel.setOnMouseClicked(this::setEnglish);
         frenchLabel.setOnMouseClicked(this::setFrench);
@@ -91,8 +88,14 @@ public class LoginFormController {
         frenchLabel.setOnMouseExited(event -> setLanguageStyles());
     }
 
+    /**
+     * This method handles the Login button.
+     * Calls the ActivityLoggerUtil.log() function to create a log file.
+     * If login is successful after calls authenticate() method, then calls checkForUpcomingAppointments() and
+     * loadAppointmentsForm() or gives the user a login error.
+     */
     @FXML
-    private void handleLoginButtonAction() {
+    private void handleLoginButton() {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
@@ -101,18 +104,29 @@ public class LoginFormController {
 
         if (loginSuccess) {
             errorLabel.setText("");
-            checkForUpcomingAppointments(); // Check for upcoming appointments
+            checkForUpcomingAppointments();
             loadAppointmentsForm();
         } else {
             errorLabel.setText(bundle.getString("login.error"));
         }
     }
 
+    /**
+     * This method handles the Exit button and calls the Java built in method Platform.exit() which closes the application.
+     */
     @FXML
-    private void handleExitButtonAction(){
+    private void handleExitButton(){
         Platform.exit();
     }
 
+    /**
+     * This helper method authenticates the login credentials.
+     * This creates a connection to the database to the users table and checks to see all users.
+     * If a user does not exist or the username and password do not match to the corresponding user, an error message will populate.
+     * @param username user entered username
+     * @param password user entered password
+     * @return returns true if authenticated, returns false if username and password do not match username and password combo in database.
+     */
     private boolean authenticate(String username, String password) {
         Connection connection = JDBC.connection;
         String query = "SELECT * FROM users WHERE User_Name = ? AND Password = ?";
@@ -130,6 +144,12 @@ public class LoginFormController {
         return false;
     }
 
+    /**
+     * This helper method checks to see if there are any upcoming appointments in the next 15 minutes from the local date/time.
+     * The database is checked to see any relevant appointments.
+     * If there are appointments, a dialogue box will pop up and display the appointment information.
+     * If there are no appointments, a dialogue box will pop up and state there are no upcoming appointments within 15 minutes.
+     */
     private void checkForUpcomingAppointments() {
         LocalDateTime currentTime = LocalDateTime.now();
         ObservableList<Appointments> upcomingAppointments = AppointmentsDAO.getAppointmentsWithin15Minutes(currentTime);
@@ -147,6 +167,10 @@ public class LoginFormController {
         }
     }
 
+    /**
+     * This helper method will load the AppointmentsForm when the Login button is clicked by the user.
+     * (Pending authentication in other parts of the code)
+     */
     private void loadAppointmentsForm() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/view/AppointmentsForm.fxml"));
@@ -159,12 +183,18 @@ public class LoginFormController {
         }
     }
 
+    /**
+     * This helper method continually updates the time to the UI in the Login form.
+     */
     private void updateDateTime() {
         ZonedDateTime now = ZonedDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm:ss a z");
         dateTimeLabel.setText(now.format(formatter));
     }
 
+    /**
+     * This helper method displays English or French in cyan depending on which text is selected.
+     */
     private void setLanguageStyles() {
         if (Locale.getDefault().getLanguage().equals("en")) {
             englishLabel.setStyle("-fx-text-fill: cyan;");
@@ -175,6 +205,10 @@ public class LoginFormController {
         }
     }
 
+    /**
+     * This method ensure all the text is in English based on the resource bundle for messages_en.properties.
+     * @param event mouse click event of text.
+     */
     private void setEnglish(MouseEvent event) {
         Locale.setDefault(new Locale("en", "US"));
         bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
@@ -182,6 +216,10 @@ public class LoginFormController {
         setLanguageStyles();
     }
 
+    /**
+     * This method ensure all the text is in English based on the resource bundle for messages_fr.properties.
+     * @param event mouse click event of text.
+     */
     private void setFrench(MouseEvent event) {
         Locale.setDefault(new Locale("fr", "FR"));
         bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
@@ -189,19 +227,25 @@ public class LoginFormController {
         setLanguageStyles();
     }
 
+    /**
+     * This method alters the UI display of the textfield for a cleaner UI look and feel.
+     */
     private void adjustTextFieldWidth() {
         double newWidth = usernameLabel.getWidth() + 20;
         usernameField.setPrefWidth(newWidth > 200 ? newWidth : 200);
     }
 
+    /**
+     * This method reloads all the text when English or French is selected.
+     * Calls adjustTextFieldWidth() to ensure text is not cutoff when switching to French.
+     */
     private void reloadText() {
-        // Reload all the text that needs to be localized
         titleLabel.setText(bundle.getString("title.login"));
         subtitleLabel.setText(bundle.getString("subtitle.login"));
         usernameLabel.setText(bundle.getString("login.username"));
         passwordLabel.setText(bundle.getString("login.password"));
         loginButton.setText(bundle.getString("login.button"));
-        errorLabel.setText(""); // Clear error message when changing language
+        errorLabel.setText("");
         adjustTextFieldWidth();
     }
 

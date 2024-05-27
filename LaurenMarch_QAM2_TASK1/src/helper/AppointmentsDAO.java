@@ -10,8 +10,14 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * This class is the Data Access Object class for the appointments table.
+ */
 public class AppointmentsDAO {
 
+    /**
+     * This method creates a list of all appointments from the appointments table in the database.
+     */
     public static ObservableList<Appointments> getAppointmentsList() {
         ObservableList<Appointments> appointmentsList = FXCollections.observableArrayList();
         String sql = "SELECT a.Appointment_ID, a.Title, a.Description, a.Location, a.Type, a.Start, a.End, " +
@@ -50,6 +56,12 @@ public class AppointmentsDAO {
         return appointmentsList;
     }
 
+    /**
+     * This method creates a list from the database SQL command SELECT.
+     * This gets the appointments based on the Customer_ID
+     * and joins the contacts table using the foreign key Contact_ID
+     * @return returns the appointmentsByCustomerIdList used to find appointments by customer IDs
+     */
     public static ObservableList<Appointments> getAppointmentsByCustomerId(int customerId) {
         ObservableList<Appointments> appointmentsByCustomerIdList = FXCollections.observableArrayList();
         String sql = "SELECT a.Appointment_ID, a.Title, a.Description, a.Location, a.Type, a.Start, a.End, " +
@@ -88,6 +100,10 @@ public class AppointmentsDAO {
         return appointmentsByCustomerIdList;
     }
 
+    /**
+     * This method inserts appointment objects into the database from the SQL INSERT INTO statement.
+     * This is used to add appointments to the database and convert to UTC.
+     */
     public static void addAppointment(Appointments appointments, Timestamp startUTC, Timestamp endUTC) throws SQLException {
         String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, " +
                 "Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -112,6 +128,13 @@ public class AppointmentsDAO {
         }
     }
 
+    /**
+     * This method updates appointment objects into the database from the SQL UPDATE - SET statement.
+     * This is used to update appointments to the database based on the AppointmentID.
+     * @param appointments appointment object
+     * @param startUTC start time converted to UTC using Timestamp for SQL
+     * @param endUTC end time converted to UTC using Timestamp for SQL
+     */
     public static void updateAppointment(Appointments appointments, Timestamp startUTC, Timestamp endUTC) {
         String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, " +
                 "Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
@@ -134,6 +157,11 @@ public class AppointmentsDAO {
         }
     }
 
+    /**
+     * This method deletes appointments from the database using the SQL DELETE statement.
+     * Deletes apopintment data based on Appointment_ID.
+     * @param appointmentId appointmentID that get selected by the user from the tableview on AppointmentsForm.
+     */
     public static void deleteAppointment(int appointmentId) {
         String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
@@ -144,6 +172,10 @@ public class AppointmentsDAO {
         }
     }
 
+    /**
+     * This method gets the next appointment ID in order for the application to increment appointment IDs when creating new appointments.
+     * @return returns the next appointment ID or 1 if no appointments exist.
+     */
     public static int getNextAppointmentId() {
         String sql = "SELECT Appointment_ID FROM appointments ORDER BY Appointment_ID";
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
@@ -163,6 +195,12 @@ public class AppointmentsDAO {
         return 1;
     }
 
+    /**
+     * This method is to find appointment times for the Login form check.
+     * This creates a list of appointments that will start within the next 15 minutes local time.
+     * @param currentTime checks the current time to reference against times for appointments in database.
+     * @return returns list of appointments starting within in next 15 minutes local time if any.
+     */
     public static ObservableList<Appointments> getAppointmentsWithin15Minutes(LocalDateTime currentTime) {
         ObservableList<Appointments> appointmentsList = FXCollections.observableArrayList();
         String sql = "SELECT a.Appointment_ID, a.Title, a.Description, a.Location, a.Type, a.Start, a.End, " +
@@ -204,9 +242,13 @@ public class AppointmentsDAO {
         return appointmentsList;
     }
 
-    // Getters for Reports form
+    /**
+     * This method get appointments by month for one of the piecharts in the Reports form.
+     * @param month shows the appointments based on month selected in comboBox.
+     * @return list of appointments based on selected month if any and grouped by type
+     */
     public static ObservableList<PieChart.Data> getAppointmentsByTypeForMonth(int month) {
-        ObservableList<PieChart.Data> appointmentData = FXCollections.observableArrayList();
+        ObservableList<PieChart.Data> appointmentListByTypeForMonth = FXCollections.observableArrayList();
         String sql = "SELECT Type, COUNT(*) as Count FROM appointments " +
                 "WHERE MONTH(Start) = ? GROUP BY Type";
 
@@ -216,14 +258,20 @@ public class AppointmentsDAO {
             while (rs.next()) {
                 String type = rs.getString("Type");
                 int count = rs.getInt("Count");
-                appointmentData.add(new PieChart.Data(type, count));
+                appointmentListByTypeForMonth.add(new PieChart.Data(type, count));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return appointmentData;
+        return appointmentListByTypeForMonth;
     }
 
+    /**
+     * This method gets a list of appointments by contactID to use for Reports form.
+     * Based on which contact is selected, this will return a list of appointments that match the Contact_ID.
+     * @param contactId selected contact from combobox in Reports form.
+     * @return returns a list of appointments based on contact id.
+     */
     public static ObservableList<Appointments> getAppointmentsByContactId(int contactId) {
         ObservableList<Appointments> appointmentsList = FXCollections.observableArrayList();
         String sql = "SELECT a.Appointment_ID, a.Title, a.Description, a.Location, a.Type, a.Start, a.End, " +

@@ -8,8 +8,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * This class is the Data Access Object class for the contacts table.
+ */
 public class ContactsDAO {
 
+    /**
+     * This method creates a list of all contacts from the contacts table in the database.
+     * @return returns contactsList
+     */
     public static ObservableList<Contacts> getContactsList() {
         ObservableList<Contacts> contactsList = FXCollections.observableArrayList();
         String sql = "SELECT * FROM contacts";
@@ -30,6 +37,11 @@ public class ContactsDAO {
         return contactsList;
     }
 
+    /**
+     * This method creates a list of contacts filtered based on Contact_ID.
+     * @param contactId selected contact ID will create a list based on this parameter
+     * @return returns list based on Contact_ID
+     */
     public static Contacts getContactById(int contactId) {
         String sql = "SELECT * FROM contacts WHERE Contact_ID = ?";
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {

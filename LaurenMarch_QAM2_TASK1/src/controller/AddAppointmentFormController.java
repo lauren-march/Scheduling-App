@@ -64,13 +64,13 @@ public class AddAppointmentFormController {
      */
     @FXML
     public void initialize() {
-        // Load contacts into contactsComboBox
+
         ObservableList<Contacts> contacts = ContactsDAO.getContactsList();
         contactsComboBox.setItems(contacts);
-        // Load customerId into customerComboBox
+
         ObservableList<Integer> customers = CustomerDAO.getCustomerIdList();
         customerComboBox.setItems(customers);
-        // Load userId into usersComboBox
+
         ObservableList<Integer> users = UsersDAO.getUserIdList();
         usersComboBox.setItems(users);
 

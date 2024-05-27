@@ -7,8 +7,14 @@ import model.Customer;
 import java.sql.*;
 import java.time.LocalDateTime;
 
+/**
+ * This class is the Data Access Object class for the contacts table.
+ */
 public class CustomerDAO {
 
+    /**
+     * This method creates a list of all customers from the customer table in the database.
+     */
     public static ObservableList<Customer> getCustomerList() {
         ObservableList<Customer> customerList = FXCollections.observableArrayList();
         String sql = "SELECT customers.Customer_ID, customers.Customer_Name, customers.Address, customers.Create_Date, " +
@@ -43,6 +49,10 @@ public class CustomerDAO {
         return customerList;
     }
 
+    /**
+     * This method creates a list of customer IDs.
+     * @return returns list based on Contact_ID
+     */
     public static ObservableList<Integer> getCustomerIdList() {
         ObservableList<Integer> customerIdList = FXCollections.observableArrayList();
         String sql = "SELECT customers.Customer_ID FROM customers ORDER BY customers.Customer_ID";
@@ -59,7 +69,10 @@ public class CustomerDAO {
         return customerIdList;
     }
 
-
+    /**
+     * This method inserts customer objects into the database from the SQL INSERT INTO statement.
+     * This is used to add customer to the database.
+     */
     public static void addCustomer(Customer customer, LocalDateTime createdDate, LocalDateTime lastUpdated) throws SQLException {
         String sql = "INSERT INTO customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone, Create_Date, Last_Update, Created_By, Last_Updated_By, Division_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
@@ -79,6 +92,10 @@ public class CustomerDAO {
         }
     }
 
+    /**
+     * This method updates customer objects into the database from the SQL UPDATE - SET statement.
+     * This is used to update customer records to the database based on the Customer_ID.
+     */
     public static void updateCustomer(Customer customer, LocalDateTime lastUpdated) {
         String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Last_Updated_By = ?, Last_Update = ?, Division_ID = ? WHERE Customer_ID = ?";
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
@@ -96,6 +113,11 @@ public class CustomerDAO {
         }
     }
 
+    /**
+     * This method deletes customers from the database using the SQL DELETE statement.
+     * Deletes customer data based on Customer_ID.
+     * @param customerId customerId that gets selected by the user from the tableview on AppointmentsForm.
+     */
     public static void deleteCustomer(int customerId) {
         String sql = "DELETE FROM customers WHERE Customer_ID = ?";
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
@@ -106,6 +128,10 @@ public class CustomerDAO {
         }
     }
 
+    /**
+     * This method gets the next customer ID in order for the application to increment customer IDs when creating new customers.
+     * @return returns the next customer ID or 1 if no customers exist.
+     */
     public static int getNextCustomerId() {
         String sql = "SELECT Customer_ID FROM customers ORDER BY Customer_ID";
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
@@ -125,8 +151,12 @@ public class CustomerDAO {
         return 1;
     }
 
+    /**
+     * This method is to populate the piechart in the Reports form with number of customers based on their country.
+     * @return returns the number of customers based on their country.
+     */
     public static ObservableList<PieChart.Data> getCustomerCountByCountry() {
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+        ObservableList<PieChart.Data> customerCountByCountry = FXCollections.observableArrayList();
         String sql = "SELECT countries.Country, COUNT(customers.Customer_ID) as CustomerCount " +
                 "FROM customers " +
                 "JOIN first_level_divisions ON customers.Division_ID = first_level_divisions.Division_ID " +
@@ -137,12 +167,12 @@ public class CustomerDAO {
             while (rs.next()) {
                 String country = rs.getString("Country");
                 int count = rs.getInt("CustomerCount");
-                pieChartData.add(new PieChart.Data(country + " (" + count + ")", count));
+                customerCountByCountry.add(new PieChart.Data(country + " (" + count + ")", count));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return pieChartData;
+        return customerCountByCountry;
     }
 
 }
