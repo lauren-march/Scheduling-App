@@ -12,9 +12,9 @@
                 <Font name="Constantia" size="17.0" />
             </font>
         </Text>
-        <Button fx:id="addCustomerButton" layoutX="829.0" layoutY="98.0" mnemonicParsing="false" onAction="#handleLoadAddCustomerForm" text="Add" />
-        <Button fx:id="updateCustomerButton" layoutX="829.0" layoutY="134.0" mnemonicParsing="false" onAction="#handleLoadUpdateCustomerForm" text="Update" />
-        <Button fx:id="deleteCustomerButton" layoutX="829.0" layoutY="174.0" mnemonicParsing="false" onAction="#handleDeleteButtonAction" text="Delete" />
+        <Button fx:id="addCustomerButton" layoutX="829.0" layoutY="98.0" mnemonicParsing="false" onAction="#handleAddButton" text="Add" />
+        <Button fx:id="updateCustomerButton" layoutX="829.0" layoutY="134.0" mnemonicParsing="false" onAction="#handleUpdatebutton" text="Update" />
+        <Button fx:id="deleteCustomerButton" layoutX="829.0" layoutY="174.0" mnemonicParsing="false" onAction="#handleDeleteButton" text="Delete" />
         <CubicCurve controlX1="-68.0" controlX2="250.0" controlY1="21.0" controlY2="-33.0" endX="489.0" endY="-6.0" fill="#0fb0c9" layoutX="240.0" layoutY="340.0" nodeOrientation="LEFT_TO_RIGHT" opacity="0.29" startX="-196.0" startY="-6.0" stroke="BLACK" strokeType="OUTSIDE" />
         <ScrollPane fx:id="customerScrollPane" fitToHeight="true" fitToWidth="true" layoutX="28.0" layoutY="85.0" prefHeight="210.0" prefWidth="770.0">
             <content>
@@ -34,6 +34,6 @@
                 </TableView>
             </content>
         </ScrollPane>
-      <Button fx:id="appointmentsFormButton" layoutX="809.0" layoutY="322.0" mnemonicParsing="false" onAction="#handleLoadAppointmentsFormButton" text="Appointments" />
+      <Button fx:id="appointmentsFormButton" layoutX="809.0" layoutY="322.0" mnemonicParsing="false" onAction="#handleAppointmentsButton" text="Appointments" />
     </children>
 </AnchorPane>

@@ -17,6 +17,9 @@ import util.UserInterfaceUtil;
 
 import java.io.IOException;
 
+/**
+ * This class handles the functionality and UI elements of the CustomerForm.
+ */
 public class CustomerFormController {
 
     @FXML
@@ -48,6 +51,14 @@ public class CustomerFormController {
     @FXML
     private Button updateCustomerButton;
 
+    /**
+     * This is the initialize method and is automatically called by JavaFx when this form loads.
+     * It adds data to UI elements for AppointmentsForm.
+     * The lambda function UserInterfaceUtil.adjuster.adjustColumns() was chosen because I have multiple tables in my program.
+     * This keeps reusable code organized and easily accessible across multiple forms.
+     * The allows for consistency for the tableview column sizing for a cleaner look.
+     * This also allows me to only need to make changes from one location to adjust table column sizes instead of multiple files.
+     */
     @FXML
     public void initialize() {
         // Initialize customer table columns
@@ -69,19 +80,21 @@ public class CustomerFormController {
         UserInterfaceUtil.adjuster.adjustColumns(customerTableView);
     }
 
+    /**
+     * This method handles the Add button.
+     * Calls the helper function loadAddCustomerForm().
+     */
     @FXML
-    private void handleLoadAppointmentsFormButton(){
-        loadAppointmentsForm();
-    }
-
-    @FXML
-    private void handleLoadAddCustomerForm() {
-
+    private void handleAddButton() {
         loadAddCustomerForm();
     }
 
+    /**
+     * This method handles the Update button.
+     * Calls the helper function loadUpdateCustomerForm().
+     */
     @FXML
-    private void handleLoadUpdateCustomerForm() {
+    private void handleUpdatebutton() {
         Customer selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
         if (selectedCustomer != null) {
             loadUpdateCustomerForm(selectedCustomer);
@@ -90,8 +103,12 @@ public class CustomerFormController {
         }
     }
 
+    /**
+     * This method handles the Delete button.
+     * Calls the helper method deleteButtonAction().
+     */
     @FXML
-    private void handleDeleteButtonAction() {
+    private void handleDeleteButton() {
         Customer selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
         if (selectedCustomer != null) {
             deleteButtonAction(selectedCustomer);
@@ -100,11 +117,26 @@ public class CustomerFormController {
         }
     }
 
+    /**
+     * This method handles the onAction for the Appointments button.
+     * Calls helper function loadAppointmentForm()
+     */
+    @FXML
+    private void handleAppointmentsButton(){
+        loadAppointmentsForm();
+    }
+
+    /**
+     * This helper method loads data from the database into the Customer tableview.
+     */
     public void loadCustomerData() {
         ObservableList<Customer> customerList = CustomerDAO.getCustomerList();
         customerTableView.setItems(customerList);
     }
 
+    /**
+     * This helper method loads the AppointmentsForm when the Appointments button is clicked by the user.
+     */
     private void loadAppointmentsForm(){
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/view/AppointmentsForm.fxml"));
@@ -117,6 +149,9 @@ public class CustomerFormController {
         }
     }
 
+    /**
+     * This helper method loads the AddCustomerForm when the Add button is clicked by the user.
+     */
     private void loadAddCustomerForm () {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/view/AddCustomerForm.fxml"));
@@ -129,6 +164,9 @@ public class CustomerFormController {
         }
     }
 
+    /**
+     * This helper method loads the UpdateCustomerForm when the Update button is clicked by the user.
+     */
     private void loadUpdateCustomerForm(Customer selectedCustomer) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UpdateCustomerForm.fxml"));
@@ -146,6 +184,14 @@ public class CustomerFormController {
         }
     }
 
+    /**
+     * This helper method will delete a selected customer when the Delete button is clicked.
+     * Calls hasAppointments method to check if customer has any appointments. If the customer does have appointments,
+     * an error window will appear informing the user that the customer has appointments and cannot be deleted.
+     * If the customer does not have appointments, the user will be prompted to make sure they want to delete
+     * the selected customer with a pop-up warning window.
+     * @param selectedCustomer selected customer from tableview.
+     */
     private void deleteButtonAction(Customer selectedCustomer) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog");
@@ -173,7 +219,11 @@ public class CustomerFormController {
         });
     }
 
-    // Helper method to check if a customer has any appointments
+    /**
+     * This helper method checks to see if a customer has any appointments in the database based on customerId.
+     * @param customerId find appointments based on foreign key of customerId
+     * @return
+     */
     private boolean hasAppointments(int customerId) {
         ObservableList<Appointments> appointments = AppointmentsDAO.getAppointmentsByCustomerId(customerId);
         return !appointments.isEmpty();

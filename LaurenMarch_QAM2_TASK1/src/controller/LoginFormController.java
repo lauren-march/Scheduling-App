@@ -27,6 +27,9 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * This class handles the functionality and UI elements of the LoginForm.
+ */
 public class LoginFormController {
     @FXML
     private TextField usernameField;
@@ -56,6 +59,10 @@ public class LoginFormController {
     private ResourceBundle bundle;
     public static String currentUser;
 
+    /**
+     * This is the initialize method and is automatically called by JavaFx when this form loads.
+     * It handles the UI elements for LoginForm.
+     */
     @FXML
     public void initialize() {
         // Set up resource bundle for localization
@@ -82,25 +89,6 @@ public class LoginFormController {
         frenchLabel.setOnMouseEntered(event -> frenchLabel.setStyle("-fx-text-fill: cyan; -fx-cursor: hand;"));
         englishLabel.setOnMouseExited(event -> setLanguageStyles());
         frenchLabel.setOnMouseExited(event -> setLanguageStyles());
-
-        // Add text field length validation
-        usernameField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 25) {
-                errorLabel.setText("Username cannot exceed 25 characters");
-                usernameField.setText(oldValue);
-            } else {
-                errorLabel.setText("");
-            }
-        });
-
-        passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 30) {
-                errorLabel.setText("Password cannot exceed 30 characters");
-                passwordField.setText(oldValue);
-            } else {
-                errorLabel.setText("");
-            }
-        });
     }
 
     @FXML
@@ -202,8 +190,8 @@ public class LoginFormController {
     }
 
     private void adjustTextFieldWidth() {
-        double newWidth = usernameLabel.getWidth() + 20; // 20 is just an additional padding factor
-        usernameField.setPrefWidth(newWidth > 200 ? newWidth : 200); // Ensuring a minimum width of 200
+        double newWidth = usernameLabel.getWidth() + 20;
+        usernameField.setPrefWidth(newWidth > 200 ? newWidth : 200);
     }
 
     private void reloadText() {

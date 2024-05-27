@@ -2,16 +2,13 @@ package controller;
 
 import helper.AppointmentsDAO;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.Appointments;
 import util.UserInterfaceUtil;
@@ -28,9 +25,6 @@ import java.util.Locale;
  * This class handles the functionality and UI elements of the AppointmentsForm.
  */
 public class AppointmentsFormController {
-
-    @FXML
-    private AnchorPane appointmentFormPane;
 
     @FXML
     private TableView<Appointments> appointmentsTableView;
@@ -102,7 +96,7 @@ public class AppointmentsFormController {
     private TableColumn<Appointments, Integer> appointmentsUserIdColumnWeek;
 
     @FXML
-    private Button customerFormButton;
+    private Button customersButton;
     @FXML
     private Button addAppointmentButton;
     @FXML
@@ -115,6 +109,10 @@ public class AppointmentsFormController {
     /**
      * This is the initialize method and is automatically called by JavaFx when this form loads.
      * It adds data to UI elements for AppointmentsForm.
+     * The lambda function UserInterfaceUtil.adjuster.adjustColumns() was chosen because I have multiple tables in my program.
+     * This keeps reusable code organized and easily accessible across multiple forms.
+     * The allows for consistency for the tableview column sizing for a cleaner look.
+     * This also allows me to only need to make changes from one location to adjust table column sizes instead of multiple files.
      */
     @FXML
     public void initialize() {
@@ -156,18 +154,29 @@ public class AppointmentsFormController {
 
         // Load data
         loadAppointmentData();
+
+        // Adjusts table columns for a cleaner more uniform look
         UserInterfaceUtil.adjuster.adjustColumns(appointmentsTableView);
         UserInterfaceUtil.adjuster.adjustColumns(appointmentsTableViewMonth);
         UserInterfaceUtil.adjuster.adjustColumns(appointmentsTableViewWeek);
     }
 
+    /**
+     * This method handles the onAction for the Add button.
+     * Calls helper function loadAppointmentForm().
+     */
     @FXML
-    private void handleLoadAddAppointmentForm() {
+    private void handleAddAppointmentButton() {
         loadAddAppointmentForm();
     }
 
+    /**
+     * This method handles the onAction for the Update button.
+     * Forces user to first select an appointment from the appointmentsTableView before navigating to UpdateAppointmentForm.
+     * If no appointment is selected it prompts an error dialogue window.
+     */
     @FXML
-    private void handleLoadUpdateAppointmentForm() {
+    private void handleUpdateAppointmentButton() {
         Appointments selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
         if (selectedAppointment != null) {
             loadUpdateAppointmentForm(selectedAppointment);
@@ -176,18 +185,31 @@ public class AppointmentsFormController {
         }
     }
 
+    /**
+     * This method handles the onAction for the Reports button.
+     * Calls helper function loadReportsForm();
+     */
     @FXML
-    private void handleLoadReportsForm(){
+    private void handleReportButton(){
         loadReportsForm();
     }
 
+    /**
+     * This method handles the onAction for the Customers button.
+     * Calls helper function loadCustomersForm().
+     */
     @FXML
-    private void handleLoadCustomerFormButton() {
+    private void handleCustomersButton() {
         loadCustomersForm();
     }
 
+    /**
+     * This method handles the onAction for the Delete button.
+     * If an appointment is not selected Delete button will not delete appointment and prompts an error dialogue window.
+     * Calls helper function deleteButtonAction().
+     */
     @FXML
-    private void handleDeleteButtonAction() {
+    private void handleDeleteButton() {
         Appointments selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
         if (selectedAppointment != null) {
             deleteButtonAction(selectedAppointment);
@@ -196,29 +218,28 @@ public class AppointmentsFormController {
         }
     }
 
+    /**
+     * This method handles the onAction for the Logs button.
+     * Calls helper function createLogFile().
+     */
     @FXML
-    private void handleLogsButtonAction(ActionEvent event) {
-        try {
-            StringBuilder logs = new StringBuilder();
-            try (BufferedReader reader = new BufferedReader(new FileReader("login_activity.txt"))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    logs.append(line).append("\n");
-                }
-            }
-
-            showLogs(logs.toString());
-        } catch (IOException e) {
-            showAlert("Error", "Unable to read log file.");
-            e.printStackTrace();
-        }
+    private void handleLogsButton() {
+        createLogFile();
     }
 
+    /**
+     * This method handles the onAction for the Logout button.
+     * Calls helper function logout().
+     */
     @FXML
-    private void handleLogoutButtonAction() {
+    private void handleLogoutButton() {
         logout();
     }
 
+    /**
+     * This helper method loads the data from the database into the Appointments tableview.
+     * The for loop checks the appointment data and correctly filters appointments for each view (all, monthly, weekly).
+     */
     public void loadAppointmentData() {
         ObservableList<Appointments> appointmentsList = AppointmentsDAO.getAppointmentsList();
         ObservableList<Appointments> monthlyAppointments = FXCollections.observableArrayList();
@@ -251,6 +272,9 @@ public class AppointmentsFormController {
         appointmentsTableViewWeek.setItems(weeklyAppointments);
     }
 
+    /**
+     * This helper method loads the AddAppointmentForm when the Add button is clicked.
+     */
     private void loadAddAppointmentForm() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/view/AddAppointmentForm.fxml"));
@@ -263,6 +287,10 @@ public class AppointmentsFormController {
         }
     }
 
+    /**
+     * This helper method loads the UpdateAppointmentForm when the Update button is clicked.
+     * @param selectedAppointment user selected appointment from tableview.
+     */
     private void loadUpdateAppointmentForm(Appointments selectedAppointment) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UpdateAppointmentForm.fxml"));
@@ -280,10 +308,13 @@ public class AppointmentsFormController {
         }
     }
 
+    /**
+     * This helper method loads the CustomerForm when the Customers button is clicked.
+     */
     private void loadCustomersForm() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/view/CustomerForm.fxml"));
-            Stage stage = (Stage) customerFormButton.getScene().getWindow();
+            Stage stage = (Stage) customersButton.getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
@@ -292,6 +323,11 @@ public class AppointmentsFormController {
         }
     }
 
+    /**
+     * This helper method will delete a selected appointment when the Delete button is clicked.
+     * The user will be prompted to make sure they want to delete the selected appointment with a pop-up warning window.
+     * @param selectedAppointment user selected appointment from tableview.
+     */
     private void deleteButtonAction(Appointments selectedAppointment) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog");
@@ -313,6 +349,9 @@ public class AppointmentsFormController {
         });
     }
 
+    /**
+     * This helper method will load the Reports form when the Reports button is clicked.
+     */
     private void loadReportsForm() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/view/ReportsForm.fxml"));
@@ -325,6 +364,32 @@ public class AppointmentsFormController {
         }
     }
 
+    /**
+     * This helper function will read a log file and display a log window in the UI when the Logs button is clicked.
+     * If the log file is not found or is named something other than login_activity.txt an alert window will pop up.
+     * Calls showLogs() which will display the read in log file that gets created when clicking Login button from LoginForm.
+     */
+    private void createLogFile () {
+        try {
+            StringBuilder logs = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(new FileReader("login_activity.txt"))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    logs.append(line).append("\n");
+                }
+            }
+
+            showLogs(logs.toString());
+        } catch (IOException e) {
+            showAlert("Error", "Unable to read log file.");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * This helper file will pop up an information dialogue window.
+     * @param logs read in log file saved to the directory from the Login button functionality.
+     */
     private void showLogs(String logs) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("User Activity Logs");
@@ -335,6 +400,9 @@ public class AppointmentsFormController {
         alert.showAndWait();
     }
 
+    /**
+     * This helper function navigates to the LoginForm when the user clicks the Logout button.
+     */
     private void logout() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/view/LoginForm.fxml"));

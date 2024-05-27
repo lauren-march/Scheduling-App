@@ -88,13 +88,13 @@
             </Tab>
          </tabs>
       </TabPane>
-      <Button fx:id="addAppointmentButton" layoutX="995.0" layoutY="95.0" mnemonicParsing="false" onAction="#handleLoadAddAppointmentForm" text="Add" />
-      <Button fx:id="updateAppointmentButton" layoutX="995.0" layoutY="131.0" mnemonicParsing="false" onAction="#handleLoadUpdateAppointmentForm" text="Update" />
-      <Button fx:id="deleteAppointmentButton" layoutX="995.0" layoutY="171.0" mnemonicParsing="false" onAction="#handleDeleteButtonAction" text="Delete" />
+      <Button fx:id="addAppointmentButton" layoutX="995.0" layoutY="95.0" mnemonicParsing="false" onAction="#handleAddAppointmentButton" text="Add" />
+      <Button fx:id="updateAppointmentButton" layoutX="995.0" layoutY="131.0" mnemonicParsing="false" onAction="#handleUpdateAppointmentButton" text="Update" />
+      <Button fx:id="deleteAppointmentButton" layoutX="995.0" layoutY="171.0" mnemonicParsing="false" onAction="#handleDeleteButton" text="Delete" />
       <CubicCurve controlX1="-68.0" controlX2="467.0" controlY1="21.0" controlY2="-28.0" endX="654.0" endY="-6.0" fill="#0fb0c9" layoutX="240.0" layoutY="409.0" nodeOrientation="LEFT_TO_RIGHT" opacity="0.29" startX="-196.0" startY="-6.0" stroke="BLACK" strokeType="OUTSIDE" />
-      <Button fx:id="logoutButton" layoutX="996.0" layoutY="392.0" mnemonicParsing="false" text="Logout" onAction="#handleLogoutButtonAction" />
-      <Button fx:id="customerFormButton" layoutX="910.0" layoutY="392.0" mnemonicParsing="false" onAction="#handleLoadCustomerFormButton" text="Customers" />
-      <Button fx:id="reportsButton" layoutX="994.0" layoutY="33.0" mnemonicParsing="false" onAction="#handleLoadReportsForm" text="Reports" />
-      <Button fx:id="logsButton" layoutX="942.0" layoutY="33.0" mnemonicParsing="false" onAction="#handleLogsButtonAction" text="Logs" />
+      <Button fx:id="logoutButton" layoutX="996.0" layoutY="392.0" mnemonicParsing="false" text="Logout" onAction="#handleLogoutButton" />
+      <Button fx:id="customersButton" layoutX="910.0" layoutY="392.0" mnemonicParsing="false" onAction="#handleCustomersButton" text="Customers" />
+      <Button fx:id="reportsButton" layoutX="994.0" layoutY="33.0" mnemonicParsing="false" onAction="#handleReportButton" text="Reports" />
+      <Button fx:id="logsButton" layoutX="942.0" layoutY="33.0" mnemonicParsing="false" onAction="#handleLogsButton" text="Logs" />
    </children>
 </AnchorPane>
