@@ -14,17 +14,18 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.Appointments;
-import util.TimeUtil;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
 
+/**
+ * This class handles the functionality and UI elements of the AppointmentsForm.
+ */
 public class AppointmentsFormController {
 
     @FXML
@@ -106,15 +107,14 @@ public class AppointmentsFormController {
     @FXML
     private Button updateAppointmentButton;
     @FXML
-    private Button deleteAppointmentButton;
-    @FXML
     private Button reportsButton;
-    @FXML
-    private Button logsButton;
     @FXML
     private Button logoutButton;
 
-
+    /**
+     * This is the initialize method and is automatically called by JavaFx when this form loads.
+     * It adds data to UI elements for AppointmentsForm.
+     */
     @FXML
     public void initialize() {
         // Initialize columns for the all view

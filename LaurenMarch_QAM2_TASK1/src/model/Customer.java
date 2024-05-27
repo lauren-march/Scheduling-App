@@ -2,6 +2,9 @@ package model;
 
 import java.time.LocalDateTime;
 
+/**
+ * This class constructs customer objects
+ */
 public class Customer {
     private int customerId;
     private String name;
@@ -17,7 +20,22 @@ public class Customer {
     private LocalDateTime createDate;
     private LocalDateTime lastUpdate;
 
-    // Constructor for full details with LocalDateTime fields
+    /** Constructor for customer object
+     *
+     * @param customerId customerId attribute
+     * @param name name attribute
+     * @param address address
+     * @param postalCode postalCode attribute
+     * @param phoneNumber phoneNumber attribute
+     * @param createdBy createdBy attribute
+     * @param lastUpdatedBy lastUpdatedBy attribute
+     * @param divisionId divisionId attribute
+     * @param divisionName divisionName attribute
+     * @param countryId countryId attribute
+     * @param countryName countryName attribute
+     * @param createDate createDate attribute
+     * @param lastUpdate lastUpdate attribute
+     */
     public Customer(int customerId, String name, String address, String postalCode, String phoneNumber,
                     String createdBy, String lastUpdatedBy, int divisionId, String divisionName, int countryId, String countryName,
                     LocalDateTime createDate, LocalDateTime lastUpdate) {
@@ -36,12 +54,7 @@ public class Customer {
         this.lastUpdate = lastUpdate;
     }
 
-    public Customer(int customerId, String name) {
-        this.customerId = customerId;
-        this.name = name;
-    }
-
-    // Getter and Setter methods
+    // Getters and Setters
     public int getCustomerId() {
         return customerId;
     }
@@ -144,10 +157,5 @@ public class Customer {
 
     public void setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
-    }
-
-    @Override
-    public String toString() {
-        return String.valueOf(customerId);
     }
 }

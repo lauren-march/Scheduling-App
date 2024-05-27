@@ -106,22 +106,6 @@ public class CustomerDAO {
         }
     }
 
-    public static Customer returnCustomerList(int customerId) throws SQLException {
-        String sql = "SELECT * FROM customers WHERE Customer_ID = ?";
-        try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
-            ps.setInt(1, customerId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                int searchedCustomerId = rs.getInt("Customer_ID");
-                String customerName = rs.getString("Customer_Name");
-                return new Customer(searchedCustomerId, customerName);
-            }
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        return null;
-    }
-
     public static int getNextCustomerId() {
         String sql = "SELECT Customer_ID FROM customers ORDER BY Customer_ID";
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
@@ -134,11 +118,11 @@ public class CustomerDAO {
                 }
                 expectedId++;
             }
-            return expectedId; // If no gaps found, return the next available ID
+            return expectedId;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 1; // Default to 1 if there are no customers
+        return 1;
     }
 
     public static ObservableList<PieChart.Data> getCustomerCountByCountry() {

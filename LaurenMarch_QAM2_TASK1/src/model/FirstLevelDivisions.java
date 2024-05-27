@@ -2,6 +2,9 @@ package model;
 
 import java.time.LocalDateTime;
 
+/**
+ * This class constructs first level division objects
+ */
 public class FirstLevelDivisions {
 
     private int divisionId;
@@ -12,6 +15,16 @@ public class FirstLevelDivisions {
     private String lastUpdatedBy;
     private int countryId;
 
+    /**
+     * Constructor for first level division objects
+     * @param divisionId divisionId attribute
+     * @param division division attribute
+     * @param createDate createDate attribute
+     * @param createdBy createdBy attribute
+     * @param lastUpdate lastUpdate attribute
+     * @param lastUpdatedBy lastUpdatedBy attribute
+     * @param countryId countryId attribute
+     */
     public FirstLevelDivisions(int divisionId, String division, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate,
                                String lastUpdatedBy, int countryId){
 
@@ -24,6 +37,7 @@ public class FirstLevelDivisions {
         this.countryId = countryId;
     }
 
+    // Getters and setters
     public int getDivisionId() {
 
         return divisionId;
@@ -94,6 +108,10 @@ public class FirstLevelDivisions {
         this.countryId = countryId;
     }
 
+    /**
+     * toString conversion to handle memory address appearing in lieu of human-readable data
+     * @return returns division
+     */
     @Override
     public String toString() {
         return division;

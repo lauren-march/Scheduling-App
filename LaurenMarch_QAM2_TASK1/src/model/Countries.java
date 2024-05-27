@@ -2,6 +2,9 @@ package model;
 
 import java.time.LocalDateTime;
 
+/**
+ * This class constructs country objects
+ */
 public class Countries {
 
     private int countryId;
@@ -11,6 +14,15 @@ public class Countries {
     private LocalDateTime lastUpdate;
     private String lastUpdatedBy;
 
+    /**
+     * This is a constructor for country objects
+     * @param countryId countryId attribute
+     * @param country country attribute
+     * @param createDate createDate attribute
+     * @param createdBy createdBy attribute
+     * @param lastUpdate lastUpdate attribute
+     * @param lastUpdatedBy lastUpdatedBy attribute
+     */
     public Countries(int countryId, String country, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy){
         this.countryId = countryId;
         this.country = country;
@@ -20,6 +32,7 @@ public class Countries {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
+   // Getters and setters
     public int getCountryId() {
         return countryId;
     }
@@ -68,6 +81,10 @@ public class Countries {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
+    /**
+     * toString conversion to handle memory address appearing in lieu of human-readable data
+     * @return country attribute
+     */
     @Override
     public String toString() {
         return country;

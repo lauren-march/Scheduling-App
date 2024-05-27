@@ -2,6 +2,9 @@ package model;
 
 import java.time.LocalDateTime;
 
+/**
+ * This class constructs user objects
+ */
 public class Users {
 
     private int userId;
@@ -12,6 +15,16 @@ public class Users {
     private LocalDateTime lastUpdate;
     private String lastUpdatedBy;
 
+    /**
+     * This is a constructor for user objects
+     * @param userId userId attribute
+     * @param userName userName attribute
+     * @param password password attribute
+     * @param createDate createDate attribute
+     * @param createdBy createdBy attribute
+     * @param lastUpdate lastUpdate attribute
+     * @param lastUpdatedBy lastUpdatedBy attribute
+     */
     public Users(int userId, String userName, String password, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy){
 
         this.userId = userId;
@@ -23,6 +36,7 @@ public class Users {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
+    // Getters and setters
     public int getUserId() {
 
         return userId;
