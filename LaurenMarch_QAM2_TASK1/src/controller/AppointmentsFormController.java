@@ -14,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.Appointments;
+import util.UserInterfaceUtil;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -155,9 +156,9 @@ public class AppointmentsFormController {
 
         // Load data
         loadAppointmentData();
-        makeColumnsAdjustable(appointmentsTableView);
-        makeColumnsAdjustable(appointmentsTableViewMonth);
-        makeColumnsAdjustable(appointmentsTableViewWeek);
+        UserInterfaceUtil.adjuster.adjustColumns(appointmentsTableView);
+        UserInterfaceUtil.adjuster.adjustColumns(appointmentsTableViewMonth);
+        UserInterfaceUtil.adjuster.adjustColumns(appointmentsTableViewWeek);
     }
 
     @FXML
@@ -277,20 +278,6 @@ public class AppointmentsFormController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void makeColumnsAdjustable(TableView<?> table) {
-        table.getColumns().forEach(column -> {
-            column.setPrefWidth(column.getWidth());
-            column.setMinWidth(110);  // Set a minimum width for better appearance
-        });
-
-        table.getItems().addListener((ListChangeListener<Object>) change -> {
-            table.getColumns().forEach(column -> {
-                column.setPrefWidth(column.getWidth());
-                column.setMinWidth(50);  // Set a minimum width for better appearance
-            });
-        });
     }
 
     private void loadCustomersForm() {

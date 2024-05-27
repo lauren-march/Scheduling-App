@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import model.Customer;
 import model.Appointments;
 import helper.AppointmentsDAO;
+import util.UserInterfaceUtil;
 
 import java.io.IOException;
 
@@ -65,7 +66,7 @@ public class CustomerFormController {
         loadCustomerData();
 
         // Make columns adjustable
-        makeColumnsAdjustable(customerTableView);
+        UserInterfaceUtil.adjuster.adjustColumns(customerTableView);
     }
 
     @FXML
@@ -102,20 +103,6 @@ public class CustomerFormController {
     public void loadCustomerData() {
         ObservableList<Customer> customerList = CustomerDAO.getCustomerList();
         customerTableView.setItems(customerList);
-    }
-
-    private void makeColumnsAdjustable(TableView<?> table) {
-        table.getColumns().forEach(column -> {
-            column.setPrefWidth(column.getWidth());
-            column.setMinWidth(130);  // Set a minimum width for better appearance
-        });
-
-        table.getItems().addListener((ListChangeListener<Object>) change -> {
-            table.getColumns().forEach(column -> {
-                column.setPrefWidth(column.getWidth());
-                column.setMinWidth(130);  // Set a minimum width for better appearance
-            });
-        });
     }
 
     private void loadAppointmentsForm(){

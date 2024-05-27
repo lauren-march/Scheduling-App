@@ -23,6 +23,7 @@ import java.time.Month;
 import helper.AppointmentsDAO;
 import model.Appointments;
 import model.Contacts;
+import util.UserInterfaceUtil;
 
 public class ReportsFormController {
 
@@ -85,7 +86,7 @@ public class ReportsFormController {
         });
 
         loadAppointmentData();
-        makeColumnsAdjustable(contactAppointmentsTableView);
+        UserInterfaceUtil.adjuster.adjustColumns(contactAppointmentsTableView);
         initializeMonthComboBox();
         initializeContactScheduleComboBox();
         updatePieChart(currentMonth);
@@ -159,20 +160,6 @@ public class ReportsFormController {
         contactAppointmentsTableView.setItems(appointmentsList);
     }
 
-    private void makeColumnsAdjustable(TableView<?> table) {
-        table.getColumns().forEach(column -> {
-            column.setPrefWidth(column.getWidth());
-            column.setMinWidth(110);  // Set a minimum width for better appearance
-        });
-
-        table.getItems().addListener((ListChangeListener<Object>) change -> {
-            table.getColumns().forEach(column -> {
-                column.setPrefWidth(column.getWidth());
-                column.setMinWidth(50);  // Set a minimum width for better appearance
-            });
-        });
-    }
-
     private void updateTableView(Contacts selectedContact) {
         ObservableList<Appointments> filteredAppointments = AppointmentsDAO.getAppointmentsByContactId(selectedContact.getContactId());
         contactAppointmentsTableView.setItems(filteredAppointments);
@@ -189,5 +176,4 @@ public class ReportsFormController {
             e.printStackTrace();
         }
     }
-
 }
