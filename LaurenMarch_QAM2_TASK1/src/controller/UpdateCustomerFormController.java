@@ -76,10 +76,12 @@ public class UpdateCustomerFormController {
     private void handleUpdateCustomerButton() {
         try {
             String name = ValidationUtil.validateName(customerNameTextField.getText());
-            String address = ValidationUtil.validateAddress(addressTextField.getText());
+            String address = ValidationUtil.validateAddress(addressTextField.getText(),
+                    countryComboBox.getSelectionModel().getSelectedItem().getCountry());
             String postalCode = ValidationUtil.validatePostalCode(postalCodeTextField.getText(),
                     countryComboBox.getSelectionModel().getSelectedItem().getCountry());
-            String phoneNumber = ValidationUtil.validatePhoneNumber(phoneNumberTextField.getText());
+            String phoneNumber = ValidationUtil.validatePhoneNumber(phoneNumberTextField.getText(),
+                    countryComboBox.getSelectionModel().getSelectedItem().getCountry());
             FirstLevelDivisions selectedDivision = firstLevelDivisionComboBox.getSelectionModel().getSelectedItem();
 
             if (selectedDivision == null) {

@@ -11,8 +11,15 @@ import validator.TimeValidator;
 
 import java.time.LocalDateTime;
 
+/**
+ * This class is for program validation and error handling.
+ */
 public class ValidationUtil {
 
+    /**
+     * This lambda method validates start and end times to ensure start times are not after end times.
+     * (Justification for lambda is where this gets called).
+     */
     public static final TimeValidator validateTimes = (start, end) -> {
         if (start != null && end != null && !end.isAfter(start)) {
             showAlert("Error", "End time must be after start time.");
@@ -21,6 +28,10 @@ public class ValidationUtil {
         return true;
     };
 
+    /**
+     * This lambda method validates whether a customer already has an appointment scheduled for this time slot/range.
+     * (Justification for lambda is where this gets called).
+     */
     public static final AppointmentOverlapValidator validateOverlappingAppointments = (customerId, start, end) -> {
         ObservableList<Appointments> appointments = AppointmentsDAO.getAppointmentsByCustomerId(customerId);
 
@@ -36,6 +47,10 @@ public class ValidationUtil {
         return true;
     };
 
+    /**
+     * This lambda method validates whether the chosen times are withing business hours.
+     * (Justification for lambda is where this gets called).
+     */
     public static BusinessHoursValidator businessHoursValidator = (start, end) -> {
         if (!TimeUtil.isWithinBusinessHours(start, end)) {
             showAlert("Error", "Appointment times must be within business hours (8:00 AM - 10:00 PM ET).");
@@ -43,13 +58,6 @@ public class ValidationUtil {
         }
         return true;
     };
-
-    private static void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
 
     // Validation for customer text fields
     public static String validateName(String name) throws ValidationException {
@@ -59,20 +67,70 @@ public class ValidationUtil {
         return name;
     }
 
-    public static String validateAddress(String address) throws ValidationException {
+    public static String validateAddress(String address, String country) throws ValidationException {
         if (address == null || address.isBlank()) {
             throw new ValidationException("Address cannot be blank.");
         }
-        return  address;
+
+        String[] addressParts = address.trim().split("\\s*,\\s*");
+
+        String usAddressPattern = "^[0-9]+\\s+[^,]+,\\s*[^,]+$";
+        String ukAddressPattern = "^[0-9]+\\s+[^,]+,\\s*[^,]+,\\s*[^,]+$";
+        String canadaAddressPattern = "^[0-9]+\\s+[^,]+,\\s*[^,]+$";
+
+        switch (country.toUpperCase()) {
+            case "U.S":
+                if (!address.matches(usAddressPattern)) {
+                    throw new ValidationException("U.S. address must be in the format: '123 ABC Street, City'.");
+                }
+                break;
+            case "UK":
+                if (!address.matches(ukAddressPattern)) {
+                    throw new ValidationException("UK address must be in the format: '123 ABC Street, City, London'.");
+                }
+                break;
+            case "CANADA":
+                if (!address.matches(canadaAddressPattern)) {
+                    throw new ValidationException("Canadian address must be in the format: '123 ABC Street, City'.");
+                }
+                break;
+            default:
+                throw new ValidationException("Invalid country for address validation.");
+        }
+
+        return address;
     }
 
-    public static String validatePhoneNumber(String phoneNumber) throws ValidationException {
+
+    public static String validatePhoneNumber(String phoneNumber, String country) throws ValidationException {
         if (phoneNumber == null || phoneNumber.isBlank()) {
-            throw new ValidationException("Phone number cannot be blank");
+            throw new ValidationException("Phone number cannot be blank.");
         }
-        if (!phoneNumber.matches("\\d{10}")) {
-            throw new ValidationException("Phone number must be 10 digits, do no include '-' between digits");
+
+        String usPhonePattern = "^(\\+1)?\\d{10}$";
+        String ukPhonePattern = "^(\\+44)?\\d{10}$";
+        String canadaPhonePattern = "^(\\+1)?\\d{10}$";
+
+        switch (country.toUpperCase()) {
+            case "U.S":
+                if (!phoneNumber.matches(usPhonePattern)) {
+                    throw new ValidationException("U.S. phone number must be 10 digits optionally preceded by +1.");
+                }
+                break;
+            case "UK":
+                if (!phoneNumber.matches(ukPhonePattern)) {
+                    throw new ValidationException("UK phone number must be 10 digits optionally preceded by +44.");
+                }
+                break;
+            case "CANADA":
+                if (!phoneNumber.matches(canadaPhonePattern)) {
+                    throw new ValidationException("Canadian phone number must be 10 digits optionally preceded by +1.");
+                }
+                break;
+            default:
+                throw new ValidationException("Invalid country for phone number validation.");
         }
+
         return phoneNumber;
     }
 
@@ -131,6 +189,13 @@ public class ValidationUtil {
             throw new ValidationException("Type cannot be blank.");
         }
         return type;
+    }
+
+    private static void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
 }

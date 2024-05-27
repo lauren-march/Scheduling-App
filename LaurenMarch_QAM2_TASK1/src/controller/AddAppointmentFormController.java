@@ -124,7 +124,7 @@ public class AddAppointmentFormController {
             }
 
             // Validate business hours
-            if (!ValidationUtil.businessHoursValidator.validate(TimeUtil.toET(startLocalDateTime), TimeUtil.toET(endLocalDateTime))) {
+            if (!ValidationUtil.businessHoursValidator.validate(TimeUtil.toEST(startLocalDateTime), TimeUtil.toEST(endLocalDateTime))) {
                 showAlert("Error", "Appointment times must be within business hours (8:00 AM - 10:00 PM ET).");
                 return;
             }

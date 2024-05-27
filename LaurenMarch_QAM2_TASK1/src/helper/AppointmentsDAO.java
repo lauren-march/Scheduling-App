@@ -57,10 +57,9 @@ public class AppointmentsDAO {
     }
 
     /**
-     * This method creates a list from the database SQL command SELECT.
-     * This gets the appointments based on the Customer_ID
-     * and joins the contacts table using the foreign key Contact_ID
-     * @return returns the appointmentsByCustomerIdList used to find appointments by customer IDs
+     * This method creates a list of appointments by the Customer_ID.
+     * @param customerId parameter filters appointments based on customer_ID selected
+     * @return returns appointmentsByCustomerIdList
      */
     public static ObservableList<Appointments> getAppointmentsByCustomerId(int customerId) {
         ObservableList<Appointments> appointmentsByCustomerIdList = FXCollections.observableArrayList();
@@ -102,7 +101,7 @@ public class AppointmentsDAO {
 
     /**
      * This method inserts appointment objects into the database from the SQL INSERT INTO statement.
-     * This is used to add appointments to the database and convert to UTC.
+     * This is used to add appointments to the database and convert start and end times to UTC.
      */
     public static void addAppointment(Appointments appointments, Timestamp startUTC, Timestamp endUTC) throws SQLException {
         String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, " +
