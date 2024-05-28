@@ -65,7 +65,6 @@ public class LoginFormController {
      */
     @FXML
     public void initialize() {
-        // Sets up resource bundle for localization
         bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
         reloadText();
 

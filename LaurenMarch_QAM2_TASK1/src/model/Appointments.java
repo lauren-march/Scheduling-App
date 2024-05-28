@@ -41,7 +41,6 @@ public class Appointments {
      * @param contactId contactId attribute
      * @param contactName contactName attribute
      */
-    // Constructor with contactName for loading data from the database
     public Appointments(int appointmentId, String title, String description, String location, String type,
                         LocalDateTime start, LocalDateTime end, LocalDateTime createDate, String createdBy,
                         LocalDateTime lastUpdate, String lastUpdateBy, int customerId, int userId, int contactId,

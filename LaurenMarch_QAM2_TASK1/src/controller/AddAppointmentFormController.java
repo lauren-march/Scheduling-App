@@ -109,31 +109,25 @@ public class AddAppointmentFormController {
                 return;
             }
 
-            // Combine date and time
             LocalDateTime startLocalDateTime = LocalDateTime.of(startDate, startTime);
             LocalDateTime endLocalDateTime = LocalDateTime.of(startDate, endTime);
 
-            // Validate times against each other to make sure end time is after start time
             if (!ValidationUtil.validateTimes.validate(startLocalDateTime, endLocalDateTime)) {
                 return;
             }
 
-            // Validate date/time for existing appointments to ensure appointments do not overlap
             if (!ValidationUtil.validateOverlappingAppointments.validate(customerId, startLocalDateTime, endLocalDateTime)) {
                 return;
             }
 
-            // Validate business hours
             if (!ValidationUtil.businessHoursValidator.validate(TimeUtil.toEST(startLocalDateTime), TimeUtil.toEST(endLocalDateTime))) {
                 showAlert("Error", "Appointment times must be within business hours (8:00 AM - 10:00 PM ET).");
                 return;
             }
 
-            // Convert to UTC for storage
             Timestamp startUTC = TimeUtil.localToTimestamp(startLocalDateTime);
             Timestamp endUTC = TimeUtil.localToTimestamp(endLocalDateTime);
 
-            // Creates a new appointment
             LocalDateTime now = LocalDateTime.now();
             String currentUser = LoginFormController.currentUser;
 
@@ -145,7 +139,6 @@ public class AddAppointmentFormController {
                     customerId, userId, contact.getContactId()
             );
 
-            // Saves new appointment to database to corresponding appointments table
             try {
                 AppointmentsDAO.addAppointment(newAppointment, startUTC, endUTC);
                 navigateToAppointmentsForm();
@@ -163,6 +156,7 @@ public class AddAppointmentFormController {
      */
     @FXML
     private void handleCancelButtonAction() {
+
         navigateToAppointmentsForm();
     }
 

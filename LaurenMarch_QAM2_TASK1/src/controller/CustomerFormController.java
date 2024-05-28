@@ -1,7 +1,6 @@
 package controller;
 
 import helper.CustomerDAO;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,6 +34,10 @@ public class CustomerFormController {
     @FXML
     private TableColumn<Customer, String> phoneColumn;
     @FXML
+    private TableColumn<Customer, Integer> divisionColumn;
+    @FXML
+    private TableColumn<Customer, String> countryColumn;
+    @FXML
     private TableColumn<Customer, String> createDateColumn;
     @FXML
     private TableColumn<Customer, String> createdByColumn;
@@ -42,8 +45,7 @@ public class CustomerFormController {
     private TableColumn<Customer, String> lastUpdateColumn;
     @FXML
     private TableColumn<Customer, String> lastUpdatedByColumn;
-    @FXML
-    private TableColumn<Customer, Integer> divisionIdColumn;
+
     @FXML
     private Button appointmentsFormButton;
     @FXML
@@ -61,22 +63,20 @@ public class CustomerFormController {
      */
     @FXML
     public void initialize() {
-        // Initialize customer table columns
         customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
         postalCodeColumn.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        divisionColumn.setCellValueFactory(new PropertyValueFactory<>("divisionName"));
+        countryColumn.setCellValueFactory(new PropertyValueFactory<>("countryName"));
         createDateColumn.setCellValueFactory(new PropertyValueFactory<>("createDate"));
         createdByColumn.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
         lastUpdateColumn.setCellValueFactory(new PropertyValueFactory<>("lastUpdate"));
         lastUpdatedByColumn.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
-        divisionIdColumn.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
 
-        // Load data
         loadCustomerData();
 
-        // Make columns adjustable
         UserInterfaceUtil.adjuster.adjustColumns(customerTableView);
     }
 
@@ -94,7 +94,7 @@ public class CustomerFormController {
      * Calls the helper function loadUpdateCustomerForm().
      */
     @FXML
-    private void handleUpdatebutton() {
+    private void handleUpdateButton() {
         Customer selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
         if (selectedCustomer != null) {
             loadUpdateCustomerForm(selectedCustomer);
@@ -205,14 +205,12 @@ public class CustomerFormController {
 
         alert.showAndWait().ifPresent(type -> {
             if (type == buttonTypeYes) {
-                // Check if the customer has any appointments
+
                 if (!hasAppointments(selectedCustomer.getCustomerId())) {
-                    // Delete the customer from the database
                     CustomerDAO.deleteCustomer(selectedCustomer.getCustomerId());
-                    // Refresh the table view
                     loadCustomerData();
+
                 } else {
-                    // Show error message
                     showAlert("Error", "This customer has existing appointments and cannot be deleted.");
                 }
             }

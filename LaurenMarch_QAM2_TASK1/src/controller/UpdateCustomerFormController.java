@@ -40,8 +40,6 @@ public class UpdateCustomerFormController {
     private ComboBox<FirstLevelDivisions> firstLevelDivisionComboBox;
     @FXML
     private Button updateCustomerButton;
-    @FXML
-    private Button cancelButton;
 
     private Customer selectedCustomer;
 
@@ -51,11 +49,8 @@ public class UpdateCustomerFormController {
      */
     @FXML
     public void initialize() {
-        // Load countries into ComboBox
         ObservableList<Countries> countries = CountryDAO.getAllCountries();
         countryComboBox.setItems(countries);
-
-        // Add listener to countryComboBox to load relevant divisions
         countryComboBox.setOnAction(event -> loadDivisions());
 
         }

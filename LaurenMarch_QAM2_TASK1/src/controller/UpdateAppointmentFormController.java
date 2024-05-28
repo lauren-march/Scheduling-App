@@ -69,7 +69,6 @@ public class UpdateAppointmentFormController {
      */
     @FXML
     public void initialize() {
-        // Load contacts into ComboBox
         ObservableList<Contacts> contacts = ContactsDAO.getContactsList();
         contactsComboBox.setItems(contacts);
 
@@ -113,7 +112,7 @@ public class UpdateAppointmentFormController {
                 return;
             }
 
-            // Combine date and time
+
             LocalDateTime startLocalDateTime = LocalDateTime.of(startDate, startTime);
             LocalDateTime endLocalDateTime = LocalDateTime.of(startDate, endTime);
 
@@ -125,17 +124,14 @@ public class UpdateAppointmentFormController {
                 return;
             }
 
-            // Validate business hours using the BusinessHoursValidator
             if (!ValidationUtil.businessHoursValidator.validate(TimeUtil.toEST(startLocalDateTime), TimeUtil.toEST(endLocalDateTime))) {
                 showAlert("Error", "Appointment times must be within business hours (8:00 AM - 10:00 PM ET).");
                 return;
             }
 
-            // Convert to UTC for storage
             Timestamp startUTC = TimeUtil.localToTimestamp(startLocalDateTime);
             Timestamp endUTC = TimeUtil.localToTimestamp(endLocalDateTime);
 
-            // Update appointment
             LocalDateTime now = LocalDateTime.now();
             String currentUser = LoginFormController.currentUser;
 

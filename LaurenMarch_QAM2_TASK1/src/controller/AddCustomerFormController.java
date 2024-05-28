@@ -4,7 +4,6 @@ import exception.ValidationException;
 import helper.CustomerDAO;
 import helper.FirstLevelDivisionsDAO;
 import helper.CountryDAO;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -49,22 +48,18 @@ public class AddCustomerFormController {
      */
     @FXML
     public void initialize() {
-        // Load countries into ComboBox
         ObservableList<Countries> countries = CountryDAO.getAllCountries();
         countryComboBox.setItems(countries);
-
-        // Add listener to countryComboBox to load relevant divisions
         countryComboBox.setOnAction(event -> loadDivisions());
 
-        // Initialize form for adding a new customer
         initializeFormForCustomerId();
     }
 
     /**
      * This method handles the functionality of the Add button on the AddCustomerForm.
      * First it gets the values entered in the corresponding fields and stores them to corresponding variables.
-     * Textfields are checked with ValidationUtil methods to make sure they are not blank.
-     * Then it runs a check to make sure that there isn't null fields for comboboxes.
+     * Text fields are checked with ValidationUtil methods to make sure they are not blank.
+     * Then it runs a check to make sure that there isn't null fields for combo boxes.
      * Lastly it converts the localtime to UTC and creates a new customer object
      * that gets saved to the customer table in the database with the CustomerDAO.addCustomer() method.
      */
@@ -119,7 +114,6 @@ public class AddCustomerFormController {
      */
     @FXML
     private void handleCancelButtonAction() {
-
         navigateToCustomerForm();
     }
 

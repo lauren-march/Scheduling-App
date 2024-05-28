@@ -59,7 +59,12 @@ public class ValidationUtil {
         return true;
     };
 
-    // Validation for customer text fields
+    /**
+     * Validation for Name text fields.
+     * @param name
+     * @return
+     * @throws ValidationException
+     */
     public static String validateName(String name) throws ValidationException {
         if (name == null || name.isBlank()) {
             throw  new ValidationException("Name cannot be blank.");
@@ -67,6 +72,13 @@ public class ValidationUtil {
         return name;
     }
 
+    /**
+     * Validation for Address text field.
+     * @param address
+     * @param country
+     * @return
+     * @throws ValidationException
+     */
     public static String validateAddress(String address, String country) throws ValidationException {
         if (address == null || address.isBlank()) {
             throw new ValidationException("Address cannot be blank.");
@@ -101,7 +113,13 @@ public class ValidationUtil {
         return address;
     }
 
-
+    /**
+     * Validation for Phone Number text field.
+     * @param phoneNumber
+     * @param country
+     * @return
+     * @throws ValidationException
+     */
     public static String validatePhoneNumber(String phoneNumber, String country) throws ValidationException {
         if (phoneNumber == null || phoneNumber.isBlank()) {
             throw new ValidationException("Phone number cannot be blank.");
@@ -134,6 +152,13 @@ public class ValidationUtil {
         return phoneNumber;
     }
 
+    /**
+     * Validation for Postal Code text field.
+     * @param postalCode
+     * @param country
+     * @return
+     * @throws ValidationException
+     */
     public static String validatePostalCode(String postalCode, String country) throws ValidationException {
         if (postalCode == null || postalCode.isBlank()) {
             throw new ValidationException("Postal code cannot be blank.");
@@ -162,7 +187,12 @@ public class ValidationUtil {
         return postalCode;
     }
 
-    //Validation for appointment text fields
+    /**
+     * Validation for Title text field.
+     * @param title
+     * @return
+     * @throws ValidationException
+     */
     public static String validateTitle(String title) throws ValidationException {
         if (title == null || title.isBlank()) {
             throw new ValidationException("Title cannot be blank.");
@@ -170,6 +200,12 @@ public class ValidationUtil {
         return title;
     }
 
+    /**
+     * Validation for Description text field.
+     * @param description
+     * @return
+     * @throws ValidationException
+     */
     public static String validateDescription(String description) throws ValidationException {
         if (description == null || description.isBlank()){
             throw new ValidationException("Description cannot be blank.");
@@ -177,6 +213,12 @@ public class ValidationUtil {
         return description;
     }
 
+    /**
+     * Validation for Location text field.
+     * @param location
+     * @return
+     * @throws ValidationException
+     */
     public static String validateLocation(String location) throws ValidationException {
         if (location == null || location.isBlank()){
             throw new ValidationException("Location cannot be blank.");
@@ -184,6 +226,12 @@ public class ValidationUtil {
         return location;
     }
 
+    /**
+     * Validation for Type text field.
+     * @param type
+     * @return
+     * @throws ValidationException
+     */
     public static String validateType(String type) throws ValidationException {
         if (type == null || type.isBlank()){
             throw new ValidationException("Type cannot be blank.");

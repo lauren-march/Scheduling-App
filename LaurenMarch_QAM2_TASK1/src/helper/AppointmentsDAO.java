@@ -230,7 +230,6 @@ public class AppointmentsDAO {
                 Appointments appointment = new Appointments(appointmentId, title, description, location, type, start, end,
                         createDate, createdBy, lastUpdate, lastUpdateBy, customerId, userId, contactId, contactName);
 
-                // Check if the appointment start time is within the next 15 minutes
                 if (ChronoUnit.MINUTES.between(currentTime, start) >= 0 && ChronoUnit.MINUTES.between(currentTime, start) <= 15) {
                     appointmentsList.add(appointment);
                 }

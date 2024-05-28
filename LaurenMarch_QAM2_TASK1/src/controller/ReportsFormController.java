@@ -3,7 +3,6 @@ package controller;
 import helper.ContactsDAO;
 import helper.CustomerDAO;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -66,7 +65,6 @@ public class ReportsFormController {
      */
     @FXML
     public void initialize() {
-        // Initialize columns
         appointmentsIdColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         appointmentsTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         appointmentsDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -75,18 +73,15 @@ public class ReportsFormController {
         appointmentsEndDateColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
         appointmentsCustomerIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
 
-        // Set the current month as default
         Month currentMonth = LocalDate.now().getMonth();
         monthComboBox.setValue(currentMonth);
 
-        // Add listener to ComboBox
         monthComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 updateAppointmentByTypePieChart(newValue);
             }
         });
 
-        // Add listener to contactScheduleComboBox
         contactScheduleComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 updateTableView(newValue);
@@ -124,11 +119,9 @@ public class ReportsFormController {
             numberCustomerByMonthAndType.setTitle("No appointments for " + selectedMonth.name());
             numberCustomerByMonthAndType.setData(FXCollections.observableArrayList(new PieChart.Data("No Appointments", 1)));
         } else {
-            // Update pie chart title with total number of appointments
             int totalAppointments = pieChartData.stream().mapToInt(data -> (int) data.getPieValue()).sum();
             numberCustomerByMonthAndType.setTitle("Total Appointments: " + totalAppointments);
 
-            // Add number of appointments next to type
             pieChartData.forEach(data -> data.setName(data.getName() + " (" + (int) data.getPieValue() + ")"));
 
             numberCustomerByMonthAndType.setData(pieChartData);

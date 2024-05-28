@@ -152,10 +152,8 @@ public class AppointmentsFormController {
         appointmentsCustomerIDColumnWeek.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         appointmentsUserIdColumnWeek.setCellValueFactory(new PropertyValueFactory<>("userId"));
 
-        // Load data
         loadAppointmentData();
 
-        // Adjusts table columns for a cleaner more uniform look
         UserInterfaceUtil.adjuster.adjustColumns(appointmentsTableView);
         UserInterfaceUtil.adjuster.adjustColumns(appointmentsTableViewMonth);
         UserInterfaceUtil.adjuster.adjustColumns(appointmentsTableViewWeek);
@@ -254,13 +252,11 @@ public class AppointmentsFormController {
         for (Appointments appointment : appointmentsList) {
             LocalDate appointmentDate = appointment.getStart().toLocalDate();
 
-            // Check for monthly view
             if ((appointmentDate.isEqual(firstDayOfMonth) || appointmentDate.isAfter(firstDayOfMonth)) &&
                     (appointmentDate.isEqual(lastDayOfMonth) || appointmentDate.isBefore(lastDayOfMonth))) {
                 monthlyAppointments.add(appointment);
             }
 
-            // Check for weekly view
             if ((appointmentDate.isEqual(firstDayOfWeek) || appointmentDate.isAfter(firstDayOfWeek)) &&
                     (appointmentDate.isEqual(lastDayOfWeek) || appointmentDate.isBefore(lastDayOfWeek))) {
                 weeklyAppointments.add(appointment);
@@ -341,9 +337,8 @@ public class AppointmentsFormController {
 
         alert.showAndWait().ifPresent(type -> {
             if (type == buttonTypeYes) {
-                // Delete the appointment from the database
                 AppointmentsDAO.deleteAppointment(selectedAppointment.getAppointmentId());
-                // Refresh the table view
+
                 loadAppointmentData();
             }
         });
