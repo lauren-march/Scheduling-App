@@ -10,18 +10,17 @@ public class TimeUtil {
 
     private static final ZoneId ET_ZONE = ZoneId.of("America/New_York");
     private static final ZoneId UTC_ZONE = ZoneId.of("UTC");
-    private static final ZoneId LOCAL_ZONE = ZoneId.systemDefault();
-
-    private static final ZonedDateTime BUSINESS_START_ET = LocalDate.now().atTime(8, 0).atZone(ET_ZONE);
-    private static final ZonedDateTime BUSINESS_END_ET = LocalDate.now().atTime(22,0).atZone(ET_ZONE);
 
     /**
-     * This method converts local date/time to EST.
-     * @param localDateTime parameter used in conversion.
-     * @return returns time in EST.
+     * This method is used to get the current local time zone.
+     * @return returns current local time zone.
      */
+    public static ZoneId getLocalZone() {
+        return ZoneId.systemDefault();
+    }
+
     public static ZonedDateTime toEST(LocalDateTime localDateTime) {
-        return localDateTime.atZone(LOCAL_ZONE).withZoneSameInstant(ET_ZONE);
+        return localDateTime.atZone(getLocalZone()).withZoneSameInstant(ET_ZONE);
     }
 
     /**
@@ -30,7 +29,7 @@ public class TimeUtil {
      * @return returns time in local time.
      */
     public static LocalDateTime timestampToLocal(Timestamp timestamp) {
-        return timestamp.toLocalDateTime().atZone(UTC_ZONE).withZoneSameInstant(LOCAL_ZONE).toLocalDateTime();
+        return timestamp.toLocalDateTime().atZone(UTC_ZONE).withZoneSameInstant(getLocalZone()).toLocalDateTime();
     }
 
     /**
@@ -39,7 +38,7 @@ public class TimeUtil {
      * @return returns Timestamp in UTC.
      */
     public static Timestamp localToTimestamp(LocalDateTime localDateTime) {
-        return Timestamp.valueOf(localDateTime.atZone(LOCAL_ZONE).withZoneSameInstant(UTC_ZONE).toLocalDateTime());
+        return Timestamp.valueOf(localDateTime.atZone(getLocalZone()).withZoneSameInstant(UTC_ZONE).toLocalDateTime());
     }
 
     /**
@@ -49,11 +48,14 @@ public class TimeUtil {
      * @return returns boolean values for isStartWithinBusinessHours && isEndWithinBusinessHours.
      */
     public static boolean isWithinBusinessHours(ZonedDateTime start, ZonedDateTime end) {
+        ZonedDateTime businessStartET = LocalDate.now().atTime(8, 0).atZone(ET_ZONE);
+        ZonedDateTime businessEndET = LocalDate.now().atTime(22, 0).atZone(ET_ZONE);
+
         ZonedDateTime startET = toEST(start.toLocalDateTime());
         ZonedDateTime endET = toEST(end.toLocalDateTime());
 
-        boolean isStartWithinBusinessHours = !startET.isBefore(BUSINESS_START_ET) && !startET.isAfter(BUSINESS_END_ET);
-        boolean isEndWithinBusinessHours = !endET.isBefore(BUSINESS_START_ET) && !endET.isAfter(BUSINESS_END_ET);
+        boolean isStartWithinBusinessHours = !startET.isBefore(businessStartET) && !startET.isAfter(businessEndET);
+        boolean isEndWithinBusinessHours = !endET.isBefore(businessStartET) && !endET.isAfter(businessEndET);
 
         return isStartWithinBusinessHours && isEndWithinBusinessHours;
     }
