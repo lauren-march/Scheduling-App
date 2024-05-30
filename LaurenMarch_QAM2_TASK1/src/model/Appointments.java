@@ -100,22 +100,27 @@ public class Appointments {
 
     // Getters and setters
     public int getAppointmentId() {
+
         return appointmentId;
     }
 
     public void setAppointmentId(int appointmentId) {
+
         this.appointmentId = appointmentId;
     }
 
     public String getTitle() {
+
         return title;
     }
 
     public void setTitle(String title) {
+
         this.title = title;
     }
 
     public String getDescription() {
+
         return description;
     }
 
@@ -124,18 +129,22 @@ public class Appointments {
     }
 
     public String getLocation() {
+
         return location;
     }
 
     public void setLocation(String location) {
+
         this.location = location;
     }
 
     public String getType() {
+
         return type;
     }
 
     public void setType(String type) {
+
         this.type = type;
     }
 
@@ -144,46 +153,57 @@ public class Appointments {
     }
 
     public void setStart(LocalDateTime start) {
+
         this.start = Timestamp.valueOf(start);
     }
 
     public LocalDateTime getEnd() {
+
         return end.toLocalDateTime();
     }
 
     public void setEnd(LocalDateTime end) {
+
         this.end = Timestamp.valueOf(end);
     }
 
     public LocalDateTime getCreateDate() {
+
         return createDate;
     }
 
     public void setCreateDate(LocalDateTime createDate) {
+
         this.createDate = createDate;
     }
 
     public String getCreatedBy() {
+
         return createdBy;
     }
 
     public void setCreatedBy(String createdBy) {
+
         this.createdBy = createdBy;
     }
 
     public LocalDateTime getLastUpdate() {
+
         return lastUpdate;
     }
 
     public void setLastUpdate(LocalDateTime lastUpdate) {
+
         this.lastUpdate = lastUpdate;
     }
 
     public String getLastUpdateBy() {
+
         return lastUpdateBy;
     }
 
     public void setLastUpdateBy(String lastUpdateBy) {
+
         this.lastUpdateBy = lastUpdateBy;
     }
 
@@ -192,26 +212,32 @@ public class Appointments {
     }
 
     public void setCustomerId(int customerId) {
+
         this.customerId = customerId;
     }
 
     public int getUserId() {
+
         return userId;
     }
 
     public void setUserId(int userId) {
+
         this.userId = userId;
     }
 
     public int getContactId() {
+
         return contactId;
     }
 
     public void setContactId(int contactId) {
+
         this.contactId = contactId;
     }
 
     public String getContactName() {
+
         return contactName;
     }
 
@@ -225,6 +251,22 @@ public class Appointments {
      */
     @Override
     public String toString() {
-        return contactName;
+        return "Appointments{" +
+                "appointmentId=" + appointmentId +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", location='" + location + '\'' +
+                ", type='" + type + '\'' +
+                ", start=" + start +
+                ", end=" + end +
+                ", createDate=" + createDate +
+                ", createdBy='" + createdBy + '\'' +
+                ", lastUpdate=" + lastUpdate +
+                ", lastUpdateBy='" + lastUpdateBy + '\'' +
+                ", customerId=" + customerId +
+                ", userId=" + userId +
+                ", contactId=" + contactId +
+                ", contactName=" + contactName +
+                '}';
     }
 }

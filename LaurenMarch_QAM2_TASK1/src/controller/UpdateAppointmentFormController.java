@@ -21,9 +21,7 @@ import util.ValidationUtil;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Locale;
@@ -115,6 +113,12 @@ public class UpdateAppointmentFormController {
 
             LocalDateTime startLocalDateTime = LocalDateTime.of(startDate, startTime);
             LocalDateTime endLocalDateTime = LocalDateTime.of(startDate, endTime);
+            ZoneId localZoneId = ZoneId.systemDefault();
+            ZonedDateTime localStartZonedDateTime = ZonedDateTime.of(startLocalDateTime,localZoneId);
+            ZonedDateTime localEndZonedDateTime = ZonedDateTime.of(endLocalDateTime,localZoneId);
+
+            System.out.println(localStartZonedDateTime);
+            System.out.println(localEndZonedDateTime);
 
             if (!ValidationUtil.validateTimes.validate(startLocalDateTime, endLocalDateTime)) {
                 return;
@@ -129,8 +133,12 @@ public class UpdateAppointmentFormController {
                 return;
             }
 
-            Timestamp startUTC = TimeUtil.localToTimestamp(startLocalDateTime);
-            Timestamp endUTC = TimeUtil.localToTimestamp(endLocalDateTime);
+            ZoneId utcZoneId = ZoneId.of("UTC");
+            ZonedDateTime startUTC = ZonedDateTime.ofInstant(localStartZonedDateTime.toInstant(), utcZoneId);
+            ZonedDateTime endUTC = ZonedDateTime.ofInstant(localEndZonedDateTime.toInstant(), utcZoneId);
+
+            System.out.println(startUTC);
+            System.out.println(endUTC);
 
             LocalDateTime now = LocalDateTime.now();
             String currentUser = LoginFormController.currentUser;
@@ -138,7 +146,7 @@ public class UpdateAppointmentFormController {
             Appointments updatedAppointment = new Appointments(
                     Integer.parseInt(appointmentIdTextField.getText()),
                     title, description, location, type,
-                    startLocalDateTime, endLocalDateTime,
+                    startUTC.toLocalDateTime(), endUTC.toLocalDateTime(),
                     now, currentUser, now, currentUser,
                     customerId, userId, contact.getContactId()
             );
