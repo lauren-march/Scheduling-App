@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.time.*;
 
 /**
- * This class is used to handle all time related methods for time conversions and time validation.
+ * This class is used to handle all time-related methods for time conversions and time validation.
  */
 public class TimeUtil {
 
@@ -12,13 +12,18 @@ public class TimeUtil {
     private static final ZoneId UTC_ZONE = ZoneId.of("UTC");
 
     /**
-     * This method is used to get the current local time zone.
-     * @return returns current local time zone.
+     * This method gets the current local time zone.
+     * @return the current local time zone.
      */
     public static ZoneId getLocalZone() {
         return ZoneId.systemDefault();
     }
 
+    /**
+     * This method converts local date/time to EST.
+     * @param localDateTime parameter used in conversion.
+     * @return returns time in EST.
+     */
     public static ZonedDateTime toEST(LocalDateTime localDateTime) {
         return localDateTime.atZone(getLocalZone()).withZoneSameInstant(ET_ZONE);
     }
