@@ -9,7 +9,6 @@ import java.time.*;
 public class TimeUtil {
 
     private static final ZoneId ET_ZONE = ZoneId.of("America/New_York");
-    private static final ZoneId UTC_ZONE = ZoneId.of("UTC");
 
     /**
      * This method gets the current local time zone.
@@ -26,24 +25,6 @@ public class TimeUtil {
      */
     public static ZonedDateTime toEST(LocalDateTime localDateTime) {
         return localDateTime.atZone(getLocalZone()).withZoneSameInstant(ET_ZONE);
-    }
-
-    /**
-     * This method converts Timestamp in UTC to local time.
-     * @param timestamp parameter used in conversion.
-     * @return returns time in local time.
-     */
-    public static LocalDateTime timestampToLocal(Timestamp timestamp) {
-        return timestamp.toLocalDateTime().atZone(UTC_ZONE).withZoneSameInstant(getLocalZone()).toLocalDateTime();
-    }
-
-    /**
-     * This method converts local time to Timestamp in UTC.
-     * @param localDateTime parameter used in conversion.
-     * @return returns Timestamp in UTC.
-     */
-    public static Timestamp localToTimestamp(LocalDateTime localDateTime) {
-        return Timestamp.valueOf(localDateTime.atZone(getLocalZone()).withZoneSameInstant(UTC_ZONE).toLocalDateTime());
     }
 
     /**

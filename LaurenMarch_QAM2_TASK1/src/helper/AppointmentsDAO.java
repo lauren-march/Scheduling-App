@@ -273,8 +273,8 @@ public class AppointmentsDAO {
                 String description = rs.getString("Description");
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
-                LocalDateTime start = TimeUtil.timestampToLocal(rs.getTimestamp("Start"));
-                LocalDateTime end = TimeUtil.timestampToLocal(rs.getTimestamp("End"));
+                LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
+                LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
                 int customerId = rs.getInt("Customer_ID");
                 int userId = rs.getInt("User_ID");
                 String contactName = rs.getString("Contact_Name");
