@@ -1,8 +1,8 @@
 package validator;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 @FunctionalInterface
 public interface BusinessHoursValidator {
-    boolean validate(ZonedDateTime start, ZonedDateTime end);
+    boolean validate(LocalDateTime start, LocalDateTime end);
 }

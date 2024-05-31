@@ -32,18 +32,13 @@ public class Appointments {
      * @param type type attribute
      * @param start start attribute
      * @param end end attribute
-     * @param createDate createDate attribute
-     * @param createdBy createdBy attribute
-     * @param lastUpdate lastUpdate attribute
-     * @param lastUpdateBy lastUpdatedBy attribute
      * @param customerId customerId attribute
      * @param userId userId attribute
      * @param contactId contactId attribute
      * @param contactName contactName attribute
      */
     public Appointments(int appointmentId, String title, String description, String location, String type,
-                        LocalDateTime start, LocalDateTime end, LocalDateTime createDate, String createdBy,
-                        LocalDateTime lastUpdate, String lastUpdateBy, int customerId, int userId, int contactId,
+                        LocalDateTime start, LocalDateTime end, int customerId, int userId, int contactId,
                         String contactName) {
         this.appointmentId = appointmentId;
         this.title = title;
@@ -52,10 +47,6 @@ public class Appointments {
         this.type = type;
         this.start = Timestamp.valueOf(start);
         this.end = Timestamp.valueOf(end);
-        this.createDate = createDate;
-        this.createdBy = createdBy;
-        this.lastUpdate = lastUpdate;
-        this.lastUpdateBy = lastUpdateBy;
         this.customerId = customerId;
         this.userId = userId;
         this.contactId = contactId;

@@ -109,20 +109,9 @@ public class AddAppointmentFormController {
 
             LocalDateTime startLocalDateTime = LocalDateTime.of(startDate, startTime);
             LocalDateTime endLocalDateTime = LocalDateTime.of(startDate, endTime);
-            ZoneId localZoneId = ZoneId.systemDefault();
+//            ZoneId localZoneId = ZoneId.systemDefault();
 //            ZonedDateTime localStartZonedDateTime = ZonedDateTime.of(startLocalDateTime,localZoneId);
 //            ZonedDateTime localEndZonedDateTime = ZonedDateTime.of(endLocalDateTime,localZoneId);
-
-            ZonedDateTime startZonedDateTime = startLocalDateTime.atZone(TimeUtil.getLocalZone());
-            ZonedDateTime endZonedDateTime = endLocalDateTime.atZone(TimeUtil.getLocalZone());
-
-
-//            System.out.println(localStartZonedDateTime);
-//            System.out.println(localEndZonedDateTime);
-
-            System.out.println(startZonedDateTime);
-            System.out.println(endZonedDateTime);
-
 
             if (!ValidationUtil.validateTimes.validate(startLocalDateTime, endLocalDateTime)) {
                 return;
@@ -132,17 +121,10 @@ public class AddAppointmentFormController {
                 return;
             }
 
-            if (!ValidationUtil.businessHoursValidator.validate(startZonedDateTime, endZonedDateTime)) {
+            if (!ValidationUtil.businessHoursValidator.validate(startLocalDateTime, endLocalDateTime)) {
                 showAlert("Error", "Appointment times must be within business hours (8:00 AM - 10:00 PM ET).");
                 return;
             }
-
-            ZoneId utcZoneId = ZoneId.of("UTC");
-            ZonedDateTime startUTC = ZonedDateTime.ofInstant(startZonedDateTime.toInstant(), utcZoneId);
-            ZonedDateTime endUTC = ZonedDateTime.ofInstant(endZonedDateTime.toInstant(), utcZoneId);
-
-            System.out.println(startUTC);
-            System.out.println(endUTC);
 
             LocalDateTime now = LocalDateTime.now();
             String currentUser = LoginFormController.currentUser;
@@ -150,7 +132,7 @@ public class AddAppointmentFormController {
             Appointments newAppointment = new Appointments(
                     Integer.parseInt(appointmentIdTextField.getText()),
                     title, description, location, type,
-                    startUTC.toLocalDateTime(), endUTC.toLocalDateTime(),
+                    startLocalDateTime, endLocalDateTime,
                     now, currentUser, now, currentUser,
                     customerId, userId, contact.getContactId()
             );
@@ -158,7 +140,7 @@ public class AddAppointmentFormController {
             System.out.println(newAppointment);
 
             try {
-                AppointmentsDAO.addAppointment(newAppointment, startUTC, endUTC);
+                AppointmentsDAO.addAppointment(newAppointment, startLocalDateTime, endLocalDateTime);
                 navigateToAppointmentsForm();
             } catch (Exception e) {
                 e.printStackTrace();
