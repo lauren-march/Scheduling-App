@@ -131,8 +131,6 @@ public class AddAppointmentFormController {
                     customerId, userId, contact.getContactId()
             );
 
-            System.out.println(newAppointment);
-
             try {
                 AppointmentsDAO.addAppointment(newAppointment, startLocalDateTime, endLocalDateTime);
                 navigateToAppointmentsForm();
