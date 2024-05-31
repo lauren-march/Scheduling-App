@@ -12,8 +12,8 @@ public class Appointments {
     private String description;
     private String location;
     private String type;
-    private Timestamp start;
-    private Timestamp end;
+    private LocalDateTime start;
+    private LocalDateTime end;
     private LocalDateTime createDate;
     private String createdBy;
     private LocalDateTime lastUpdate;
@@ -45,8 +45,8 @@ public class Appointments {
         this.description = description;
         this.location = location;
         this.type = type;
-        this.start = Timestamp.valueOf(start);
-        this.end = Timestamp.valueOf(end);
+        this.start = start;
+        this.end = end;
         this.customerId = customerId;
         this.userId = userId;
         this.contactId = contactId;
@@ -78,8 +78,8 @@ public class Appointments {
         this.description = description;
         this.location = location;
         this.type = type;
-        this.start = Timestamp.valueOf(start);
-        this.end = Timestamp.valueOf(end);
+        this.start = start;
+        this.end = end;
         this.createDate = createDate;
         this.createdBy = createdBy;
         this.lastUpdate = lastUpdate;
@@ -140,22 +140,22 @@ public class Appointments {
     }
 
     public LocalDateTime getStart() {
-        return start.toLocalDateTime();
+        return start;
     }
 
     public void setStart(LocalDateTime start) {
 
-        this.start = Timestamp.valueOf(start);
+        this.start = start;
     }
 
     public LocalDateTime getEnd() {
 
-        return end.toLocalDateTime();
+        return end;
     }
 
     public void setEnd(LocalDateTime end) {
 
-        this.end = Timestamp.valueOf(end);
+        this.end = end;
     }
 
     public LocalDateTime getCreateDate() {

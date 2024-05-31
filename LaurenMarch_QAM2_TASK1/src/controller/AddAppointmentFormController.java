@@ -16,11 +16,9 @@ import javafx.scene.control.*;
 import javafx.util.StringConverter;
 import model.Appointments;
 import model.Contacts;
-import util.TimeUtil;
 import util.ValidationUtil;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -109,9 +107,6 @@ public class AddAppointmentFormController {
 
             LocalDateTime startLocalDateTime = LocalDateTime.of(startDate, startTime);
             LocalDateTime endLocalDateTime = LocalDateTime.of(startDate, endTime);
-//            ZoneId localZoneId = ZoneId.systemDefault();
-//            ZonedDateTime localStartZonedDateTime = ZonedDateTime.of(startLocalDateTime,localZoneId);
-//            ZonedDateTime localEndZonedDateTime = ZonedDateTime.of(endLocalDateTime,localZoneId);
 
             if (!ValidationUtil.validateTimes.validate(startLocalDateTime, endLocalDateTime)) {
                 return;
