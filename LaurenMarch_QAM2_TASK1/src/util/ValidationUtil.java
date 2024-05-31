@@ -59,10 +59,11 @@ public class ValidationUtil {
         return true;
     };
 
+    // Validators for customer text fields
     /**
      * Validation for Name text fields.
-     * @param name
-     * @return
+     * @param name customer name from customerName text field
+     * @return returns name
      * @throws ValidationException
      */
     public static String validateName(String name) throws ValidationException {
@@ -74,9 +75,9 @@ public class ValidationUtil {
 
     /**
      * Validation for Address text field.
-     * @param address
-     * @param country
-     * @return
+     * @param address customer address from customerAddress text field
+     * @param country customer country from country combo box
+     * @return returns address
      * @throws ValidationException
      */
     public static String validateAddress(String address, String country) throws ValidationException {
@@ -115,9 +116,9 @@ public class ValidationUtil {
 
     /**
      * Validation for Phone Number text field.
-     * @param phoneNumber
-     * @param country
-     * @return
+     * @param phoneNumber customer phone number from phoneNumber text field.
+     * @param country customer country from country combo box.
+     * @return returns phoneNumber
      * @throws ValidationException
      */
     public static String validatePhoneNumber(String phoneNumber, String country) throws ValidationException {
@@ -154,8 +155,8 @@ public class ValidationUtil {
 
     /**
      * Validation for Postal Code text field.
-     * @param postalCode
-     * @param country
+     * @param postalCode customer postal code from postal code text field.
+     * @param country customer country from country combo box.
      * @return
      * @throws ValidationException
      */
@@ -187,10 +188,11 @@ public class ValidationUtil {
         return postalCode;
     }
 
+    // Validators for appointment text fields
     /**
      * Validation for Title text field.
-     * @param title
-     * @return
+     * @param title appointment title from title text field.
+     * @return returns title.
      * @throws ValidationException
      */
     public static String validateTitle(String title) throws ValidationException {
@@ -202,8 +204,8 @@ public class ValidationUtil {
 
     /**
      * Validation for Description text field.
-     * @param description
-     * @return
+     * @param description appointment description from description text field.
+     * @return returns description.
      * @throws ValidationException
      */
     public static String validateDescription(String description) throws ValidationException {
@@ -215,8 +217,8 @@ public class ValidationUtil {
 
     /**
      * Validation for Location text field.
-     * @param location
-     * @return
+     * @param location appointment location from location text field.
+     * @return returns location.
      * @throws ValidationException
      */
     public static String validateLocation(String location) throws ValidationException {
@@ -228,8 +230,8 @@ public class ValidationUtil {
 
     /**
      * Validation for Type text field.
-     * @param type
-     * @return
+     * @param type appointment type from type text field.
+     * @return returns type.
      * @throws ValidationException
      */
     public static String validateType(String type) throws ValidationException {

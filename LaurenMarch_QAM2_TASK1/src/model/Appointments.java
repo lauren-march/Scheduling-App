@@ -238,7 +238,7 @@ public class Appointments {
 
     /**
      * toString conversion to handle memory address appearing in lieu of human-readable data
-     * @return returns contactName
+     * @return returns string conversions for each attribute.
      */
     @Override
     public String toString() {

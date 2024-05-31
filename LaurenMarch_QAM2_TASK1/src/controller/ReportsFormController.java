@@ -102,6 +102,7 @@ public class ReportsFormController {
      */
     @FXML
     private void handleExitButton() {
+
         exitReportsForm();
     }
 

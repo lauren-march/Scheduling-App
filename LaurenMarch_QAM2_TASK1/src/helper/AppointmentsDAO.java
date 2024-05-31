@@ -18,6 +18,8 @@ public class AppointmentsDAO {
 
     /**
      * This method creates a list of all appointments from the appointments table in the database.
+     * Using the getTimestamp converts to the local time in the application.
+     * @return returns appointmentList
      */
     public static ObservableList<Appointments> getAppointmentsList() {
         ObservableList<Appointments> appointmentsList = FXCollections.observableArrayList();
@@ -47,13 +49,14 @@ public class AppointmentsDAO {
                 appointmentsList.add(appointment);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
         }
         return appointmentsList;
     }
 
     /**
      * This method creates a list of appointments by the Customer_ID.
+     * Using the getTimestamp converts to the local time in the application.
      * @param customerId parameter filters appointments based on customer_ID selected
      * @return returns appointmentsByCustomerIdList
      */
@@ -85,16 +88,19 @@ public class AppointmentsDAO {
                 appointmentsByCustomerIdList.add(appointment);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
         }
         return appointmentsByCustomerIdList;
     }
 
     /**
      * This method inserts appointment objects into the database from the SQL INSERT INTO statement.
-     * This is used to add appointments to the database and convert start and end times to UTC.
+     * This is used to add appointments to the database and convert start and end times to UTC using setTimestamp.
+     * @param appointments appointment object
+     * @param startUTC local date and time converted into UTC via setTimestamp
+     * @param endUTC local date and time converted into UTC via setTimestamp
      */
-    public static void addAppointment(Appointments appointments, LocalDateTime startUTC, LocalDateTime endUTC) throws SQLException {
+    public static void addAppointment(Appointments appointments, LocalDateTime startUTC, LocalDateTime endUTC) {
         String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, " +
                 "Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = JDBC.connection.prepareStatement(sql)) {
@@ -122,8 +128,8 @@ public class AppointmentsDAO {
      * This method updates appointment objects into the database from the SQL UPDATE - SET statement.
      * This is used to update appointments to the database based on the AppointmentID.
      * @param appointments appointment object
-     * @param startUTC start time converted to UTC using Timestamp for SQL
-     * @param endUTC end time converted to UTC using Timestamp for SQL
+     * @param startUTC start time converted to UTC
+     * @param endUTC end time converted to UTC
      */
     public static void updateAppointment(Appointments appointments, LocalDateTime startUTC, LocalDateTime endUTC) {
         String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, " +
@@ -149,7 +155,7 @@ public class AppointmentsDAO {
 
     /**
      * This method deletes appointments from the database using the SQL DELETE statement.
-     * Deletes apopintment data based on Appointment_ID.
+     * Deletes appointment data based on Appointment_ID.
      * @param appointmentId appointmentID that get selected by the user from the tableview on AppointmentsForm.
      */
     public static void deleteAppointment(int appointmentId) {
@@ -180,7 +186,7 @@ public class AppointmentsDAO {
             }
             return expectedId;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
         }
         return 1;
     }
@@ -221,7 +227,7 @@ public class AppointmentsDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
         }
         return appointmentsList;
     }
@@ -245,7 +251,7 @@ public class AppointmentsDAO {
                 appointmentListByTypeForMonth.add(new PieChart.Data(type, count));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
         }
         return appointmentListByTypeForMonth;
     }
@@ -284,7 +290,7 @@ public class AppointmentsDAO {
                 appointmentsList.add(appointment);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
         }
         return appointmentsList;
     }

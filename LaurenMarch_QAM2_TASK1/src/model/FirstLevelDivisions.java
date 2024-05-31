@@ -110,7 +110,7 @@ public class FirstLevelDivisions {
 
     /**
      * toString conversion to handle memory address appearing in lieu of human-readable data
-     * @return returns division
+     * @return returns division converted to String.
      */
     @Override
     public String toString() {

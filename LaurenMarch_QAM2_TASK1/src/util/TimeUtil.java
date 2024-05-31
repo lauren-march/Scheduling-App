@@ -1,6 +1,5 @@
 package util;
 
-import java.sql.Timestamp;
 import java.time.*;
 
 /**
@@ -11,7 +10,7 @@ public class TimeUtil {
     private static final ZoneId ET_ZONE = ZoneId.of("America/New_York");
 
     /**
-     * This method gets the current local time zone.
+     * This method gets the current local time zone from systemDefault.
      * @return the current local time zone.
      */
     public static ZoneId getLocalZone() {

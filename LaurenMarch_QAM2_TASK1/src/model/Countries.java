@@ -83,7 +83,7 @@ public class Countries {
 
     /**
      * toString conversion to handle memory address appearing in lieu of human-readable data
-     * @return country attribute
+     * @return country attribute converted to string.
      */
     @Override
     public String toString() {

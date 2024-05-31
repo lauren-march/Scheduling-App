@@ -86,6 +86,7 @@ public class CustomerFormController {
      */
     @FXML
     private void handleAddButton() {
+
         loadAddCustomerForm();
     }
 
@@ -220,7 +221,7 @@ public class CustomerFormController {
     /**
      * This helper method checks to see if a customer has any appointments in the database based on customerId.
      * @param customerId find appointments based on foreign key of customerId
-     * @return
+     * @return this returns true or false whether or not there are appointments with that customerId
      */
     private boolean hasAppointments(int customerId) {
         ObservableList<Appointments> appointments = AppointmentsDAO.getAppointmentsByCustomerId(customerId);

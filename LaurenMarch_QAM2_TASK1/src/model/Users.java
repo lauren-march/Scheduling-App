@@ -106,6 +106,10 @@ public class Users {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
+    /**
+     * This method converts userId to a String
+     * @return returns userId to String
+     */
     @Override
     public String toString() {
         return String.valueOf(userId);

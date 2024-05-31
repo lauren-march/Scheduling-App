@@ -56,8 +56,6 @@ public class UpdateAppointmentFormController {
 
     @FXML
     private Button updateAppointmentButton;
-    @FXML
-    private Button cancelAddAppointmentButton;
 
     private Appointments selectedAppointment;
 
@@ -88,8 +86,8 @@ public class UpdateAppointmentFormController {
      * I chose to use lambdas for ValidateUtil.validateTime, validateOverlappingAppointments, and businessHoursValidator
      * since these can be used in various places in the application (reusable) and it saved about 11-12 lines of code for each
      * which makes my code more readable and concise.
-     * Lastly it converts the localtime to UTC and updates and creates a new appointment object with the updates
-     * that gets updated to the appointments table in the database with the AppointmentsDAO.updateAppointment() method that uses SQL UPDATE statement.
+     * Lastly it creates a new appointment object with the updates that gets updated to the appointments
+     * table in the database with the AppointmentsDAO.updateAppointment() method that uses SQL UPDATE statement.
      */
     @FXML
     public void handleUpdateAppointmentButton() {
@@ -110,12 +108,8 @@ public class UpdateAppointmentFormController {
                 return;
             }
 
-
             LocalDateTime startLocalDateTime = LocalDateTime.of(startDate, startTime);
             LocalDateTime endLocalDateTime = LocalDateTime.of(startDate, endTime);
-//            ZoneId localZoneId = ZoneId.systemDefault();
-//            ZonedDateTime localStartZonedDateTime = ZonedDateTime.of(startLocalDateTime,localZoneId);
-//            ZonedDateTime localEndZonedDateTime = ZonedDateTime.of(endLocalDateTime,localZoneId);
 
             if (!ValidationUtil.validateTimes.validate(startLocalDateTime, endLocalDateTime)) {
                 return;
@@ -158,6 +152,7 @@ public class UpdateAppointmentFormController {
      */
     @FXML
     private void handleCancelButtonAction() {
+
         navigateToAppointmentsForm();
     }
 

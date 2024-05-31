@@ -70,8 +70,13 @@ public class CustomerDAO {
     }
 
     /**
+     * /**
      * This method inserts customer objects into the database from the SQL INSERT INTO statement.
      * This is used to add customer to the database.
+     * @param customer customer object
+     * @param createdDate local date time for createdDate
+     * @param lastUpdated local date time for lastUpdated
+     * @throws SQLException
      */
     public static void addCustomer(Customer customer, LocalDateTime createdDate, LocalDateTime lastUpdated) throws SQLException {
         String sql = "INSERT INTO customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone, Create_Date, Last_Update, Created_By, Last_Updated_By, Division_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -93,8 +98,11 @@ public class CustomerDAO {
     }
 
     /**
+     * /**
      * This method updates customer objects into the database from the SQL UPDATE - SET statement.
      * This is used to update customer records to the database based on the Customer_ID.
+     * @param customer customer object
+     * @param lastUpdated local date time of last updated
      */
     public static void updateCustomer(Customer customer, LocalDateTime lastUpdated) {
         String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Last_Updated_By = ?, Last_Update = ?, Division_ID = ? WHERE Customer_ID = ?";

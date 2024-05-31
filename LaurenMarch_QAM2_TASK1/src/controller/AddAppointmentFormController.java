@@ -83,8 +83,7 @@ public class AddAppointmentFormController {
      * I chose to use lambdas for ValidateUtil.validateTime, validateOverlappingAppointments, and businessHoursValidator
      * since these can be used in various places in the application (reusable) and it saved about 11-12 lines of code for each
      * which makes my code more readable and concise.
-     * Lastly it converts the localtime to UTC and creates a new appointment object
-     * that gets saved to the appointments table in the database with the AppointmentsDAO.addAppointment() method.
+     * Lastly the appointment gets saved to the appointments table in the database with the AppointmentsDAO.addAppointment() method.
      */
     @FXML
     public void handleAddAppointmentButton() {
