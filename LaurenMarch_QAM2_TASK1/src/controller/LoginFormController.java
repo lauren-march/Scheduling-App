@@ -183,7 +183,7 @@ public class LoginFormController {
     }
 
     /**
-     * This helper method continually updates the time to the UI in the Login form.
+     * This helper method creates the ZonedDateTime object 'now' and formats the
      */
     private void updateDateTime() {
         ZonedDateTime now = ZonedDateTime.now();

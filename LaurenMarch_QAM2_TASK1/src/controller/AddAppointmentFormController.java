@@ -107,6 +107,9 @@ public class AddAppointmentFormController {
             LocalDateTime startLocalDateTime = LocalDateTime.of(startDate, startTime);
             LocalDateTime endLocalDateTime = LocalDateTime.of(startDate, endTime);
 
+            System.out.println(startLocalDateTime);
+            System.out.println(endLocalDateTime);
+
             if (!ValidationUtil.validateTimes.validate(startLocalDateTime, endLocalDateTime)) {
                 return;
             }

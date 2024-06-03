@@ -328,7 +328,8 @@ public class AppointmentsFormController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog");
         alert.setHeaderText("Delete Appointment");
-        alert.setContentText("Are you sure you want to delete this appointment?");
+        alert.setContentText("Are you sure you want to delete this appointment?" + "\n" + "Appointment ID: " + selectedAppointment.getAppointmentId() +
+                " " + "Type: " + selectedAppointment.getType());
 
         ButtonType buttonTypeYes = new ButtonType("Yes");
         ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -338,6 +339,13 @@ public class AppointmentsFormController {
         alert.showAndWait().ifPresent(type -> {
             if (type == buttonTypeYes) {
                 AppointmentsDAO.deleteAppointment(selectedAppointment.getAppointmentId());
+                Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+                alert1.setTitle("Information");
+                alert1.setHeaderText("Appointment Cancelled.");
+                alert1.setContentText("Appointment ID: " + selectedAppointment.getAppointmentId() +
+                " " + "Type: " + selectedAppointment.getType() + " has been cancelled.");
+
+                alert1.showAndWait();
 
                 loadAppointmentData();
             }
