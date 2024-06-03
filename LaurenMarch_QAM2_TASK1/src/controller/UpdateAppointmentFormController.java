@@ -111,6 +111,10 @@ public class UpdateAppointmentFormController {
             LocalDateTime startLocalDateTime = LocalDateTime.of(startDate, startTime);
             LocalDateTime endLocalDateTime = LocalDateTime.of(startDate, endTime);
 
+            ZoneId localZoneId = ZoneId.systemDefault();
+            ZonedDateTime localStartZonedDateTime = ZonedDateTime.of(startLocalDateTime,localZoneId);
+            ZonedDateTime localEndZonedDateTime = ZonedDateTime.of(endLocalDateTime,localZoneId);
+
             if (!ValidationUtil.validateTimes.validate(startLocalDateTime, endLocalDateTime)) {
                 return;
             }
@@ -119,7 +123,7 @@ public class UpdateAppointmentFormController {
                 return;
             }
 
-            if (!ValidationUtil.businessHoursValidator.validate(startLocalDateTime, endLocalDateTime)) {
+            if (!ValidationUtil.businessHoursValidator.validate(localStartZonedDateTime, localEndZonedDateTime)) {
                 showAlert("Error", "Appointment times must be within business hours (8:00 AM - 10:00 PM ET).");
                 return;
             }

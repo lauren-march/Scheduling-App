@@ -197,7 +197,7 @@ public class CustomerFormController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog");
         alert.setHeaderText("Delete Customer");
-        alert.setContentText("Are you sure you want to delete this customer?");
+        alert.setContentText("Are you sure you want to delete this customer?" + "\n" + selectedCustomer.getName());
 
         ButtonType buttonTypeYes = new ButtonType("Yes");
         ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
