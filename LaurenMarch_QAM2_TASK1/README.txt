@@ -12,7 +12,7 @@ Author:
 
 * Lauren March
 * lmarc30@wgu.edu
-* Student Version 1
+* Student Version 3
 * May 27, 2024
 
 Development Environment:
@@ -44,7 +44,11 @@ Reports Window
 * From the Appointments window select the Reports button.
 * The reports window is an informational dashboard to review three different data sets.
 * For the # of Appts by Type, please select the month from the dropdown to review the total number of appointments by type for that month.
-* Number of Customers By Country (A3F requirement) will display the number customers based on their respective locale.
+* Number of Customers By Country (A3f requirement) will display the number customers based on their respective locale.
 * Please select a contact from the Contact Schedules dropdown in order to see appointments associated with each selected contact.
 * When you are finished reviewing the reports, please select Exit to be directed back to the Appointments window.
+
+A3f
+* This report displays the number of customers from each Country represented in a pie chart.
+* These values are a cumulative total of all customers.
 
