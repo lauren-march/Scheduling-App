@@ -50,5 +50,5 @@ Reports Window
 
 A3f
 * This report displays the number of customers from each Country represented in a pie chart.
-* These values are a cumulative total of all customers.
+* This helps our stakeholders see the size of each market clearly. 
 
