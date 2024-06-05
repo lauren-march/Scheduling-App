@@ -33,8 +33,8 @@ public class TimeUtil {
      * @return returns boolean values for isStartWithinBusinessHours && isEndWithinBusinessHours.
      */
     public static boolean isWithinBusinessHours(ZonedDateTime start, ZonedDateTime end) {
-        ZonedDateTime businessStartET = LocalDate.now().atTime(8, 0).atZone(ET_ZONE);
-        ZonedDateTime businessEndET = LocalDate.now().atTime(22, 0).atZone(ET_ZONE);
+        ZonedDateTime businessStartET = ZonedDateTime.of(start.toLocalDate(), LocalTime.of(8, 0), ET_ZONE);
+        ZonedDateTime businessEndET = businessStartET.plusHours(14);
 
         ZonedDateTime startET = toEST(start.toLocalDateTime());
         ZonedDateTime endET = toEST(end.toLocalDateTime());

@@ -96,6 +96,15 @@ public class AppointmentsFormController {
     private TableColumn<Appointments, Integer> appointmentsUserIdColumnWeek;
 
     @FXML
+    private TabPane tabPane;
+    @FXML
+    private Tab tabAll;
+    @FXML
+    private Tab tabMonth;
+    @FXML
+    private Tab tabWeek;
+    
+    @FXML
     private Button customersButton;
     @FXML
     private Button addAppointmentButton;
@@ -157,6 +166,17 @@ public class AppointmentsFormController {
         UserInterfaceUtil.adjuster.adjustColumns(appointmentsTableView);
         UserInterfaceUtil.adjuster.adjustColumns(appointmentsTableViewMonth);
         UserInterfaceUtil.adjuster.adjustColumns(appointmentsTableViewWeek);
+
+        // Add listeners to clear selections when tabs are selected
+        tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
+            if (newTab == tabAll) {
+                clearSelectionsExcept(appointmentsTableView);
+            } else if (newTab == tabMonth) {
+                clearSelectionsExcept(appointmentsTableViewMonth);
+            } else if (newTab == tabWeek) {
+                clearSelectionsExcept(appointmentsTableViewWeek);
+            }
+        });
     }
 
     /**
@@ -175,7 +195,18 @@ public class AppointmentsFormController {
      */
     @FXML
     private void handleUpdateAppointmentButton() {
-        Appointments selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
+        Appointments selectedAppointment = null;
+
+        selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
+
+        if (selectedAppointment == null) {
+            selectedAppointment = appointmentsTableViewMonth.getSelectionModel().getSelectedItem();
+        }
+
+        if (selectedAppointment == null) {
+            selectedAppointment = appointmentsTableViewWeek.getSelectionModel().getSelectedItem();
+        }
+
         if (selectedAppointment != null) {
             loadUpdateAppointmentForm(selectedAppointment);
         } else {
@@ -280,6 +311,22 @@ public class AppointmentsFormController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * This helper method clears the selected appointment when switching tabs in the table view.
+     * @param tableViewToKeep
+     */
+    private void clearSelectionsExcept(TableView<Appointments> tableViewToKeep) {
+        if (tableViewToKeep != appointmentsTableView) {
+            appointmentsTableView.getSelectionModel().clearSelection();
+        }
+        if (tableViewToKeep != appointmentsTableViewMonth) {
+            appointmentsTableViewMonth.getSelectionModel().clearSelection();
+        }
+        if (tableViewToKeep != appointmentsTableViewWeek) {
+            appointmentsTableViewWeek.getSelectionModel().clearSelection();
         }
     }
 

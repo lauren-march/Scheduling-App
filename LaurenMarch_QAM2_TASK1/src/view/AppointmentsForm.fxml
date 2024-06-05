@@ -20,7 +20,7 @@
       </Text>
       <TabPane fx:id="tabPane" layoutX="42.0" layoutY="89.0" prefHeight="279.0" prefWidth="932.0">
          <tabs>
-            <Tab closable="false" text="All Appointments View">
+            <Tab closable="false" fx:id="tabAll" text="All Appointments View">
                <content>
                   <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="238.0" prefWidth="932.0">
                      <content>
@@ -42,7 +42,7 @@
                   </ScrollPane>
                </content>
             </Tab>
-            <Tab closable="false" text="Monthly View">
+            <Tab closable="false" fx:id="tabMonth" text="Monthly View">
                <content>
                   <ScrollPane fitToHeight="true" fitToWidth="true">
                      <content>
@@ -64,7 +64,7 @@
                   </ScrollPane>
                </content>
             </Tab>
-            <Tab closable="false" text="Weekly View">
+            <Tab closable="false" fx:id="tabWeek" text="Weekly View">
                <content>
                   <ScrollPane fitToHeight="true" fitToWidth="true">
                      <content>

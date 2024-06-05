@@ -114,6 +114,10 @@ public class AddAppointmentFormController {
             System.out.println(startLocalDateTime);
             System.out.println(endLocalDateTime);
 
+            System.out.println(localStartZonedDateTime);
+            System.out.println(localEndZonedDateTime);
+
+
             if (!ValidationUtil.validateTimes.validate(startLocalDateTime, endLocalDateTime)) {
                 return;
             }
